@@ -40,6 +40,4 @@ protected:
 	static int next_id;
 };
 
-
-
 #endif
