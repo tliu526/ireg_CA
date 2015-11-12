@@ -15,8 +15,6 @@ Things to consider:
 
 #include <list>
 
-using namespace std;
-
 class Cell {
 public:
 	
@@ -27,7 +25,7 @@ public:
 	bool       is_alive();
 	int        get_uid();
 	point     *get_point();
-	list<int> *get_neighbors();
+	std::list<int> *get_neighbors();
 
 	void       add_neighbor(int id);
 	void       remove_neighbor(int id);
@@ -36,7 +34,7 @@ protected:
 	bool alive;
 	point pt;
 	int uid; 
-	list<int> neighbors;
+	std::list<int> neighbors;
 	static int next_id;
 };
 

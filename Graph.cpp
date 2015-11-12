@@ -10,67 +10,93 @@ Implementing the adjacency list graph.
 
 using namespace std;
 
-int Graph::add_vertex(point &p){
-	Cell c(p);
-	int uid = c.get_uid();
+template<class T>
+T Graph<T>::add_vertex(T label) {
 
-	dict.insert(pair<int,Cell>(uid, c));
-	//dict[uid] = c;
-
-	return uid;
+  if(dict.count(label) == 0) { //we need to add the vertex to the graph
+    Vertex v(label);
+    dict[label] = v;
+  }
+  return label;
 }
 
-void Graph::remove_vertex(int id){
-	if (dict.count(id) == 1){
-		dict.erase(id);
-	}
+template<class T>
+void Graph<T>::remove_vertex(T label){
+  if (dict.count(label) == 1){
+    dict.erase(label);
+  }
 }
 
-void Graph::add_edge(int id1, int id2){
-	if ((dict.count(id1) == 1) && (dict.count(id2) == 1)) {
-		//we're undirected, so need to add to each other's neighbor list
-		Cell cell1 = dict[id1];
-		Cell cell2 = dict[id2];
-
-		cell1.add_neighbor(id2);
-		cell2.add_neighbor(id1);
-	}
+template<class T>
+void Graph<T>::add_edge(T label1, T label2){
+  if ((dict.count(label1) == 1) && (dict.count(label2) == 1)) {
+    //we're undirected, so need to add to each other's neighbor list
+    dict[label1].add_neighbor(label2);
+    dict[label2].add_neighbor(label1);
+  }
 }
 
-void Graph::remove_edge(int id1, int id2){
-	if ((dict.count(id1) == 1) && (dict.count(id2) == 1)) {
-		//we're undirected, so need to add to each other's neighbor list
-		Cell cell1 = dict[id1];
-		Cell cell2 = dict[id2];
-
-		cell1.remove_neighbor(id2);
-		cell2.remove_neighbor(id1);
-	}
+template<class T>
+void Graph<T>::remove_edge(T label1, T label2){
+  if ((dict.count(label1) == 1) && (dict.count(label2) == 1)) {
+    //we're undirected, so need to add to each other's neighbor list
+    dict[label1].remove_neighbor(label2);
+    dict[label2].remove_neighbor(label1);
+  }
 }
 
-void Graph::print_adj_list() {
-	map<int, Cell>::iterator map_it;
-	for (map_it = dict.begin(); map_it != dict.end(); map_it++) {
-		cout << map_it->first;
-
-		Cell c = map_it->second;
-
-		list<int>::iterator list_it;
-		for (list_it = c.get_neighbors()->begin(); list_it != c.get_neighbors()->end(); list_it++) {
-			cout << "->" << *list_it;
-		}
+template<class T>
+void Graph<T>::print_adj_list() {
+  typename map<T, Vertex>::iterator map_it;
+      for (map_it = dict.begin(); map_it != dict.end(); map_it++) {
+	cout << map_it->first;
+	
+	Vertex v = map_it->second;
+	
+	typename list<T>::iterator list_it;
+	for (list_it = v.get_neighbors()->begin(); list_it != v.get_neighbors()->end(); list_it++) {
+	  cout << "->" << *list_it;
 	}
+	
+	cout << '\n';
+      }
+}
+
+/**** VERTEX IMPLEMENTATION ****/
+
+template<class T>
+Graph<T>::Vertex::Vertex(T l) {
+  label = l;
+}
+
+template<class T>
+T Graph<T>::Vertex::get_label(){
+  return label;
+}
+
+template<class T>
+void Graph<T>::Vertex::add_neighbor(T label) {
+  neighbors.push_back(label);
+}
+
+template<class T>
+void Graph<T>::Vertex::remove_neighbor(T label) {
+  neighbors.remove(label);
+}
+
+template<class T>
+list<T> *Graph<T>::Vertex::get_neighbors() {
+  return &neighbors;
 }
 
 //debugging
 int main() {
-	point p(5.0f, 0.1f);
-	Graph g;
+	Graph<int> g;
 
-	int a = g.add_vertex(p);
-	int b = g.add_vertex(p);
-	int c = g.add_vertex(p);
-	int d = g.add_vertex(p);
+	int a = g.add_vertex(1);
+	int b = g.add_vertex(2);
+	int c = g.add_vertex(3);
+	int d = g.add_vertex(4);
 
 	g.add_edge(a,b);
 	g.add_edge(b,c);
