@@ -34,7 +34,7 @@ int main() {
 	generate_uniform_rand(points, 10, 10.0f, 10.0f);
 
 	for (int i = 0; i < points.size(); i++){
-		cout << points[i].first << "," << points[i].second << "\n";
+		cout << points[i].x << "," << points[i].y << "\n";
 	}
 
 	return 0;

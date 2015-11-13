@@ -13,8 +13,17 @@ Things to think about:
 #include "util.h"
 #include "GraphGenerator.h"
 
+#include <vector>
+
 class DelaunayGraphGenerator : public GraphGenerator {
-	void generate_graph();
+	public:
+		void generate_graph();
+
+	private:
+		//generates a list of edges that gives an arbitrary triangulation using an incremental process
+		std::vector<edge> init_triangulation(); 
+		// determines whether point q is visible from point p, ie the edge pq does not intersect other edges
+		//bool              isVisible(point p, point q, vector<edge> &edge_vec); 
 };
 
 #endif
