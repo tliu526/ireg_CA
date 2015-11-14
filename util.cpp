@@ -75,12 +75,12 @@ bool edge_intersect(Edge e1, Edge e2) {
 }
 
 
-void generate_poisson_disk(vector<point>& pts, int n, float x, float y, float r){
+void generate_poisson_disk(vector<Point>& pts, int n, float x, float y, float r){
 
 }
 
 //TODO defining the dimensions?
-void pts_to_file(vector<point>& pts, string f){
+void pts_to_file(vector<Point>& pts, string f){
 
 } 
 
