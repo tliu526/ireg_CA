@@ -16,6 +16,9 @@ TODO: do we want integer coordinates or floating point coordinates?
 #ifndef UTIL_H
 #define UTIL_H 
 
+#include "Tri.h"
+#include "Edge.h"
+
 #include <utility>
 #include <vector>
 #include <string>
@@ -24,51 +27,6 @@ TODO: do we want integer coordinates or floating point coordinates?
 
 inline int max(int a, int b){ return (a<b) ? b : a; }
 inline int min(int a, int b){ return (a>b) ? b : a; }
-
-struct Point{
-    int x;
-    int y;
-
-    Point() {}
-
-    Point(int xi, int yi){
-        x = xi;
-        y = yi;
-    }
-
-    bool operator!=(Point &p){
-        return (x != p.x) || (y != p.y);
-    }
-
-    bool operator==(const Point& p){
-        return (x == p.x) && (y == p.y);
-    }
-
-    //toString equivalent
-    friend std::ostream & operator<<(std::ostream & _stream, Point const &p){
-        _stream << "(" << p.x << ", " << p.y << ")";
-    }
-};
-
-struct Edge{
-    Point p;
-    Point q;
-
-    Edge() {}
-
-    Edge(Point one, Point two){
-        p = one;
-        q = two;
-    }
-
-    bool operator==(const Edge &e){
-        return ((p == e.p) && (q == e.q)) || ((p == e.q) && (q == e.p));
-    }
-
-    friend std::ostream & operator<<(std::ostream & _stream, Edge const &e){
-        _stream << e.p << ", " << e.q;
-    }
-};
 
 /*
 Populates pts vector with n points sampled uniformly in a 2x by 2y dimension space.
@@ -86,11 +44,14 @@ Writes all points to file f
 void pts_to_file(std::vector<Point>& pts, std::string f); 
 
 /**** GEOMETRY FUNCTIONS ****/
-
 int pt_orientation(Point p1, Point p2, Point p3);
 
 bool on_segment(Point p1, Point p2, Point p3);
 
 bool edge_intersect(Edge e1, Edge e2);
+
+bool pt_in_tri(Point p, Tri& t);
+
+/**** LINEAR ALG FUNCTIONS ****/
 
 #endif

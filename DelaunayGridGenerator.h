@@ -26,7 +26,10 @@ class DelaunayGridGenerator : public GridGenerator {
 		
 	private:
 		// determines whether point q is visible from point p, ie the edge pq does not intersect other edges
-		bool isVisible(Point p, Point q, std::vector<Edge> &edge_vec);
+		bool isVisible(Point p, Point q);
+
+		// adds tris to the face vector when considering the new edges
+		void add_tris(std::vector<Edge> &new_edges);
 };
 
 #endif

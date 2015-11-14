@@ -8,7 +8,7 @@ TODO:
 #ifndef POLY_H
 #define POLY_H
 
-#include "util.h"
+#include "Edge.h"
 
 #include <vector>
 	
