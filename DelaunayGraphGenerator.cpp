@@ -31,8 +31,8 @@ bool DelaunayGraphGenerator::isVisible(Point p, Point q, vector<Edge> &edge_vec)
 	for (int i = edge_vec.size()-1; i >= 0; i--) {
 		
 		//don't consider edges with the same points
-		if((!p.equals(edge_vec[i].p)) && (!p.equals(edge_vec[i].q)) &&
-			(!q.equals(edge_vec[i].p)) && (!q.equals(edge_vec[i].q))){
+		if((p != edge_vec[i].p)) && (p != edge_vec[i].q) &&
+			(q != edge_vec[i].p) && (q != edge_vec[i].q)){
 			if (edge_intersect(edge_vec[i], e)) {
 				return false;
 			}

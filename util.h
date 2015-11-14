@@ -36,7 +36,11 @@ struct Point{
         y = yi;
     }
 
-    bool equals(Point p){
+    bool operator!=(Point &p){
+        return (x != p.x) || (y != p.y);
+    }
+
+    bool operator==(const Point& p){
         return (x == p.x) && (y == p.y);
     }
 
@@ -57,7 +61,11 @@ struct Edge{
         q = two;
     }
 
-  friend std::ostream & operator<<(std::ostream & _stream, Edge const &e){
+    bool operator==(const Edge &e){
+        return ((p == e.p) && (q == e.q)) || ((p == e.q) && (q == e.p));
+    }
+
+    friend std::ostream & operator<<(std::ostream & _stream, Edge const &e){
         _stream << e.p << ", " << e.q;
     }
 };

@@ -74,8 +74,8 @@ bool edge_intersect(Edge e1, Edge e2) {
     return false;
 }
 
-/*
-	void generate_poisson_disk(vector<point>& pts, int n, float x, float y, float r){
+
+void generate_poisson_disk(vector<point>& pts, int n, float x, float y, float r){
 
 }
 
@@ -84,6 +84,7 @@ void pts_to_file(vector<point>& pts, string f){
 
 } 
 
+/*
 //For debugging my incompetence in C++
 int main() {
 	vector<point> points;
@@ -95,4 +96,4 @@ int main() {
 
 	return 0;
 }
-n*/
+*/
