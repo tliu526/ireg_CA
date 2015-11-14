@@ -8,7 +8,7 @@ graph_to_file.
 
 using namespace std;
 
-GraphGenerator::GraphGenerator(vector<point>& p) :
+GraphGenerator::GraphGenerator(vector<Point>& p) :
 	points(p) 
 	{}
 

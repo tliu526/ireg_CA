@@ -14,13 +14,13 @@ An abstract class for generating graphs.
 
 class GraphGenerator {
 public:
-	GraphGenerator(std::vector<point>& p);
+	GraphGenerator(std::vector<Point>& p);
 
 	virtual void generate_graph() = 0;
 	void graph_to_file(std::string f);
 	
 protected:
-	std::vector<std::point> points;
+	std::vector<Point> points;
 	//TODO?
 	Graph<std::string> g;
 };

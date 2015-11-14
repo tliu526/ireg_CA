@@ -9,7 +9,7 @@ Current methods for generating points:
 - uniform random
 - Poisson disk sampling
 
-
+TODO: do we want integer coordinates or floating point coordinates?
 (c) Tony Liu 2015.
 */
 
@@ -19,60 +19,70 @@ Current methods for generating points:
 #include <utility>
 #include <vector>
 #include <string>
+#include <iostream>
+#include <random>
 
-struct point{
-    float x;
-    float y;
+inline int max(int a, int b){ return (a<b) ? b : a; }
+inline int min(int a, int b){ return (a>b) ? b : a; }
 
-    point(float xi, float yi){
+struct Point{
+    int x;
+    int y;
+
+    Point() {}
+
+    Point(int xi, int yi){
         x = xi;
         y = yi;
     }
-};
 
-struct edge{
-    point p1;
-    point p2;
+    bool equals(Point p){
+        return (x == p.x) && (y == p.y);
+    }
 
-    edge(point one, point two){
-        p1 = one;
-        p2 = two;
+    //toString equivalent
+    friend std::ostream & operator<<(std::ostream & _stream, Point const &p){
+        _stream << "(" << p.x << ", " << p.y << ")";
     }
 };
 
-//TODO do we want this?
-class PointGenerator {
-public:
-	virtual void generate_points(int n, float x, float y) = 0; //must be overidden
-	
-	void pts_to_file(std::string f); //writes points to file
+struct Edge{
+    Point p;
+    Point q;
 
-protected:
-	int n;
-	float x; // width of grid plane
-	float y; // height of grid plane
-	std::vector<point> pts;
+    Edge() {}
+
+    Edge(Point one, Point two){
+        p = one;
+        q = two;
+    }
+
+  friend std::ostream & operator<<(std::ostream & _stream, Edge const &e){
+        _stream << e.p << ", " << e.q;
+    }
 };
 
 /*
-Populates pts vector with n points sampled uniformly in a x by y dimension space.
+Populates pts vector with n points sampled uniformly in a 2x by 2y dimension space.
 */
-void generate_uniform_rand(std::vector<point>& pts, int n, float x, float y);
+std::vector<Point> generate_uniform_rand(int n, int x, int y);
 
 /*
 Populates pts vector with n points from a poisson disk in a x by y dimension space.
 */
-void generate_poisson_disk(std::vector<point>& pts, int n, float x, float y);
+void generate_poisson_disk(std::vector<Point>& pts, int n, float x, float y);
 
 /*
 Writes all points to file f
 */
-void pts_to_file(std::vector<point>& pts, std::string f); 
+void pts_to_file(std::vector<Point>& pts, std::string f); 
 
-/*
-Checks whether the two edges intersect
-*/
-bool edge_intersect(edge e1, edge e2) {
-    //TODO
-}
+/**** GEOMETRY FUNCTIONS ****/
+
+int pt_orientation(Point p1, Point p2, Point p3);
+
+bool on_segment(Point p1, Point p2, Point p3);
+
+bool edge_intersect(Edge e1, Edge e2);
+
 #endif

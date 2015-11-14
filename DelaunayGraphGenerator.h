@@ -10,20 +10,22 @@ Things to think about:
 #ifndef DELAUNAYGRAPHGENERATOR_H
 #define DELAUNAYGRAPHGENERATOR_H
 
-#include "util.h"
 #include "GraphGenerator.h"
 
 #include <vector>
 
 class DelaunayGraphGenerator : public GraphGenerator {
 	public:
+		explicit DelaunayGraphGenerator(std::vector<Point>& p) : GraphGenerator(p) {}
+
 		void generate_graph();
+		std::vector<Edge> init_triangulation(); 
 
 	private:
 		//generates a list of edges that gives an arbitrary triangulation using an incremental process
-		std::vector<edge> init_triangulation(); 
+		
 		// determines whether point q is visible from point p, ie the edge pq does not intersect other edges
-		//bool              isVisible(point p, point q, vector<edge> &edge_vec); 
+		bool isVisible(Point p, Point q, std::vector<Edge> &edge_vec);
 };
 
 #endif
