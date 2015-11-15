@@ -32,16 +32,6 @@ Tri::Tri(Edge e1, Edge e2, Edge e3) {
 		throw invalid_argument("The edges provided do not form a tri");
 }
 
-bool Tri::operator==(const Tri& tri){
-
-	for(int i = 0; i < tri.verts.size(); i++){
-		if(count(verts.begin(), verts.end(), tri.verts[i]) == 0){
-			return false;
-		}
-	}
-
-	return true;
-}
 /*
 int main(){
 	Point p1(0,0);

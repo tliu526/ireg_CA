@@ -27,6 +27,8 @@ class Poly {
 		bool contains_vert(Point &p);
 		bool contains_edge(Edge &e);
 
+		bool operator==(const Poly &p);
+
 		friend std::ostream & operator<<(std::ostream &_stream, Poly const &p){
 			_stream << "Verts: "; 
 			for(int i = 0; i < p.verts.size(); i++){

@@ -31,6 +31,17 @@ bool Poly::contains_vert(Point &p){
 	return count(verts.begin(), verts.end(), p) > 0;
 }
 
+bool Poly::operator==(const Poly& poly){
+
+	for(int i = 0; i < poly.verts.size(); i++){
+		if(count(verts.begin(), verts.end(), poly.verts[i]) == 0){
+			return false;
+		}
+	}
+
+	return true;
+}
+
 /*
 int main() {
 	vector<Edge> edges;

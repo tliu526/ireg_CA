@@ -61,16 +61,16 @@ void DelaunayGridGenerator::add_tris(Point anchor, std::vector<Edge> &new_edges)
 					p1 = e1.p;
 
 				if(e2.p == anchor) 
-					p2 = e1.q;
+					p2 = e2.q;
 				else
-					p2 = e1.p;
+					p2 = e2.p;
 
 				Edge e3(p1, p2);
-				
+				//cout << "existing edge? " << e3 << endl;
 				if(count(edges.begin(), edges.end(), e3) > 0){
 					Tri t(e1,e2,e3);
-
-					if(isValidTri(t)){
+				
+					if(isValidTri(t) && (count(faces.begin(), faces.end(), t) == 0)){
 						faces.push_back(t);
 					}
 				}
@@ -125,7 +125,7 @@ vector<Edge> DelaunayGridGenerator::init_triangulation() {
 
 // for debugging
 int main() {
-	vector<Point> pts = generate_uniform_rand(1000, 100, 100);
+	vector<Point> pts = generate_uniform_rand(5, 10, 10);
 	DelaunayGridGenerator gen(pts);
 	vector<Edge> edges = gen.init_triangulation();
 	
