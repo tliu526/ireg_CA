@@ -1,5 +1,6 @@
 /*
-An abstract class for generating grids. This includes the graph representation, the polygons, points, and edges.
+An abstract class for generating grids. This includes the graph representation, the polygons, points, 
+and edges.
 
 (c) Tony Liu 2015.
 */
@@ -25,7 +26,7 @@ protected:
 	std::vector<Point> verts;
 	std::vector<Edge>  edges;
 	std::vector<Poly>  faces;
-	//TODO?
+	//TODO what else should we hang off this graph?
 	Graph<std::string> graph;
 
 };

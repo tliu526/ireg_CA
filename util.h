@@ -28,6 +28,8 @@ TODO: do we want integer coordinates or floating point coordinates?
 inline int max(int a, int b){ return (a<b) ? b : a; }
 inline int min(int a, int b){ return (a>b) ? b : a; }
 
+/**** POINT GENERATION ****/
+
 /*
 Populates pts vector with n points sampled uniformly in a 2x by 2y dimension space.
 */
@@ -38,21 +40,36 @@ Populates pts vector with n points from a poisson disk in a x by y dimension spa
 */
 void generate_poisson_disk(std::vector<Point>& pts, int n, float x, float y);
 
-/*
-Writes all points to file f
-*/
-void pts_to_file(std::vector<Point>& pts, std::string f); 
 
 /**** GEOMETRY FUNCTIONS ****/
+
+/*
+Determines the orientation of the two points.
+From http://www.dcs.gla.ac.uk/~pat/52233/slides/Geometry1x1.pdf
+@return: 0 if collinear, 1 if clockwise, 2 if counterclockwise
+*/
 int pt_orientation(Point p1, Point p2, Point p3);
 
+/*
+Checks whether p2 is on the line segment p1p3.
+*/
 bool on_segment(Point p1, Point p2, Point p3);
 
+/*
+Checks whether the two edges intersect. Utilizes on_segment and pt_orientation.
+*/
 bool edge_intersect(Edge e1, Edge e2);
 
+/*
+Checks whether p is enclosed within the boundary of t. Uses the barycentric method.
+From http://totologic.blogspot.fr/2014/01/accurate-point-in-triangle-test.html
+*/
 bool pt_in_tri(Point p, Tri& t);
 
-//checks whether Point p is in the circumcircle defined by t.
+/*
+checks whether Point p is in the circumcircle defined by t.
+TODO: what about points lying directly on the circumcircle?
+*/
 bool pt_in_circumcircle(Point p, Tri& t);
 
 /**** LINEAR ALG FUNCTIONS ****/

@@ -20,11 +20,6 @@ vector<Point> generate_uniform_rand(int n, int x, int y) {
     return pts;
 }
 
-/*
-Returns the orientation of the two points
-From http://www.dcs.gla.ac.uk/~pat/52233/slides/Geometry1x1.pdf
-@return: 0 if collinear, 1 if clockwise, 2 if counterclockwise
-*/
 int pt_orientation(Point p1, Point p2, Point p3){
     int val = ((p2.y - p1.y) * (p3.x - p2.x)) - ((p3.y - p2.y) * (p2.x - p1.x));
 
@@ -37,9 +32,6 @@ int pt_orientation(Point p1, Point p2, Point p3){
         return 2;
 }
 
-/*
-Checks whether p2 is on the line segment p1p3
-*/
 bool on_segment(Point p1, Point p2, Point p3) {
     if (p2.x <= (max(p1.x, p3.x) && p2.x >= min(p1.x, p3.x)) &&
         p2.y <= (max(p1.y, p3.y) && p2.y >= min(p1.y, p3.y))){
@@ -49,10 +41,6 @@ bool on_segment(Point p1, Point p2, Point p3) {
     return false;
 }
 
-/*
-Checks whether the two edges intersect
-@return: whether e1 and e2 intersect
-*/
 bool edge_intersect(Edge e1, Edge e2) {
     int o1 = pt_orientation(e1.p, e1.q, e2.p);
     int o2 = pt_orientation(e1.p, e1.q, e2.q);
@@ -79,13 +67,6 @@ void generate_poisson_disk(vector<Point>& pts, int n, float x, float y, float r)
 
 }
 
-//TODO defining the dimensions?
-void pts_to_file(vector<Point>& pts, string f){
-
-}  
-
-//Using barycentric coordinate system
-//http://totologic.blogspot.fr/2014/01/accurate-point-in-triangle-test.html
 bool pt_in_tri(Point pt, Tri& tri){
     Point v1 = tri.verts[0];
     Point v2 = tri.verts[1];
