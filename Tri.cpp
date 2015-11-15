@@ -32,6 +32,20 @@ Tri::Tri(Edge e1, Edge e2, Edge e3) {
 		throw invalid_argument("The edges provided do not form a tri");
 }
 
+//TODO sanity checks?
+Tri::Tri(Point p1, Point p2, Point p3){
+	verts.push_back(p1);
+	verts.push_back(p2);
+	verts.push_back(p3);
+
+	edges.push_back(Edge(p1,p2));
+	edges.push_back(Edge(p2,p3));
+	edges.push_back(Edge(p1,p3));
+
+	num_edges = edges.size();
+	num_verts = verts.size();
+}
+
 /*
 int main(){
 	Point p1(0,0);

@@ -19,7 +19,8 @@ public:
     Edge() {}
 
     Edge(Point one, Point two);
-    
+
+    bool operator!=(Edge &e);    
     bool operator== (const Edge &e);
 
     bool contains (Point p);

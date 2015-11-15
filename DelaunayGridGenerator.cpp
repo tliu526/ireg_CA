@@ -2,8 +2,11 @@
 Implementation of the Delaunay Grid Generator. Utilizes the "flip" algorithm to construct a triangulation:
 An arbitrary triangulation is constructed, and illegal edges are flipped until all edges are valid delaunay
 edges. The flip algorithm runs in O(n^2) time; faster algorithms (the "iterative" algorithm runs in O(nlog(n)))
-require more complicated data structure to maintain. If performance becomes an issue we can revist the 
+require more complicated data structures to maintain. If performance becomes an issue we can revist the 
 implementation for improvements.
+
+References:
+https://www.cs.duke.edu/courses/fall08/cps230/Lectures/L-21.pdf
 
 (c) Tony Liu 2015.
 */
@@ -11,6 +14,7 @@ implementation for improvements.
 
 #include <algorithm>
 #include <iostream>
+#include <stack>
 
 using namespace std;
 
@@ -44,7 +48,7 @@ bool DelaunayGridGenerator::isVisible(Point p, Point q){
 	return true;
 }
 
-//TODO horribly slow and broken 
+//TODO horribly slow 
 void DelaunayGridGenerator::add_tris(Point anchor, std::vector<Edge> &new_edges){
 	//walk through all pairs of new edges, see if there is a corresponding edge that can be added
 	for (int i = 0; i < new_edges.size(); i++){
@@ -123,6 +127,97 @@ vector<Edge> DelaunayGridGenerator::init_triangulation() {
 	return edges;
 }
 
+bool DelaunayGridGenerator::is_locally_delaunay(Edge &e, Tri &t1, Tri &t2){
+	Point pt;
+	for(int i =0 ; i < t1.verts.size(); i++){
+		if(!e.contains(t1.verts[i])){
+			pt = t1.verts[i];
+			break;
+		}
+	}
+
+	return !pt_in_circumcircle(pt, t2);
+}
+
+void DelaunayGridGenerator::flip_edge(Edge &e, Tri& t1, Tri& t2){
+	Point p1;
+	Point p2;
+
+	for(int i = 0; i < t1.verts.size(); i++){
+		if(!e.contains(t1.verts[i])){
+			p1 = t1.verts[i];
+			break;
+		}
+	}
+
+	for(int i = 0; i < t2.verts.size(); i++){
+		if(!e.contains(t2.verts[i])){
+			p2 = t1.verts[i];
+			break;
+		}
+	}
+
+	remove(edges.begin(), edges.end(), e);
+	edges.push_back(Edge(p1,p2));
+
+	remove(faces.begin(), faces.end(), t1);
+	remove(faces.begin(), faces.end(), t2);
+	faces.push_back(Tri(p1,e.p,e.q));
+	faces.push_back(Tri(p2,e.p,e.q));
+}
+
+void DelaunayGridGenerator::delaunay_triangulation() {
+	vector<Edge> marked = edges;
+
+	stack<Edge, vector<Edge> > edge_stack(edges);
+
+	while (!edge_stack.empty()){
+		Edge e = edge_stack.top();
+		edge_stack.pop();
+		remove(marked.begin(), marked.end(), e);
+
+		Tri t1;
+		Tri t2;
+
+		//TODO ugly, everything about it
+		int i;
+		for(i = 0; i < faces.size(); i++) {
+			if(faces[i].contains_edge(e)) {
+				t1 = *((Tri*)&faces[i]);
+				i++;
+				break;
+			}
+		}
+
+		for(i; i < faces.size(); i++) {
+			if (faces[i].contains_edge(e)) {
+				t2 = *((Tri*)&faces[i]);
+				break;
+			}
+		}
+
+		if(!is_locally_delaunay(e, t1, t2)){
+			//push unmarked edges on the perimeter 
+			for(int i = 0; i < t1.edges.size(); i++){
+				if((e != t1.edges[i]) && (count(marked.begin(), marked.end(), t1.edges[i]) == 0)){
+					marked.push_back(t1.edges[i]);
+					edge_stack.push(t1.edges[i]);
+				}
+			}
+
+
+			for(int i = 0; i < t2.edges.size(); i++){
+				if( (e != t2.edges[i]) && (count(marked.begin(), marked.end(), t2.edges[i]) == 0)){
+					marked.push_back(t2.edges[i]);
+					edge_stack.push(t2.edges[i]);
+				}
+			}
+
+			flip_edge(e, t1, t2);
+		}
+	}
+}
+
 // for debugging
 int main() {
 	vector<Point> pts = generate_uniform_rand(5, 10, 10);
@@ -140,6 +235,15 @@ int main() {
 	cout << edges.size() << endl;	
 
 	vector<Poly> faces = gen.get_faces();
+	for (int i = 0; i < faces.size(); i++){
+		cout << faces[i] << endl;
+	}
+
+	cout << "Delaunay testing: " << endl;
+
+	gen.delaunay_triangulation();
+
+	faces = gen.get_faces();
 	for (int i = 0; i < faces.size(); i++){
 		cout << faces[i] << endl;
 	}

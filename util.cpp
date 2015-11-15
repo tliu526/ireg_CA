@@ -103,6 +103,11 @@ bool pt_in_tri(Point pt, Tri& tri){
     return (0 <= a) && (a <= 1) && (0 <= b) && (b <= 1) && (0 <= c) && (c <= 1);
 }
 
+//TODO
+bool pt_in_circumcircle(Point p, Tri &t){
+    return false;
+}
+
 /*
 //For debugging my incompetence in C++
 int main() {

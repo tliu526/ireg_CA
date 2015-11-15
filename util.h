@@ -52,6 +52,9 @@ bool edge_intersect(Edge e1, Edge e2);
 
 bool pt_in_tri(Point p, Tri& t);
 
+//checks whether Point p is in the circumcircle defined by t.
+bool pt_in_circumcircle(Point p, Tri& t);
+
 /**** LINEAR ALG FUNCTIONS ****/
 
 #endif
