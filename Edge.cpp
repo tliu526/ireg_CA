@@ -8,3 +8,7 @@ Edge::Edge(Point one, Point two){
 bool Edge::operator==(const Edge &e){
     return ((p == e.p) && (q == e.q)) || ((p == e.q) && (q == e.p));
 }
+
+bool Edge::contains(Point pt){
+	return (p == pt) || (q == pt);
+}

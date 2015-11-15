@@ -20,10 +20,14 @@ public:
 
     Edge(Point one, Point two);
     
-    bool operator==(const Edge &e);
+    bool operator== (const Edge &e);
+
+    bool contains (Point p);
 
     friend std::ostream & operator<<(std::ostream & _stream, Edge const &e){
         _stream << e.p << ", " << e.q;
+
+        return _stream;
     }
 };
 

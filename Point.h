@@ -23,6 +23,7 @@ public:
 	//toString equivalent
     friend std::ostream & operator<<(std::ostream & _stream, Point const &p){
     	_stream << "(" << p.x << ", " << p.y << ")";
+        return _stream;
     }
 };
 

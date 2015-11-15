@@ -12,6 +12,7 @@ class Tri : public Poly {
 		Tri(Edge e1, Edge e2, Edge e3);
 
 		bool operator==(const Tri& tri);
+
 };
 
 #endif

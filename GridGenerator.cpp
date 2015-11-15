@@ -12,7 +12,10 @@ GridGenerator::GridGenerator(vector<Point>& p) :
 	gen_pts(p) 
 	{}
 
-//TODO
-void grid_to_file(string f){
+void GridGenerator::grid_to_file(string f){
+	//TODO
+}
 
+vector<Poly> GridGenerator::get_faces() {
+	return faces;
 }

@@ -11,6 +11,7 @@ TODO:
 #include "Edge.h"
 
 #include <vector>
+#include <iostream>
 	
 class Poly {
 	public:
@@ -25,6 +26,15 @@ class Poly {
 
 		bool contains_vert(Point &p);
 		bool contains_edge(Edge &e);
+
+		friend std::ostream & operator<<(std::ostream &_stream, Poly const &p){
+			_stream << "Verts: "; 
+			for(int i = 0; i < p.verts.size(); i++){
+				_stream << p.verts[i] << " ";
+			}
+
+			return _stream;
+        }
 };
 
 #endif

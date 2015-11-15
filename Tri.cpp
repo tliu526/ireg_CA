@@ -42,11 +42,11 @@ bool Tri::operator==(const Tri& tri){
 
 	return true;
 }
-
+/*
 int main(){
 	Point p1(0,0);
-	Point p2(0,2);
-	Point p3(2,2);
+	Point p2(0,3);
+	Point p3(3,3);
 
 	Edge e1(p1,p2);
 	Edge e2(p2,p3);
@@ -71,4 +71,9 @@ int main(){
 	Point pt2(0,5);
 
 	cout << pt_in_tri(pt2, t) << endl;
+
+	Point pt3(1,2);
+
+	cout << pt_in_tri(pt3, t) << endl;
 }
+*/

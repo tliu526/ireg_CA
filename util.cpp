@@ -88,13 +88,17 @@ void pts_to_file(vector<Point>& pts, string f){
 //http://totologic.blogspot.fr/2014/01/accurate-point-in-triangle-test.html
 bool pt_in_tri(Point pt, Tri& tri){
     Point v1 = tri.verts[0];
-    Point v2 = tri.verts[2];
-    Point v3 = tri.verts[3];
+    Point v2 = tri.verts[1];
+    Point v3 = tri.verts[2];
 
     float denom = (v2.y - v3.y)*(v1.x - v3.x) + (v3.x - v2.x)*(v1.y - v3.y);
     float a = ((v2.y - v3.y)*(pt.x - v3.x) + (v3.x - v2.x)*(pt.y - v3.y)) / denom;
     float b = ((v3.y - v1.y)*(pt.x - v3.x) + (v1.x - v3.x)*(pt.y - v3.y)) / denom;
     float c = 1 - a - b;
+
+    //cout << a << endl;
+    //cout << b << endl;
+    //cout << c << endl;
 
     return (0 <= a) && (a <= 1) && (0 <= b) && (b <= 1) && (0 <= c) && (c <= 1);
 }
