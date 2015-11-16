@@ -47,19 +47,23 @@ void Graph<T,D>::remove_edge(T label1, T label2){
 
 template<class T, class D>
 void Graph<T,D>::print_adj_list() {
-  typename map<T, Vertex>::iterator map_it;
-      for (map_it = dict.begin(); map_it != dict.end(); map_it++) {
-       cout << map_it->first;
 
-       Vertex v = map_it->second;
+    float avg = 0;
+    typename map<T, Vertex>::iterator map_it;
+    for (map_it = dict.begin(); map_it != dict.end(); map_it++) {
+        cout << map_it->first;
 
-       typename list<T>::iterator list_it;
-       for (list_it = v.get_neighbors()->begin(); list_it != v.get_neighbors()->end(); list_it++) {
+        Vertex v = map_it->second;
+
+        avg += v.get_neighbors()->size();
+        typename list<T>::iterator list_it;
+        for (list_it = v.get_neighbors()->begin(); list_it != v.get_neighbors()->end(); list_it++) {
          cout << "->" << *list_it;
        }
 
-       cout << '\n';
-     }
+       cout << endl;
+    }
+    cout << "Average degree: " << avg / dict.size() << endl;
 }
 
 /**** VERTEX IMPLEMENTATION ****/

@@ -32,7 +32,7 @@ protected:
 	std::vector<Poly>  faces;
 	
 	Graph<std::string, Cell> graph;
-	std::map<Point, std::string> pt_map; //reverse map for 
+	std::map<Point, std::string> pt_map; 
 };
 
 #endif

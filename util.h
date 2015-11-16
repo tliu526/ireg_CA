@@ -74,4 +74,15 @@ bool pt_in_circumcircle(Point p, Tri& t);
 
 /**** LINEAR ALG FUNCTIONS ****/
 
+
+/**** MISC ****/
+/*
+Returns the difference in digits between n and m, where n < m. Useful for pretty printing.
+*/
+int digit_diff(int n, int m);
+
+/*
+Returns the number of digits in n, useful for pretty printing.
+*/
+int num_digits(int n);
 #endif

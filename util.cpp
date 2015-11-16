@@ -119,6 +119,20 @@ bool pt_in_circumcircle(Point p, Tri &t){
     return det > 0;
 }
 
+int num_digits(int n){
+    int n_digits = 0;
+
+    while (n/=10){
+        n_digits++;
+    }
+
+    return n_digits;
+}
+
+int digit_diff(int n, int m){
+    return num_digits(m) - num_digits(n);
+}
+
 /*
 //For debugging my incompetence in C++
 int main() {

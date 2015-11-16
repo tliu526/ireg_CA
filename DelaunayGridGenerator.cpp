@@ -28,12 +28,17 @@ DelaunayGridGenerator::DelaunayGridGenerator(vector<Point> &pts) : GridGenerator
 	verts = pts;
 
 	//initialize pt_map
+	//upper bound on number of digits;
+	
+
 	for (int i = 0; i < verts.size(); i++) {
 		stringstream ss;
-		if(i < 10) 
-			ss << "p0" << i;
-		else
-			ss << "p" << i; 
+		ss << "p";
+		
+		int n = digit_diff(i, verts.size());
+		while(n--) { ss << "0"; }
+			
+		ss << i; 
 		pt_map[verts[i]] = ss.str();
 	}
 
@@ -262,7 +267,7 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 
 // for debugging
 int main() {
-	vector<Point> pts = generate_uniform_rand(100, 20.0, 20.0);
+	vector<Point> pts = generate_uniform_rand(1111, 20.0, 20.0);
 	DelaunayGridGenerator gen(pts);
 	vector<Edge> edges = gen.init_triangulation();
 	/*
