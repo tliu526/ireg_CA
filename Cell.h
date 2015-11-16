@@ -1,9 +1,7 @@
 /*
-Represents the state and contains the information of a single cell on the grid.
-
-Things to consider:
-- What other properties do we need?
-- What's the best way of setting UIDs?
+Represents the state and contains the information of a single cell on the grid. Currently stores a list
+of key value pairs (TODO variable value types), with the intent of being subclassed. The base class Cell
+only has one property (is_alive) as well as its label.
 
 (c) Tony Liu 2015.
 */
@@ -13,29 +11,27 @@ Things to consider:
 
 #include "util.h"
 
-#include <list>
+#include <vector>
 
 class Cell {
 public:
 	
-	Cell(point& p);
-	Cell();
+	Cell(Point p, std::string label);
+	Cell() {};
 	//TODO other constructors?
 
-	bool       is_alive();
-	int        get_uid();
-	point     *get_point();
-	std::list<int> *get_neighbors();
+	bool        is_alive();
+	std::string get_id();
+	Point       get_point();
 
-	void       add_neighbor(int id);
-	void       remove_neighbor(int id);
-
+	std::string get_property(std::string label);
 protected:
 	bool alive;
-	point pt;
-	int uid; 
-	std::list<int> neighbors;
-	static int next_id;
+	Point pt; // the point in the space that corresponds to 
+	std::string id;
+
+	//TODO make the value of variable type?
+	std::map<std::string, std::string> prop_map;
 };
 
 #endif

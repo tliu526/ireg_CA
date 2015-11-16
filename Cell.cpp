@@ -9,54 +9,36 @@ Implementation of Cell class.
 
 using namespace std;
 
-
-int Cell::next_id = 0;
-
-Cell::Cell(point& p) :
-	pt(0.0,0.0)
+Cell::Cell(Point p, string label)
 {
 	alive = false;
-	uid = next_id;
-	Cell::next_id++;
+	id = label;
+	pt = p;
 }
-
-Cell::Cell() {}
 
 bool Cell::is_alive() {
 	return alive; 
 }
 
-int Cell::get_uid() {
-	return uid;
+string Cell::get_id() {
+	return id;
 }
 
-point *Cell::get_point() {
-	return &pt;
+Point Cell::get_point() {
+	return pt;
 }
 
-list<int> *Cell::get_neighbors() {
-	return &neighbors;
-}
-
-void Cell::add_neighbor(int id) {
-	neighbors.push_back(id);
-}
-
-void Cell::remove_neighbor(int id) {
-	neighbors.remove(id);
-}
 //for debugging because I'm bad at B++
-/*
 int main() {
-	point p(5.0f, 0.1f);
-	Cell c(p);
-	Cell d(p);
+	Point p(5.0, 0.1);
+
+	Cell c(p, "a");
+	Cell d(p, "b");
 
 	cout << c.is_alive() << "\n";
-	cout << c.get_point()->first << "\n";
-	cout << c.get_uid() << "\n";
+	cout << c.get_point().x << "\n";
+	cout << c.get_id() << "\n";
 
-	cout << d.get_point()->second << "\n";
-	cout << d.get_uid() << "\n";
+	cout << d.get_point().y << "\n";
+	cout << d.get_id() << "\n";
 }
-*/

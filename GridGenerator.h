@@ -9,6 +9,7 @@ and edges.
 
 #include "util.h"
 #include "Graph.h"
+#include "Cell.h"
 #include "Poly.h"
 #include <vector>
 #include <string>
@@ -21,14 +22,13 @@ public:
 	void grid_to_file(std::string f);
 	
 	//TODO make this work
-	//std::vector<Poly> get_faces() = 0;
+	std::vector<Poly> get_faces();
 protected:
 	std::vector<Point> gen_pts; //The generator points for the grid
 	std::vector<Point> verts;
 	std::vector<Edge>  edges;
-	//std::vector<Poly>  faces;
-	//TODO what else should we hang off this graph?
-	Graph<std::string> graph;
+	std::vector<Poly>  faces;
+	Graph<std::string, Cell> graph;
 
 };
 

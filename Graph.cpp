@@ -10,25 +10,25 @@ Implementing the adjacency list graph.
 
 using namespace std;
 
-template<class T>
-T Graph<T>::add_vertex(T label) {
+template<class T, class D>
+T Graph<T,D>::add_vertex(T label, D data) {
 
   if(dict.count(label) == 0) { //we need to add the vertex to the graph
-    Vertex v(label);
+    Vertex v(label, data);
     dict[label] = v;
   }
   return label;
 }
 
-template<class T>
-void Graph<T>::remove_vertex(T label){
+template<class T, class D>
+void Graph<T,D>::remove_vertex(T label){
   if (dict.count(label) == 1){
     dict.erase(label);
   }
 }
 
-template<class T>
-void Graph<T>::add_edge(T label1, T label2){
+template<class T, class D>
+void Graph<T,D>::add_edge(T label1, T label2){
   if ((dict.count(label1) == 1) && (dict.count(label2) == 1)) {
     //we're undirected, so need to add to each other's neighbor list
     dict[label1].add_neighbor(label2);
@@ -36,8 +36,8 @@ void Graph<T>::add_edge(T label1, T label2){
   }
 }
 
-template<class T>
-void Graph<T>::remove_edge(T label1, T label2){
+template<class T, class D>
+void Graph<T,D>::remove_edge(T label1, T label2){
   if ((dict.count(label1) == 1) && (dict.count(label2) == 1)) {
     //we're undirected, so need to add to each other's neighbor list
     dict[label1].remove_neighbor(label2);
@@ -45,8 +45,8 @@ void Graph<T>::remove_edge(T label1, T label2){
   }
 }
 
-template<class T>
-void Graph<T>::print_adj_list() {
+template<class T, class D>
+void Graph<T,D>::print_adj_list() {
   typename map<T, Vertex>::iterator map_it;
       for (map_it = dict.begin(); map_it != dict.end(); map_it++) {
 	cout << map_it->first;
@@ -64,39 +64,45 @@ void Graph<T>::print_adj_list() {
 
 /**** VERTEX IMPLEMENTATION ****/
 
-template<class T>
-Graph<T>::Vertex::Vertex(T l) {
+template<class T, class D>
+Graph<T,D>::Vertex::Vertex(T l, D d) {
   label = l;
+  data = d;
 }
 
-template<class T>
-T Graph<T>::Vertex::get_label(){
+template<class T, class D>
+T Graph<T,D>::Vertex::get_label(){
   return label;
 }
 
-template<class T>
-void Graph<T>::Vertex::add_neighbor(T label) {
+template<class T, class D>
+D Graph<T,D>::Vertex::get_data() {
+  return data;
+}
+
+template<class T, class D>
+void Graph<T,D>::Vertex::add_neighbor(T label) {
   neighbors.push_back(label);
 }
 
-template<class T>
-void Graph<T>::Vertex::remove_neighbor(T label) {
+template<class T, class D>
+void Graph<T,D>::Vertex::remove_neighbor(T label) {
   neighbors.remove(label);
 }
 
-template<class T>
-list<T> *Graph<T>::Vertex::get_neighbors() {
+template<class T, class D>
+list<T> *Graph<T,D>::Vertex::get_neighbors() {
   return &neighbors;
 }
 
 //debugging
 int main() {
-	Graph<int> g;
+	Graph<int, int> g;
 
-	int a = g.add_vertex(1);
-	int b = g.add_vertex(2);
-	int c = g.add_vertex(3);
-	int d = g.add_vertex(4);
+	int a = g.add_vertex(1,2);
+	int b = g.add_vertex(2,2);
+	int c = g.add_vertex(3,2);
+	int d = g.add_vertex(4,2);
 
 	g.add_edge(a,b);
 	g.add_edge(b,c);

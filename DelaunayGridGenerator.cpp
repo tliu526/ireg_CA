@@ -1,12 +1,15 @@
 /*
 Implementation of the Delaunay Grid Generator. Utilizes the "flip" algorithm to construct a triangulation:
 An arbitrary triangulation is constructed, and illegal edges are flipped until all edges are valid delaunay
-edges. The flip algorithm runs in O(n^2) time; faster algorithms (the "iterative" algorithm runs in O(nlog(n)))
-require more complicated data structures to maintain. If performance becomes an issue we can revist the 
-implementation for improvements.
+edges. The flip algorithm runs in O(n^2) time; faster algorithms (the "iterative" algorithm runs in 
+O(nlog(n))) require more complicated data structures to maintain. If performance becomes an issue we can 
+revist the implementation for improvements.
 
 References:
 https://www.cs.duke.edu/courses/fall08/cps230/Lectures/L-21.pdf
+
+We have approximately n^2 scaling, 1000 points takes 2.1 seconds, 5000 points takes ~1 min. Not great.
+Need to look at optimizing some of the other functions, or switching to an alternative algorithm.
 
 (c) Tony Liu 2015.
 */
@@ -19,6 +22,7 @@ https://www.cs.duke.edu/courses/fall08/cps230/Lectures/L-21.pdf
 using namespace std;
 
 DelaunayGridGenerator::DelaunayGridGenerator(vector<Point> &pts) : GridGenerator(pts) {
+	verts = pts;
 	//TODO add initialization here?
 }
 
@@ -160,8 +164,6 @@ void DelaunayGridGenerator::flip_edge(Edge e, Tri t1, Tri t2){
 
 	faces.erase(remove(faces.begin(), faces.end(), t1), faces.end());
 	faces.erase(remove(faces.begin(), faces.end(), t2), faces.end());
-	Tri new_t1(p1,e.p,e.q);
-	Tri new_t2(p2,e.p,e.q);
 
 	faces.push_back(Tri(p1,e.p,e.q));
 	faces.push_back(Tri(p2,e.p,e.q));
@@ -188,7 +190,7 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 		int i;
 		for(i = 0; i < faces.size(); i++) {
 			if(faces[i].contains_edge(e)) {
-				t1 = &faces[i];
+				t1 = (Tri*)&faces[i];
 				i++;
 				break;
 			}
@@ -196,7 +198,7 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 
 		for(i; i < faces.size(); i++) {
 			if (faces[i].contains_edge(e)) {
-				t2 = &faces[i];
+				t2 = (Tri*)&faces[i];
 				break;
 			}
 		}
@@ -232,13 +234,9 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 	}
 }
 
-vector<Tri> DelaunayGridGenerator::get_faces(){
-	return faces;
-}
-
 // for debugging
 int main() {
-	vector<Point> pts = generate_uniform_rand(4000, 50.0, 50.0);
+	vector<Point> pts = generate_uniform_rand(5, 10.0, 10.0);
 	DelaunayGridGenerator gen(pts);
 	vector<Edge> edges = gen.init_triangulation();
 	/*
@@ -266,7 +264,7 @@ int main() {
 		cout << faces[i] << endl;
 	}
 */
-	vector<Tri> faces = gen.get_faces();
+	vector<Poly> faces = gen.get_faces();
 	cout << "Number of faces: " << faces.size() << endl;
 	cout << "Number of edges: " << edges.size() << endl;
 }

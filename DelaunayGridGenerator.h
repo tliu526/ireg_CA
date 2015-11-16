@@ -20,7 +20,7 @@ class DelaunayGridGenerator : public GridGenerator {
 
 		void generate_graph();
 
-		std::vector<Tri> get_faces();
+		//std::vector<Tri> get_faces();
 
 	    //TODO only here for debugging
 	    /*
@@ -28,13 +28,13 @@ class DelaunayGridGenerator : public GridGenerator {
 		*/
 		std::vector<Edge> init_triangulation(); 
 		
-		//TODO only here for debuggin
+		//TODO only here for debugging
 		/*
 	    Once the edges and triangulations are initialized, generates a delaunay triangulation.
 		*/
 		void delaunay_triangulation();
 	private:
-		std::vector<Tri> faces;
+		//std::vector<Tri> faces;
 		/*
 		Determines whether point q is visible from point p, i.e. the edge pq does not intersect other edges.
 		*/
