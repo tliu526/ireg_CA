@@ -17,12 +17,26 @@ Need to look at optimizing some of the other functions, or switching to an alter
 
 #include <algorithm>
 #include <iostream>
+#include <sstream>
 #include <stack>
+#include <string>
+#include <utility>
 
 using namespace std;
 
 DelaunayGridGenerator::DelaunayGridGenerator(vector<Point> &pts) : GridGenerator(pts) {
 	verts = pts;
+
+	//initialize pt_map
+	for (int i = 0; i < verts.size(); i++) {
+		stringstream ss;
+		if(i < 10) 
+			ss << "p0" << i;
+		else
+			ss << "p" << i; 
+		pt_map[verts[i]] = ss.str();
+	}
+
 	//TODO add initialization here?
 }
 
@@ -31,7 +45,19 @@ bool point_xcomparator(Point a, Point b){
 };
 
 void DelaunayGridGenerator::generate_graph() {
-	//TODO
+
+	typename map<Point, string>::iterator map_it;
+	for(map_it = pt_map.begin(); map_it != pt_map.end(); map_it++) {
+		graph.add_vertex(map_it->second, Cell(map_it->first, map_it->second));		
+	}
+
+	for (int i = 0; i < edges.size(); i++){
+		string p1 = pt_map[edges[i].p];
+		string p2 = pt_map[edges[i].q];
+		graph.add_edge(p1,p2);
+	}
+
+	graph.print_adj_list();
 }
 
 //can be improved, how can we determine visibility quicker?
@@ -236,7 +262,7 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 
 // for debugging
 int main() {
-	vector<Point> pts = generate_uniform_rand(5, 10.0, 10.0);
+	vector<Point> pts = generate_uniform_rand(100, 20.0, 20.0);
 	DelaunayGridGenerator gen(pts);
 	vector<Edge> edges = gen.init_triangulation();
 	/*
@@ -254,7 +280,6 @@ int main() {
 	for (int i = 0; i < faces.size(); i++){
 		cout << faces[i] << endl;
 	}
-
 	cout << "Delaunay testing: " << endl;
 	*/
 	gen.delaunay_triangulation();
@@ -267,4 +292,6 @@ int main() {
 	vector<Poly> faces = gen.get_faces();
 	cout << "Number of faces: " << faces.size() << endl;
 	cout << "Number of edges: " << edges.size() << endl;
+
+	gen.generate_graph();
 }

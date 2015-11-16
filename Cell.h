@@ -12,6 +12,7 @@ only has one property (is_alive) as well as its label.
 #include "util.h"
 
 #include <vector>
+#include <map>
 
 class Cell {
 public:

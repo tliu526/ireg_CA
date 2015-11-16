@@ -10,6 +10,10 @@ Point::Point(float xi, float yi){
 	 y = yi;
 }
 
+bool Point::operator<(const Point &p) const{
+	return x < p.x;
+}
+
 bool Point::operator!=(Point &p){
     return (x != p.x) || (y != p.y);
 }

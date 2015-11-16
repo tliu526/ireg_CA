@@ -13,6 +13,7 @@ and edges.
 #include "Poly.h"
 #include <vector>
 #include <string>
+#include <map>
 
 class GridGenerator {
 public:
@@ -23,13 +24,15 @@ public:
 	
 	//TODO make this work
 	std::vector<Poly> get_faces();
+
 protected:
 	std::vector<Point> gen_pts; //The generator points for the grid
 	std::vector<Point> verts;
 	std::vector<Edge>  edges;
 	std::vector<Poly>  faces;
+	
 	Graph<std::string, Cell> graph;
-
+	std::map<Point, std::string> pt_map; //reverse map for 
 };
 
 #endif

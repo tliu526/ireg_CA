@@ -27,7 +27,7 @@ string Cell::get_id() {
 Point Cell::get_point() {
 	return pt;
 }
-
+/*
 //for debugging because I'm bad at B++
 int main() {
 	Point p(5.0, 0.1);
@@ -42,3 +42,4 @@ int main() {
 	cout << d.get_point().y << "\n";
 	cout << d.get_id() << "\n";
 }
+*/

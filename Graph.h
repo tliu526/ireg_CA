@@ -44,4 +44,6 @@ private:
 	std::map<T, Vertex> dict;
 };
 
+#include "Graph.tpp"
+
 #endif 

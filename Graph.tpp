@@ -4,7 +4,7 @@ Implementing the adjacency list graph.
 (c) 2015 Tony Liu.
 */
 
-#include "Graph.h"
+//#include "Graph.h"
 
 #include <iostream>
 
@@ -49,17 +49,17 @@ template<class T, class D>
 void Graph<T,D>::print_adj_list() {
   typename map<T, Vertex>::iterator map_it;
       for (map_it = dict.begin(); map_it != dict.end(); map_it++) {
-	cout << map_it->first;
-	
-	Vertex v = map_it->second;
-	
-	typename list<T>::iterator list_it;
-	for (list_it = v.get_neighbors()->begin(); list_it != v.get_neighbors()->end(); list_it++) {
-	  cout << "->" << *list_it;
-	}
-	
-	cout << '\n';
-      }
+       cout << map_it->first;
+
+       Vertex v = map_it->second;
+
+       typename list<T>::iterator list_it;
+       for (list_it = v.get_neighbors()->begin(); list_it != v.get_neighbors()->end(); list_it++) {
+         cout << "->" << *list_it;
+       }
+
+       cout << '\n';
+     }
 }
 
 /**** VERTEX IMPLEMENTATION ****/
@@ -95,6 +95,7 @@ list<T> *Graph<T,D>::Vertex::get_neighbors() {
   return &neighbors;
 }
 
+/*
 //debugging
 int main() {
 	Graph<int, int> g;
@@ -111,3 +112,4 @@ int main() {
 
 	g.print_adj_list();
 }
+*/

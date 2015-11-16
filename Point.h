@@ -19,7 +19,7 @@ public:
 
     bool operator!=(Point &p);
     bool operator==(const Point &p);
-
+    bool operator<(const Point &p) const;
 	//toString equivalent
     friend std::ostream & operator<<(std::ostream & _stream, Point const &p){
     	_stream << "(" << p.x << ", " << p.y << ")";
