@@ -5,7 +5,7 @@ Implementation of the point class.
 */
 #include "Point.h"
 
-Point::Point(int xi, int yi){
+Point::Point(float xi, float yi){
 	 x = xi;
 	 y = yi;
 }

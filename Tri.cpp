@@ -58,26 +58,27 @@ int main(){
 
 	Edge test(p2,p1);
 
-	Tri t(e1, e2, e3);
+	Tri t1(e1, e2, e3);
+	Tri t2(p1, p2, p3);
 
-	vector<Point> *pts = &t.verts;
+	vector<Point> *pts = &t1.verts;
 	for (int i = 0; i < pts->size(); i++) {
 		cout << (*pts)[i] << endl;
 	}
-	cout << (t==t) << endl;
-	cout << t.contains_vert(p1) << endl;
-	cout << t.contains_edge(test) << endl;
+	cout << "equality:" << (t1==t2) << endl;
+	cout << t1.contains_vert(p1) << endl;
+	cout << t1.contains_edge(test) << endl;
 
 	Point pt(1,1);
 
-	cout << pt_in_tri(pt, t) << endl;
+	cout << pt_in_tri(pt, t1) << endl;
 
 	Point pt2(0,5);
 
-	cout << pt_in_tri(pt2, t) << endl;
+	cout << pt_in_tri(pt2, t1) << endl;
 
 	Point pt3(1,2);
 
-	cout << pt_in_tri(pt3, t) << endl;
+	cout << pt_in_tri(pt3, t1) << endl;
 }
 */

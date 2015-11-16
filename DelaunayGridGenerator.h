@@ -20,6 +20,8 @@ class DelaunayGridGenerator : public GridGenerator {
 
 		void generate_graph();
 
+		std::vector<Tri> get_faces();
+
 	    //TODO only here for debugging
 	    /*
 	    generates a list of edges that gives an arbitrary triangulation using an incremental process
@@ -32,7 +34,7 @@ class DelaunayGridGenerator : public GridGenerator {
 		*/
 		void delaunay_triangulation();
 	private:
-
+		std::vector<Tri> faces;
 		/*
 		Determines whether point q is visible from point p, i.e. the edge pq does not intersect other edges.
 		*/
@@ -49,13 +51,13 @@ class DelaunayGridGenerator : public GridGenerator {
 		Checks whether the triangles t1 and t2 are locally delaunay against the shared edge e.
 		@pre: e is shared between t1 and t2
 		*/
-		bool is_locally_delaunay(Edge &e, Tri& t1, Tri& t2);
+		bool is_locally_delaunay(Edge e, Tri t1, Tri t2);
 
 		/*
 		Flips a common edge e between a quad defined by two tris in the graph. Edits the edges vector and 
 		faces vector accordingly.
 		*/
-		void flip_edge(Edge &e, Tri& t1, Tri& t2);
+		void flip_edge(Edge e, Tri t1, Tri t2);
 
 		/*
 	    Checks whether the given tri is valid (doesn't contain any of the other points in the grid)

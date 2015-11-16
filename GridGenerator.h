@@ -20,12 +20,13 @@ public:
 	virtual void generate_graph() = 0;
 	void grid_to_file(std::string f);
 	
-	std::vector<Poly> get_faces();
+	//TODO make this work
+	//std::vector<Poly> get_faces() = 0;
 protected:
 	std::vector<Point> gen_pts; //The generator points for the grid
 	std::vector<Point> verts;
 	std::vector<Edge>  edges;
-	std::vector<Poly>  faces;
+	//std::vector<Poly>  faces;
 	//TODO what else should we hang off this graph?
 	Graph<std::string> graph;
 

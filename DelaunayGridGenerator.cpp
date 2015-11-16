@@ -19,7 +19,7 @@ https://www.cs.duke.edu/courses/fall08/cps230/Lectures/L-21.pdf
 using namespace std;
 
 DelaunayGridGenerator::DelaunayGridGenerator(vector<Point> &pts) : GridGenerator(pts) {
-	//TODO
+	//TODO add initialization here?
 }
 
 bool point_xcomparator(Point a, Point b){
@@ -127,21 +127,39 @@ vector<Edge> DelaunayGridGenerator::init_triangulation() {
 	return edges;
 }
 
-bool DelaunayGridGenerator::is_locally_delaunay(Edge &e, Tri &t1, Tri &t2){
+bool DelaunayGridGenerator::is_locally_delaunay(Edge e, Tri t1, Tri t2){
 	Point pt;
-	for(int i =0 ; i < t1.verts.size(); i++){
+
+	for(int i = 0 ; i < t1.verts.size(); i++){
 		if(!e.contains(t1.verts[i])){
 			pt = t1.verts[i];
 			break;
 		}
 	}
 
+	/*
+	cout << "Tri1: " << t1 << endl;
+	cout << "Tri2: " << t2 << endl;
+	cout << "Edge: " << e << endl;
+	cout << "Point: " << pt << endl;
+	*/
 	return !pt_in_circumcircle(pt, t2);
 }
 
-void DelaunayGridGenerator::flip_edge(Edge &e, Tri& t1, Tri& t2){
+void DelaunayGridGenerator::flip_edge(Edge e, Tri t1, Tri t2){
 	Point p1;
 	Point p2;
+
+	if(t1 == t2) {
+		throw "Badness";
+	}
+
+//	cout << "Before flip edge: " << faces.size() << endl;
+
+
+//	cout << "Tri1: " << t1 << endl;
+//	cout << "Tri2: " << t2 << endl;
+//	cout << "Edge: " << e << endl;
 
 	for(int i = 0; i < t1.verts.size(); i++){
 		if(!e.contains(t1.verts[i])){
@@ -152,38 +170,61 @@ void DelaunayGridGenerator::flip_edge(Edge &e, Tri& t1, Tri& t2){
 
 	for(int i = 0; i < t2.verts.size(); i++){
 		if(!e.contains(t2.verts[i])){
-			p2 = t1.verts[i];
+			p2 = t2.verts[i];
 			break;
 		}
 	}
 
-	remove(edges.begin(), edges.end(), e);
+	//cout << "p1: " << p1 << endl;
+	//cout << "p2: " << p2 << endl;
+
+	//cout << "Tri2: " << t2 << endl;
+	
+	//cout << "After first remove: " << faces.size() << endl;
+	faces.erase(remove(faces.begin(), faces.end(), t1), faces.end());
+
+	faces.erase(remove(faces.begin(), faces.end(), t2), faces.end());
+	//cout << "After second remove: " << faces.size() << endl;	
+
+/*
+	for (int i = 0; i < faces.size(); i++){
+		cout << "In faces: " << faces[i] << endl;
+	}
+*/
+	Tri new_t1(p1,e.p,e.q);
+	Tri new_t2(p2,e.p,e.q);
+
+	//cout << "New T1: " << new_t1 << endl;
+	//cout << "New T2: " << new_t2 << endl;
+
+	faces.push_back(new_t1);
+	faces.push_back(new_t2);
+
+	edges.erase(remove(edges.begin(), edges.end(), e), edges.end());
 	edges.push_back(Edge(p1,p2));
 
-	remove(faces.begin(), faces.end(), t1);
-	remove(faces.begin(), faces.end(), t2);
-	faces.push_back(Tri(p1,e.p,e.q));
-	faces.push_back(Tri(p2,e.p,e.q));
+//	cout << "After flip edge: " << faces.size() << endl;
 }
 
 void DelaunayGridGenerator::delaunay_triangulation() {
 	vector<Edge> marked = edges;
 
-	stack<Edge, vector<Edge> > edge_stack(edges);
+	stack<Edge, vector<Edge> > edge_stack(marked);
 
 	while (!edge_stack.empty()){
+		cout << "stack size: " << edge_stack.size() << endl;
 		Edge e = edge_stack.top();
 		edge_stack.pop();
-		remove(marked.begin(), marked.end(), e);
+		marked.erase(remove(marked.begin(), marked.end(), e), marked.end());
 
-		Tri t1;
-		Tri t2;
+		Tri *t1 = NULL;
+		Tri *t2 = NULL;
 
-		//TODO ugly, everything about it
+		//TODO ugly
 		int i;
 		for(i = 0; i < faces.size(); i++) {
 			if(faces[i].contains_edge(e)) {
-				t1 = *((Tri*)&faces[i]);
+				t1 = &faces[i];
 				i++;
 				break;
 			}
@@ -191,36 +232,46 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 
 		for(i; i < faces.size(); i++) {
 			if (faces[i].contains_edge(e)) {
-				t2 = *((Tri*)&faces[i]);
+				t2 = &faces[i];
 				break;
 			}
 		}
 
-		if(!is_locally_delaunay(e, t1, t2)){
-			//push unmarked edges on the perimeter 
-			for(int i = 0; i < t1.edges.size(); i++){
-				if((e != t1.edges[i]) && (count(marked.begin(), marked.end(), t1.edges[i]) == 0)){
-					marked.push_back(t1.edges[i]);
-					edge_stack.push(t1.edges[i]);
+		//if we find another tri with the shared edge, could be a border edge
+		if (t2 != NULL){
+		    //cout << t1 << endl;
+		    //cout << t2 << endl;
+			if(!is_locally_delaunay(e, *t1, *t2)){
+			    //push unmarked edges on the perimeter 
+				for(int i = 0; i < t1->edges.size(); i++){
+					if((e != t1->edges[i]) && (count(marked.begin(), marked.end(), t1->edges[i]) == 0)){
+						marked.push_back(t1->edges[i]);
+						edge_stack.push(t1->edges[i]);
+					}
 				}
-			}
 
-
-			for(int i = 0; i < t2.edges.size(); i++){
-				if( (e != t2.edges[i]) && (count(marked.begin(), marked.end(), t2.edges[i]) == 0)){
-					marked.push_back(t2.edges[i]);
-					edge_stack.push(t2.edges[i]);
+				for(int i = 0; i < t2->edges.size(); i++){
+					if((e != t2->edges[i]) && (count(marked.begin(), marked.end(), t2->edges[i]) == 0)){
+						marked.push_back(t2->edges[i]);
+						edge_stack.push(t2->edges[i]);
+					}
 				}
-			}
 
-			flip_edge(e, t1, t2);
+				cout << "stack size after: " << edge_stack.size() << endl;
+
+				flip_edge(e, *t1, *t2);
+			}
 		}
 	}
 }
 
+vector<Tri> DelaunayGridGenerator::get_faces(){
+	return faces;
+}
+
 // for debugging
 int main() {
-	vector<Point> pts = generate_uniform_rand(5, 10, 10);
+	vector<Point> pts = generate_uniform_rand(20, 20.0, 20.0);
 	DelaunayGridGenerator gen(pts);
 	vector<Edge> edges = gen.init_triangulation();
 	
@@ -234,7 +285,7 @@ int main() {
 
 	cout << edges.size() << endl;	
 
-	vector<Poly> faces = gen.get_faces();
+	vector<Tri> faces = gen.get_faces();
 	for (int i = 0; i < faces.size(); i++){
 		cout << faces[i] << endl;
 	}
@@ -247,4 +298,7 @@ int main() {
 	for (int i = 0; i < faces.size(); i++){
 		cout << faces[i] << endl;
 	}
+
+	cout << "Number of faces: " << faces.size() << endl;
+	cout << "Number of edges: " << edges.size() << endl;
 }

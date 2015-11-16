@@ -16,6 +16,3 @@ void GridGenerator::grid_to_file(string f){
 	//TODO
 }
 
-vector<Poly> GridGenerator::get_faces() {
-	return faces;
-}

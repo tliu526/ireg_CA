@@ -10,12 +10,12 @@ An implementation of points, currently using integer coordinates.
 
 class Point{
 public:
-    int x;
-    int y;
+    float x;
+    float y;
 
     Point() {}
 
-    Point(int xi, int yi);
+    Point(float xi, float yi);
 
     bool operator!=(Point &p);
     bool operator==(const Point &p);

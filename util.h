@@ -33,7 +33,7 @@ inline int min(int a, int b){ return (a>b) ? b : a; }
 /*
 Populates pts vector with n points sampled uniformly in a 2x by 2y dimension space.
 */
-std::vector<Point> generate_uniform_rand(int n, int x, int y);
+std::vector<Point> generate_uniform_rand(int n, float x, float y);
 
 /*
 Populates pts vector with n points from a poisson disk in a x by y dimension space.

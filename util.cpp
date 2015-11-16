@@ -3,15 +3,16 @@
 #include <random>
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 	
-vector<Point> generate_uniform_rand(int n, int x, int y) { 
+vector<Point> generate_uniform_rand(int n, float x, float y) { 
 	vector<Point> pts;
 
 	default_random_engine gen;
-	uniform_int_distribution<int> x_distr(-x, x);
-	uniform_int_distribution<int> y_distr(-y, y);
+	uniform_real_distribution<float> x_distr(-x, x);
+	uniform_real_distribution<float> y_distr(-y, y);
 
 	for (int i = 0; i < n; i++) {
         pts.push_back(Point(x_distr(gen), y_distr(gen)));
@@ -21,7 +22,7 @@ vector<Point> generate_uniform_rand(int n, int x, int y) {
 }
 
 int pt_orientation(Point p1, Point p2, Point p3){
-    int val = ((p2.y - p1.y) * (p3.x - p2.x)) - ((p3.y - p2.y) * (p2.x - p1.x));
+    float val = ((p2.y - p1.y) * (p3.x - p2.x)) - ((p3.y - p2.y) * (p2.x - p1.x));
 
     if (val == 0) 
         return 0;
@@ -64,7 +65,7 @@ bool edge_intersect(Edge e1, Edge e2) {
 
 
 void generate_poisson_disk(vector<Point>& pts, int n, float x, float y, float r){
-
+    //TODO
 }
 
 bool pt_in_tri(Point pt, Tri& tri){
@@ -86,7 +87,36 @@ bool pt_in_tri(Point pt, Tri& tri){
 
 //TODO
 bool pt_in_circumcircle(Point p, Tri &t){
-    return false;
+    Point v1 = t.verts[0];
+    Point v2 = t.verts[1];
+    Point v3 = t.verts[2];
+    /*
+    cout << v1 << endl;
+    cout << v2 << endl;
+    cout << v3 << endl;
+    cout << p << endl;
+    */
+    
+    //if points aren't counterclockwise, we make them so by swapping the first two points
+    if(pt_orientation(v1,v2,v3) != 2){
+        Point temp = v1;
+        v1 = v2;
+        v2 = temp;
+    }
+
+    //calculate the determinant, hard coded three by three
+    float a = v1.x - p.x;
+    float b = v1.y - p.y;
+    float c = (v1.x * v1.x) - (p.x * p.x) + (v1.y * v1.y) - (p.y * p.y);
+    float d = v2.x - p.x;
+    float e = v2.y - p.y;  
+    float f = (v2.x * v2.x) - (p.x * p.x) + (v2.y * v2.y) - (p.y * p.y);
+    float g = v3.x - p.x;
+    float h = v3.y - p.y;  
+    float i = (v3.x * v3.x) - (p.x * p.x) + (v3.y * v3.y) - (p.y * p.y);
+    float det = ((a*e*i) + (b*f*g) + (c*d*h) - (c*e*g) - (b*d*i) - (a*f*h));
+    //cout << det << endl;
+    return det > 0;
 }
 
 /*
