@@ -30,7 +30,7 @@ void DelaunayGridGenerator::generate_graph() {
 	//TODO
 }
 
-//TODO can be improved, how can we determine visibility quicker?
+//can be improved, how can we determine visibility quicker?
 bool DelaunayGridGenerator::isVisible(Point p, Point q){
 	Edge e(p, q);
 
@@ -48,7 +48,7 @@ bool DelaunayGridGenerator::isVisible(Point p, Point q){
 	return true;
 }
 
-//TODO horribly slow 
+//horribly slow 
 void DelaunayGridGenerator::add_tris(Point anchor, std::vector<Edge> &new_edges){
 	//walk through all pairs of new edges, see if there is a corresponding edge that can be added
 	for (int i = 0; i < new_edges.size(); i++){
@@ -137,29 +137,12 @@ bool DelaunayGridGenerator::is_locally_delaunay(Edge e, Tri t1, Tri t2){
 		}
 	}
 
-	/*
-	cout << "Tri1: " << t1 << endl;
-	cout << "Tri2: " << t2 << endl;
-	cout << "Edge: " << e << endl;
-	cout << "Point: " << pt << endl;
-	*/
 	return !pt_in_circumcircle(pt, t2);
 }
 
 void DelaunayGridGenerator::flip_edge(Edge e, Tri t1, Tri t2){
 	Point p1;
 	Point p2;
-
-	if(t1 == t2) {
-		throw "Badness";
-	}
-
-//	cout << "Before flip edge: " << faces.size() << endl;
-
-
-//	cout << "Tri1: " << t1 << endl;
-//	cout << "Tri2: " << t2 << endl;
-//	cout << "Edge: " << e << endl;
 
 	for(int i = 0; i < t1.verts.size(); i++){
 		if(!e.contains(t1.verts[i])){
@@ -175,35 +158,17 @@ void DelaunayGridGenerator::flip_edge(Edge e, Tri t1, Tri t2){
 		}
 	}
 
-	//cout << "p1: " << p1 << endl;
-	//cout << "p2: " << p2 << endl;
-
-	//cout << "Tri2: " << t2 << endl;
-	
-	//cout << "After first remove: " << faces.size() << endl;
 	faces.erase(remove(faces.begin(), faces.end(), t1), faces.end());
-
 	faces.erase(remove(faces.begin(), faces.end(), t2), faces.end());
-	//cout << "After second remove: " << faces.size() << endl;	
-
-/*
-	for (int i = 0; i < faces.size(); i++){
-		cout << "In faces: " << faces[i] << endl;
-	}
-*/
 	Tri new_t1(p1,e.p,e.q);
 	Tri new_t2(p2,e.p,e.q);
 
-	//cout << "New T1: " << new_t1 << endl;
-	//cout << "New T2: " << new_t2 << endl;
-
-	faces.push_back(new_t1);
-	faces.push_back(new_t2);
+	faces.push_back(Tri(p1,e.p,e.q));
+	faces.push_back(Tri(p2,e.p,e.q));
 
 	edges.erase(remove(edges.begin(), edges.end(), e), edges.end());
 	edges.push_back(Edge(p1,p2));
 
-//	cout << "After flip edge: " << faces.size() << endl;
 }
 
 void DelaunayGridGenerator::delaunay_triangulation() {
@@ -212,14 +177,13 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 	stack<Edge, vector<Edge> > edge_stack(marked);
 
 	while (!edge_stack.empty()){
-		cout << "stack size: " << edge_stack.size() << endl;
+		//cout << "stack size: " << edge_stack.size() << endl;
 		Edge e = edge_stack.top();
 		edge_stack.pop();
 		marked.erase(remove(marked.begin(), marked.end(), e), marked.end());
 
 		Tri *t1 = NULL;
 		Tri *t2 = NULL;
-
 		//TODO ugly
 		int i;
 		for(i = 0; i < faces.size(); i++) {
@@ -239,14 +203,15 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 
 		//if we find another tri with the shared edge, could be a border edge
 		if (t2 != NULL){
-		    //cout << t1 << endl;
-		    //cout << t2 << endl;
 			if(!is_locally_delaunay(e, *t1, *t2)){
-			    //push unmarked edges on the perimeter 
+			    //push unmarked edges on the perimeter, is this necessary?
+			    /*
 				for(int i = 0; i < t1->edges.size(); i++){
 					if((e != t1->edges[i]) && (count(marked.begin(), marked.end(), t1->edges[i]) == 0)){
 						marked.push_back(t1->edges[i]);
 						edge_stack.push(t1->edges[i]);
+						cout << "e: " << e << endl;
+						cout << "Pushed edge (t1): " << t1->edges[i] << endl;
 					}
 				}
 
@@ -254,11 +219,13 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 					if((e != t2->edges[i]) && (count(marked.begin(), marked.end(), t2->edges[i]) == 0)){
 						marked.push_back(t2->edges[i]);
 						edge_stack.push(t2->edges[i]);
+						cout << "t2: " << *t2 << endl;
+						cout << "e: " << e << endl;
+						cout << "Pushed edge (t2): " << t2->edges[i] << endl;		
+						cout << endl;
 					}
 				}
-
-				cout << "stack size after: " << edge_stack.size() << endl;
-
+	            */
 				flip_edge(e, *t1, *t2);
 			}
 		}
@@ -271,10 +238,10 @@ vector<Tri> DelaunayGridGenerator::get_faces(){
 
 // for debugging
 int main() {
-	vector<Point> pts = generate_uniform_rand(20, 20.0, 20.0);
+	vector<Point> pts = generate_uniform_rand(4000, 50.0, 50.0);
 	DelaunayGridGenerator gen(pts);
 	vector<Edge> edges = gen.init_triangulation();
-	
+	/*
 	for (int i = 0; i < pts.size(); i++){
 		cout << pts[i] << endl;
 	}
@@ -291,14 +258,15 @@ int main() {
 	}
 
 	cout << "Delaunay testing: " << endl;
-
+	*/
 	gen.delaunay_triangulation();
-
+/*
 	faces = gen.get_faces();
 	for (int i = 0; i < faces.size(); i++){
 		cout << faces[i] << endl;
 	}
-
+*/
+	vector<Tri> faces = gen.get_faces();
 	cout << "Number of faces: " << faces.size() << endl;
 	cout << "Number of edges: " << edges.size() << endl;
 }
