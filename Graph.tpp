@@ -4,8 +4,6 @@ Implementing the adjacency list graph.
 (c) 2015 Tony Liu.
 */
 
-//#include "Graph.h"
-
 #include <iostream>
 
 using namespace std;
@@ -65,6 +63,17 @@ void Graph<T,D>::print_adj_list() {
     }
     cout << "Average degree: " << avg / dict.size() << endl;
 }
+
+template<class T, class D>
+D Graph<T,D>::get_data(T label){
+  return dict[label].get_data();
+}
+
+template<class T, class D>
+list<T> *Graph<T,D>::get_neighbors(T label){
+  return dict[label].get_neighbors();
+}
+
 
 /**** VERTEX IMPLEMENTATION ****/
 

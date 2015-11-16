@@ -17,7 +17,6 @@ Need to look at optimizing some of the other functions, or switching to an alter
 
 #include <algorithm>
 #include <iostream>
-#include <sstream>
 #include <stack>
 #include <string>
 #include <utility>
@@ -26,23 +25,10 @@ using namespace std;
 
 DelaunayGridGenerator::DelaunayGridGenerator(vector<Point> &pts) : GridGenerator(pts) {
 	verts = pts;
-
-	//initialize pt_map
-	//upper bound on number of digits;
-	
-
-	for (int i = 0; i < verts.size(); i++) {
-		stringstream ss;
-		ss << "p";
-		
-		int n = digit_diff(i, verts.size());
-		while(n--) { ss << "0"; }
-			
-		ss << i; 
-		pt_map[verts[i]] = ss.str();
-	}
-
-	//TODO add initialization here?
+	init_triangulation();
+	delaunay_triangulation();
+	init_maps();
+	generate_graph();
 }
 
 bool point_xcomparator(Point a, Point b){
@@ -62,7 +48,7 @@ void DelaunayGridGenerator::generate_graph() {
 		graph.add_edge(p1,p2);
 	}
 
-	graph.print_adj_list();
+	//graph.print_adj_list();
 }
 
 //can be improved, how can we determine visibility quicker?
@@ -269,34 +255,13 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 int main() {
 	vector<Point> pts = generate_uniform_rand(1111, 20.0, 20.0);
 	DelaunayGridGenerator gen(pts);
-	vector<Edge> edges = gen.init_triangulation();
-	/*
-	for (int i = 0; i < pts.size(); i++){
-		cout << pts[i] << endl;
-	}
+	//vector<Edge> edges = gen.init_triangulation();
 
-	for (int i = 0; i < edges.size(); i++){
-		cout << edges[i] << endl;
-	}
+	//gen.delaunay_triangulation();
 
-	cout << edges.size() << endl;	
+	//cout << "Number of faces: " << faces.size() << endl;
+	//cout << "Number of edges: " << edges.size() << endl;
 
-	vector<Tri> faces = gen.get_faces();
-	for (int i = 0; i < faces.size(); i++){
-		cout << faces[i] << endl;
-	}
-	cout << "Delaunay testing: " << endl;
-	*/
-	gen.delaunay_triangulation();
-/*
-	faces = gen.get_faces();
-	for (int i = 0; i < faces.size(); i++){
-		cout << faces[i] << endl;
-	}
-*/
-	vector<Poly> faces = gen.get_faces();
-	cout << "Number of faces: " << faces.size() << endl;
-	cout << "Number of edges: " << edges.size() << endl;
-
-	gen.generate_graph();
+	//gen.generate_graph();
+	gen.grid_to_file("test.txt");
 }

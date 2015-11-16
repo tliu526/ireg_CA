@@ -23,6 +23,10 @@ public:
 	void remove_edge(T label1, T label2);
 
 	void print_adj_list(); // for debugging purposes
+	
+
+	std::list<T> *get_neighbors(T label);
+	D             get_data(T label);
 
 private:
 	class Vertex { //nested vertex class

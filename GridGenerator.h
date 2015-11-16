@@ -11,6 +11,7 @@ and edges.
 #include "Graph.h"
 #include "Cell.h"
 #include "Poly.h"
+
 #include <vector>
 #include <string>
 #include <map>
@@ -21,11 +22,16 @@ public:
 
 	virtual void generate_graph() = 0;
 	void grid_to_file(std::string f);
-	
-	//TODO make this work
+
 	std::vector<Poly> get_faces();
 
 protected:
+	/*
+	initializes pt, edge, face maps
+	pre: verts, edges, faces are initialized
+	*/
+	void init_maps(); 
+
 	std::vector<Point> gen_pts; //The generator points for the grid
 	std::vector<Point> verts;
 	std::vector<Edge>  edges;
@@ -33,6 +39,9 @@ protected:
 	
 	Graph<std::string, Cell> graph;
 	std::map<Point, std::string> pt_map; 
+	//TODO
+	std::map<Edge, std::string> edge_map;
+	std::map<Poly, std::string> face_map;
 };
 
 #endif
