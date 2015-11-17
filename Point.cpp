@@ -18,7 +18,7 @@ bool Point::operator!=(Point &p){
     return (x != p.x) || (y != p.y);
 }
 
-bool Point::operator==(const Point& p){
+bool Point::operator==(const Point& p) const{
     return (x == p.x) && (y == p.y);
 }
 

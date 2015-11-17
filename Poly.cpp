@@ -19,6 +19,9 @@ Poly::Poly(vector<Edge> &in_edges){
 			verts.push_back(edges[i].q);
 	}
 
+	sort(verts.begin(), verts.end());
+	sort(edges.begin(), edges.end());
+
 	num_edges = edges.size();
 	num_verts = verts.size();
 }
@@ -42,6 +45,10 @@ bool Poly::operator==(const Poly& poly){
 	return true;
 }
 
+//TODO comparisons should be made via area
+bool Poly::operator< (const Poly &poly) const {
+	return false;
+}
 /*
 int main() {
 	vector<Edge> edges;

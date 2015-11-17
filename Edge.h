@@ -22,7 +22,7 @@ public:
 
     bool operator!=(Edge &e);    
     bool operator== (const Edge &e);
-
+    bool operator< (const Edge &e) const;
     bool contains (Point p);
 
     friend std::ostream & operator<<(std::ostream & _stream, Edge const &e){

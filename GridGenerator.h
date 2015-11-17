@@ -39,9 +39,9 @@ protected:
 	
 	Graph<std::string, Cell> graph;
 	std::map<Point, std::string> pt_map; 
-	//TODO
 	std::map<Edge, std::string> edge_map;
-	std::map<Poly, std::string> face_map;
+	//TODO
+	//std::map<Poly, std::string> face_map;
 };
 
 #endif

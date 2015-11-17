@@ -119,6 +119,7 @@ bool DelaunayGridGenerator::isValidTri(Tri &t){
 
 vector<Edge> DelaunayGridGenerator::init_triangulation() {
 
+	//TODO get rid of xcomparator
 	sort(gen_pts.begin(), gen_pts.end(), point_xcomparator); //sort by x_coord
 
 	//Initialize by adding the "leftmost" triangle
@@ -178,16 +179,16 @@ void DelaunayGridGenerator::flip_edge(Edge e, Tri t1, Tri t2){
 			break;
 		}
 	}
+	Edge new_e(p1,p2);
 
 	faces.erase(remove(faces.begin(), faces.end(), t1), faces.end());
 	faces.erase(remove(faces.begin(), faces.end(), t2), faces.end());
 
-	faces.push_back(Tri(p1,e.p,e.q));
-	faces.push_back(Tri(p2,e.p,e.q));
+	faces.push_back(Tri(new_e, Edge(p1,e.p), Edge(p2, e.p)));
+	faces.push_back(Tri(new_e, Edge(p1,e.q), Edge(p2, e.q)));
 
 	edges.erase(remove(edges.begin(), edges.end(), e), edges.end());
-	edges.push_back(Edge(p1,p2));
-
+	edges.push_back(new_e);
 }
 
 void DelaunayGridGenerator::delaunay_triangulation() {
@@ -255,13 +256,12 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 int main() {
 	vector<Point> pts = generate_uniform_rand(1111, 20.0, 20.0);
 	DelaunayGridGenerator gen(pts);
-	//vector<Edge> edges = gen.init_triangulation();
-
-	//gen.delaunay_triangulation();
-
-	//cout << "Number of faces: " << faces.size() << endl;
-	//cout << "Number of edges: " << edges.size() << endl;
+	
+	//cout << "After Delaunay Triangulation" << endl;
+	//cout << "Number of faces: " << gen.faces.size() << endl;
+	//cout << "Number of edges: " << gen.edges.size() << endl;
 
 	//gen.generate_graph();
+
 	gen.grid_to_file("test.txt");
 }

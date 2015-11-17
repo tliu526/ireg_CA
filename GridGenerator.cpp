@@ -29,8 +29,8 @@ void GridGenerator::init_maps(){
 		ss << i; 
 		pt_map[verts[i]] = ss.str();
 	}
-//TODO add < comparators
-/*
+
+
 	//edge_map
 	for (int i = 0; i < edges.size(); i++) {
 		stringstream ss;
@@ -44,6 +44,7 @@ void GridGenerator::init_maps(){
 	}
 
 	//face_map
+	/*
 	for (int i = 0; i < faces.size(); i++) {
 		stringstream ss;
 		ss << "f";
@@ -54,7 +55,7 @@ void GridGenerator::init_maps(){
 		ss << i; 
 		face_map[faces[i]] = ss.str();
 	}
-*/
+	*/
 }
 
 void GridGenerator::grid_to_file(string f){
@@ -68,16 +69,16 @@ void GridGenerator::grid_to_file(string f){
 	file << "Neighbors" << endl;
 
 	for (int i = 0; i < verts.size(); i++){
-		string id = pt_map[verts[i]];
-		Cell c = graph.get_data(id);
-		file << id << " " << verts[i] << " " << c.is_alive() << " ";
+		string v_id = pt_map[verts[i]];
+		Cell c = graph.get_data(v_id);
+		file << v_id << " " << verts[i] << " " << c.is_alive();
 
 		//TODO print property list
 
 		typename list<string>::iterator list_it;
-		list<string>* neighbors = graph.get_neighbors(id);
+		list<string>* neighbors = graph.get_neighbors(v_id);
 		for (list_it = neighbors->begin(); list_it != neighbors->end(); list_it++) {
-         file << *list_it << " ";
+         file << " " << *list_it;
        }
 
 		file << endl;
@@ -86,9 +87,36 @@ void GridGenerator::grid_to_file(string f){
 	file << endl;
 
 	/**** EDGES ****/
+	file << "Edges" << " " << edges.size() << endl;
+	file << "Label" << " " << "p" << " " << "q" << endl;
 
+	for (int i = 0; i < edges.size(); i++){
+		string e_id = edge_map[edges[i]];
+		file << e_id << " " << pt_map[edges[i].p] << " " << pt_map[edges[i].q] << endl;
+	}
 
+	file << endl;
 	/**** FACES ****/
+	file << "Faces" << " " << faces.size() << endl;
+	file << "Label" << " " << "Edges" << endl;
+
+	for (int i = 0; i < faces.size(); i++) {
+		stringstream ss;
+		ss << "f";
+		
+		int n = digit_diff(i, faces.size());
+		while(n--) { ss << "0"; }			
+		ss << i; 
+
+		string f_id = ss.str();
+		file << f_id;
+		vector<Edge> edge_vec(faces[i].edges);
+		for (int j = 0; j < edge_vec.size(); j++){
+			file << " " << edge_map[edge_vec[j]];
+		}
+
+		file << endl;
+	}
 
 	file.close();
 }

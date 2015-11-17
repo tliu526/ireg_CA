@@ -18,11 +18,11 @@ public:
     Point(float xi, float yi);
 
     bool operator!=(Point &p);
-    bool operator==(const Point &p);
+    bool operator==(const Point &p) const;
     bool operator<(const Point &p) const;
 	//toString equivalent
     friend std::ostream & operator<<(std::ostream & _stream, Point const &p){
-    	_stream << "(" << p.x << ", " << p.y << ")";
+    	_stream << "(" << p.x << "," << p.y << ")";
         return _stream;
     }
 };

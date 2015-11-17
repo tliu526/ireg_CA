@@ -19,10 +19,10 @@ Tri::Tri(Edge e1, Edge e2, Edge e3) {
 
 	for (int i = 0; i < edges.size(); i++){
 		if(count(verts.begin(), verts.end(), edges[i].p) == 0)
-			verts.push_back(edges[i].p);
+			verts.push_back(Point(edges[i].p));
 
 		if(count(verts.begin(), verts.end(), edges[i].q) == 0)
-			verts.push_back(edges[i].q);
+			verts.push_back(Point(edges[i].q));
 	}
 
 	num_edges = edges.size();
