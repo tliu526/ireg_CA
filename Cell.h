@@ -26,11 +26,13 @@ public:
 	Point       get_point();
 
 	std::string get_property(std::string label);
+	std::vector<std::string> get_prop_list();
 protected:
 	bool alive;
 	Point pt; // the point in the space that corresponds to 
 	std::string id;
 
+	static std::vector<std::string> properties;
 	//TODO make the value of variable type?
 	std::map<std::string, std::string> prop_map;
 };

@@ -27,7 +27,7 @@ DelaunayGridGenerator::DelaunayGridGenerator(vector<Point> &pts) : GridGenerator
 	verts = pts;
 	init_triangulation();
 	delaunay_triangulation();
-	init_maps();
+	init_maps();	
 	generate_graph();
 }
 
@@ -48,7 +48,7 @@ void DelaunayGridGenerator::generate_graph() {
 		graph.add_edge(p1,p2);
 	}
 
-	//graph.print_adj_list();
+	graph.print_adj_list();
 }
 
 //can be improved, how can we determine visibility quicker?
@@ -224,28 +224,6 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 		//if we find another tri with the shared edge, could be a border edge
 		if (t2 != NULL){
 			if(!is_locally_delaunay(e, *t1, *t2)){
-			    //push unmarked edges on the perimeter, is this necessary?
-			    /*
-				for(int i = 0; i < t1->edges.size(); i++){
-					if((e != t1->edges[i]) && (count(marked.begin(), marked.end(), t1->edges[i]) == 0)){
-						marked.push_back(t1->edges[i]);
-						edge_stack.push(t1->edges[i]);
-						cout << "e: " << e << endl;
-						cout << "Pushed edge (t1): " << t1->edges[i] << endl;
-					}
-				}
-
-				for(int i = 0; i < t2->edges.size(); i++){
-					if((e != t2->edges[i]) && (count(marked.begin(), marked.end(), t2->edges[i]) == 0)){
-						marked.push_back(t2->edges[i]);
-						edge_stack.push(t2->edges[i]);
-						cout << "t2: " << *t2 << endl;
-						cout << "e: " << e << endl;
-						cout << "Pushed edge (t2): " << t2->edges[i] << endl;		
-						cout << endl;
-					}
-				}
-	            */
 				flip_edge(e, *t1, *t2);
 			}
 		}
