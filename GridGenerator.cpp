@@ -121,6 +121,34 @@ void GridGenerator::grid_to_file(string f){
 	file.close();
 }
 
+void GridGenerator::grid_to_dot(string name){
+	ofstream file;
+	file.open(name+".dot");
+	file << "Graph G {" << endl;
+	file << "node [shape = circle, style=filled, width=0.05, height=0.05];" << endl;
+
+
+	for (int i = 0; i < verts.size(); i++){
+		string v_id = pt_map[verts[i]];
+		stringstream ss;
+		ss << verts[i];
+		string coord = ss.str();
+		coord = coord.substr(1, coord.size()-2);
+		//cout << "Coord: " << coord << endl;
+		file << v_id << " [pos = \"" << coord << "!\"];" << endl;
+	}
+
+	file << endl;
+
+	for (int i = 0; i < edges.size(); i++){
+		file << pt_map[edges[i].p] << " -- " << pt_map[edges[i].q] << ";" << endl;
+	}
+
+	file << "}" << endl;
+
+	file.close();
+}
+
 vector<Poly> GridGenerator::get_faces(){
 	return faces;
 }

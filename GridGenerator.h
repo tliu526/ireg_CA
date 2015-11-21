@@ -22,7 +22,7 @@ public:
 
 	virtual void generate_graph() = 0;
 	void grid_to_file(std::string f);
-
+	void grid_to_dot(std::string out_name); //converts the grid to a (neato) graphviz file
 	std::vector<Poly> get_faces();
 
 protected:

@@ -115,7 +115,7 @@ bool pt_in_circumcircle(Point p, Tri &t){
     float h = v3.y - p.y;  
     float i = (v3.x * v3.x) - (p.x * p.x) + (v3.y * v3.y) - (p.y * p.y);
     float det = ((a*e*i) + (b*f*g) + (c*d*h) - (c*e*g) - (b*d*i) - (a*f*h));
-    //cout << det << endl;
+   // cout << "Det: " << det << endl;
     return det > 0;
 }
 

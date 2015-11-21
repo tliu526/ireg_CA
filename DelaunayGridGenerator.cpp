@@ -48,7 +48,7 @@ void DelaunayGridGenerator::generate_graph() {
 		graph.add_edge(p1,p2);
 	}
 
-	graph.print_adj_list();
+	//graph.print_adj_list();
 }
 
 //can be improved, how can we determine visibility quicker?
@@ -184,13 +184,65 @@ void DelaunayGridGenerator::flip_edge(Edge e, Tri t1, Tri t2){
 	faces.erase(remove(faces.begin(), faces.end(), t1), faces.end());
 	faces.erase(remove(faces.begin(), faces.end(), t2), faces.end());
 
-	faces.push_back(Tri(new_e, Edge(p1,e.p), Edge(p2, e.p)));
-	faces.push_back(Tri(new_e, Edge(p1,e.q), Edge(p2, e.q)));
+	Tri new_t1(new_e, Edge(p1,e.p), Edge(p2, e.p));
+	Tri new_t2(new_e, Edge(p1,e.q), Edge(p2, e.q));
+
+	faces.push_back(new_t1);
+	faces.push_back(new_t2);
 
 	edges.erase(remove(edges.begin(), edges.end(), e), edges.end());
 	edges.push_back(new_e);
+
+	//sanity check
+	if(pt_in_circumcircle(e.p, new_t2) || pt_in_circumcircle(e.q, new_t1)) {
+		cout << "something horrible has happened" << endl;
+	}
 }
 
+//stupid version for debugging purposes
+void DelaunayGridGenerator::delaunay_triangulation() {
+	bool all_delaunay = false;
+	while(!all_delaunay){
+//		cout << "still not all delaunay" << endl;
+		int c;
+		for(c = 0; c < edges.size(); c++){
+			Edge e = edges[c];
+			Tri *t1 = NULL;
+			Tri *t2 = NULL;
+
+		    //is there a better way to do this?
+			for(int i = 0; i < faces.size(); i++) {
+				if(faces[i].contains_edge(e)) {
+					t1 = (Tri*)&faces[i];
+					break;
+				}
+			}
+
+			for(int i = 0; i < faces.size(); i++) {
+				if (faces[i].contains_edge(e) && (&faces[i] != t1)) {
+					t2 = (Tri*)&faces[i];
+					break;
+				}
+			}
+
+			//if we find another tri with the shared edge, could be a border edge
+			if (t2 != NULL){
+				if(!is_locally_delaunay(e, *t1, *t2)){
+					flip_edge(e, *t1, *t2);
+					break;
+				}
+			}
+			else{
+				//cout << "border" << endl;
+			}				
+		}
+
+		if(c == edges.size()){
+			all_delaunay = true;
+		}
+	}
+}
+/*
 void DelaunayGridGenerator::delaunay_triangulation() {
 	vector<Edge> marked = edges;
 
@@ -204,7 +256,8 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 
 		Tri *t1 = NULL;
 		Tri *t2 = NULL;
-		//TODO ugly
+
+		//is there a better way to do this?
 		int i;
 		for(i = 0; i < faces.size(); i++) {
 			if(faces[i].contains_edge(e)) {
@@ -229,10 +282,20 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 		}
 	}
 }
-
+*/
 // for debugging
 int main() {
-	vector<Point> pts = generate_uniform_rand(1111, 20.0, 20.0);
+	Point p1(0,0);
+	Point p2(0,1);
+	Point p3(1,0);
+	Point p4(0, 0.5);
+
+	Tri t(Edge(p1,p2), Edge(p2,p3), Edge(p1,p3));
+
+	cout << "point in circle " << pt_in_circumcircle(p1, t) << endl;
+	//return 0;
+
+	vector<Point> pts = generate_uniform_rand(400, 70.0, 70.0);
 	DelaunayGridGenerator gen(pts);
 	
 	//cout << "After Delaunay Triangulation" << endl;
@@ -242,4 +305,5 @@ int main() {
 	//gen.generate_graph();
 
 	gen.grid_to_file("test.txt");
+	gen.grid_to_dot("test");
 }
