@@ -72,6 +72,13 @@ TODO: what about points lying directly on the circumcircle?
 */
 bool pt_in_circumcircle(Point p, Tri& t);
 
+/*
+Gets the circumcenter of a tri. The circumcenter of a tri in a Delaunay triangulation
+is a vertex in the Voronoi diagram.
+From https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates_2
+*/
+Point get_circumcenter(Tri &t);
+
 /**** LINEAR ALG FUNCTIONS ****/
 
 

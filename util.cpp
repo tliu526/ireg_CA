@@ -85,17 +85,10 @@ bool pt_in_tri(Point pt, Tri& tri){
     return (0 <= a) && (a <= 1) && (0 <= b) && (b <= 1) && (0 <= c) && (c <= 1);
 }
 
-//TODO
 bool pt_in_circumcircle(Point p, Tri &t){
     Point v1 = t.verts[0];
     Point v2 = t.verts[1];
     Point v3 = t.verts[2];
-    /*
-    cout << v1 << endl;
-    cout << v2 << endl;
-    cout << v3 << endl;
-    cout << p << endl;
-    */
     
     //if points aren't counterclockwise, we make them so by swapping the first two points
     if(pt_orientation(v1,v2,v3) != 2){
@@ -117,6 +110,19 @@ bool pt_in_circumcircle(Point p, Tri &t){
     float det = ((a*e*i) + (b*f*g) + (c*d*h) - (c*e*g) - (b*d*i) - (a*f*h));
    // cout << "Det: " << det << endl;
     return det > 0;
+}
+
+Point get_circumcenter(Tri &t) {
+    Point a = t.verts[0];
+    Point b = t.verts[1];
+    Point c = t.verts[2];
+    
+    float D = 2*((a.x*(b.y - c.y)) + (b.x*(c.y - a.y)) + (c.x*(a.y - b.y)));
+
+    float x = ((a.x*a.x + a.y*a.y)*(b.y - c.y) + (b.x*b.x + b.y*b.y)*(c.y - a.y) + (c.x*c.x + c.y*c.y)*(a.y-b.y)) / D;
+    float y = ((a.x*a.x + a.y*a.y)*(c.x - b.x) + (b.x*b.x + b.y*b.y)*(a.x - c.x) + (c.x*c.x + c.y*c.y)*(b.x-a.x)) / D;
+
+    return Point(x,y);
 }
 
 int num_digits(int n){

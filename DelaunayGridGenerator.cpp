@@ -8,7 +8,7 @@ revist the implementation for improvements.
 References:
 https://www.cs.duke.edu/courses/fall08/cps230/Lectures/L-21.pdf
 
-We have approximately n^2 scaling, 1000 points takes 2.1 seconds, 5000 points takes ~1 min. Not great.
+We have approximately n^2 scaling, 1000 points takes 2.1 seconds, 4000 points takes ~2 min. Not great.
 Need to look at optimizing some of the other functions, or switching to an alternative algorithm.
 
 (c) Tony Liu 2015.
@@ -199,50 +199,6 @@ void DelaunayGridGenerator::flip_edge(Edge e, Tri t1, Tri t2){
 	}
 }
 
-//stupid version for debugging purposes
-void DelaunayGridGenerator::delaunay_triangulation() {
-	bool all_delaunay = false;
-	while(!all_delaunay){
-//		cout << "still not all delaunay" << endl;
-		int c;
-		for(c = 0; c < edges.size(); c++){
-			Edge e = edges[c];
-			Tri *t1 = NULL;
-			Tri *t2 = NULL;
-
-		    //is there a better way to do this?
-			for(int i = 0; i < faces.size(); i++) {
-				if(faces[i].contains_edge(e)) {
-					t1 = (Tri*)&faces[i];
-					break;
-				}
-			}
-
-			for(int i = 0; i < faces.size(); i++) {
-				if (faces[i].contains_edge(e) && (&faces[i] != t1)) {
-					t2 = (Tri*)&faces[i];
-					break;
-				}
-			}
-
-			//if we find another tri with the shared edge, could be a border edge
-			if (t2 != NULL){
-				if(!is_locally_delaunay(e, *t1, *t2)){
-					flip_edge(e, *t1, *t2);
-					break;
-				}
-			}
-			else{
-				//cout << "border" << endl;
-			}				
-		}
-
-		if(c == edges.size()){
-			all_delaunay = true;
-		}
-	}
-}
-/*
 void DelaunayGridGenerator::delaunay_triangulation() {
 	vector<Edge> marked = edges;
 
@@ -277,25 +233,39 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 		//if we find another tri with the shared edge, could be a border edge
 		if (t2 != NULL){
 			if(!is_locally_delaunay(e, *t1, *t2)){
+
+				for(int i = 0; i < t1->edges.size(); i++){
+					if((e != t1->edges[i]) && (count(marked.begin(), marked.end(), t1->edges[i]) == 0)){
+						marked.push_back(t1->edges[i]);
+						edge_stack.push(t1->edges[i]);
+					}
+				}
+
+				for(int i = 0; i < t2->edges.size(); i++){
+					if((e != t2->edges[i]) && (count(marked.begin(), marked.end(), t2->edges[i]) == 0)){
+						marked.push_back(t2->edges[i]);
+						edge_stack.push(t2->edges[i]);
+					}
+				}
+
 				flip_edge(e, *t1, *t2);
 			}
 		}
 	}
 }
-*/
+
 // for debugging
 int main() {
-	Point p1(0,0);
-	Point p2(0,1);
-	Point p3(1,0);
-	Point p4(0, 0.5);
+/*
+	Point p1(1,2);
+	Point p2(4,7);
+	Point p3(-5,10);
 
 	Tri t(Edge(p1,p2), Edge(p2,p3), Edge(p1,p3));
-
-	cout << "point in circle " << pt_in_circumcircle(p1, t) << endl;
-	//return 0;
-
-	vector<Point> pts = generate_uniform_rand(400, 70.0, 70.0);
+	cout << "Circumcenter: " << get_circumcenter(t) << endl;
+	return 0;
+*/
+	vector<Point> pts = generate_uniform_rand(4000, 70.0, 70.0);
 	DelaunayGridGenerator gen(pts);
 	
 	//cout << "After Delaunay Triangulation" << endl;
