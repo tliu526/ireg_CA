@@ -45,6 +45,17 @@ bool Poly::operator==(const Poly& poly){
 	return true;
 }
 
+
+bool Poly::shares_edge(Poly &poly){
+	for(int i = 0; i < edges.size(); i++){
+		if(count(poly.edges.begin(), poly.edges.end(), edges[i]) > 0){
+			return true;
+		}
+	}
+
+	return false;
+}
+
 //TODO comparisons should be made via area
 bool Poly::operator< (const Poly &poly) const {
 	return false;

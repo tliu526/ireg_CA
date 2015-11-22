@@ -38,13 +38,13 @@ bool point_xcomparator(Point a, Point b){
 void DelaunayGridGenerator::generate_graph() {
 
 	typename map<Point, string>::iterator map_it;
-	for(map_it = rev_pt_map.begin(); map_it != rev_pt_map.end(); map_it++) {
+	for(map_it = rev_gen_pt_map.begin(); map_it != rev_gen_pt_map.end(); map_it++) {
 		graph.add_vertex(map_it->second, Cell(map_it->first, map_it->second));		
 	}
 
 	for (int i = 0; i < edges.size(); i++){
-		string p1 = rev_pt_map[edges[i].p];
-		string p2 = rev_pt_map[edges[i].q];
+		string p1 = rev_gen_pt_map[edges[i].p];
+		string p2 = rev_gen_pt_map[edges[i].q];
 		graph.add_edge(p1,p2);
 	}
 

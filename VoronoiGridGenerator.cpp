@@ -18,6 +18,7 @@ using namespace std;
 
 VoronoiGridGenerator::VoronoiGridGenerator(string file){
 	init_from_file(file);
+	init_voronoi();
 }
 
 void VoronoiGridGenerator::init_from_file(string file){
@@ -112,7 +113,6 @@ void VoronoiGridGenerator::init_from_file(string file){
 		iss >> name >> e1 >> e2 >> e3;
 
 		Tri t(edge_map[e1], edge_map[e2], edge_map[e3]);
-		faces.push_back(t);
 		tri_map[name] = t;
 
 		for (int i = 0; i < t.edges.size(); i++){
@@ -125,13 +125,59 @@ void VoronoiGridGenerator::init_from_file(string file){
 }
 
 void VoronoiGridGenerator::init_voronoi(){
+	vector<Edge> new_edges;
+
 	typename map<string, vector<string> >::iterator map_it;
-	//TODO clear edges, populate verts, and faces
+	for(map_it = pt_face_map.begin(); map_it != pt_face_map.end(); map_it++){
+
+		vector<string> adj_faces = map_it->second;
+		vector<Edge> face_edges;
+
+		for(int i = 0; i < adj_faces.size(); i++){
+			Tri t1 = tri_map[adj_faces[i]];
+			Point v1 = get_circumcenter(t1);
+
+			verts.push_back(v1);
+
+			for(int j = 0; j < adj_faces.size(); j++){
+				if(i != j){
+					Tri t2 = tri_map[adj_faces[j]];	
+					if(t2.shares_edge(t1)){
+						Point v2 = get_circumcenter(t2);
+						face_edges.push_back(Edge(v1, v2));
+						break;
+					}
+				}
+			}
+		}
+		new_edges.insert(new_edges.end(), face_edges.begin(), face_edges.end());
+		faces.push_back(Poly(face_edges));
+
+	}
+	edges = new_edges;
+	edge_map.clear();
+	rev_edge_map.clear();
+	//pt_map.clear();
+	//rev_pt_map.clear();
 }
 
 void VoronoiGridGenerator::generate_graph(){}
 
 int main(){
+	Point p1(0,0);
+	Point p2(0,1);
+	Point p3(1,0);
+	Point p4(0,-1);
+
+	Tri t1(Edge(p1,p2),Edge(p2,p3), Edge(p1,p3));
+	Tri t2(Edge(p1,p2),Edge(p2,p4), Edge(p1,p4));
+
+	cout << t1 << endl;
+	cout << t2 << endl;
+
+	cout << t1.shares_edge(t2) << endl;
+	return 0;
+
 	VoronoiGridGenerator v("test.txt");
-	v.grid_to_file("vtest.txt");
+	//v.grid_to_file("vtest.txt");
 }

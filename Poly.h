@@ -30,6 +30,8 @@ class Poly {
 		bool operator==(const Poly &p);
 		bool operator< (const Poly &p) const;
 
+		bool shares_edge(Poly &p);
+
 		friend std::ostream & operator<<(std::ostream &_stream, Poly const &p){
 			_stream << "Verts: "; 
 			for(int i = 0; i < p.verts.size(); i++){
