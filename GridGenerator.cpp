@@ -103,7 +103,7 @@ void GridGenerator::grid_to_file(string f){
 	file << endl;
 
 	/**** VERTICES ****/
-	file << "Vertices" << verts.size() << endl;
+	file << "Vertices" << " " << verts.size() << endl;
 	for (int i = 0; i < verts.size(); i++){
 		string v_id = rev_vert_map[verts[i]];
 		file << v_id << " " << verts[i] << endl;

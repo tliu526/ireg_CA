@@ -13,32 +13,36 @@ Grid Generator.
 #include <sstream>
 #include <iostream>
 #include <cstdlib>
+#include <algorithm>
 
 using namespace std;
 
 VoronoiGridGenerator::VoronoiGridGenerator(string file){
 	init_from_file(file);
 	init_voronoi();
+
+	//worries about overwriting rev_gen_pts_map
+	init_maps();
 }
 
 void VoronoiGridGenerator::init_from_file(string file){
 	string line, name, coord, neighbor;
-	int count;
+	int n;
 	bool isAlive;
 	istringstream iss;
 	ifstream in(file);
 	
-	/**** POINTS ****/
+	/**** GEN POINTS ****/
 	getline(in, line);
 
 	iss.str(line);
 	iss.clear();
-	iss >> name >> count;
+	iss >> name >> n;
 
 	//TODO attributes, this line is ignored for now
 	getline(in, line);
 
-	for (int i = 0; i < count; i++){
+	for (int i = 0; i < n; i++){
 		getline(in,line);
 		iss.str(line);
 		iss.clear();
@@ -47,7 +51,7 @@ void VoronoiGridGenerator::init_from_file(string file){
 
 		//TODO attribute list
 		/*
-	    while(count){
+	    while(n){
 	        iss >> attr;
 	        //do something
 	    }
@@ -63,7 +67,7 @@ void VoronoiGridGenerator::init_from_file(string file){
 		Point p(x,y);
 		gen_pts.push_back(p);
 		pt_map[name] = p;
-		rev_pt_map[p] = name;
+		rev_gen_pt_map[p] = name;
 		graph.add_vertex(name, Cell(p, name, isAlive));
 
 	    /*
@@ -76,15 +80,40 @@ void VoronoiGridGenerator::init_from_file(string file){
 
 	getline(in, line);
 	
+	/**** VERTS ****/
+	getline(in, line);
+	iss.str(line);
+	iss.clear();
+	iss >> name >> n;
+
+	for (int i = 0; i < n; i++){
+		getline(in, line);
+		iss.str(line);
+		iss.clear();
+
+		iss >> name >> coord;
+
+		float x = atof(coord.substr(0, coord.find(",")).c_str());
+		float y = atof(coord.substr(coord.find(",")+1, coord.size()).c_str());
+
+		Point p(x,y);
+
+		//verts.push_back(p);
+		pt_map[name] = p;
+		rev_vert_map[p] = name;
+	}
+
+	getline(in, line);
+
 	/**** EDGES ****/
 	string p, q;
 	getline(in, line);
 	
 	iss.str(line);
 	iss.clear();
-	iss >> name >> count;
+	iss >> name >> n;
 
-	for(int i = 0; i < count; i++){
+	for(int i = 0; i < n; i++){
 		getline(in, line);
 		iss.str(line);
 		iss.clear();
@@ -94,7 +123,6 @@ void VoronoiGridGenerator::init_from_file(string file){
 		edges.push_back(e);
 		edge_map[name] = e;
 		rev_edge_map[e] = name;
-		graph.add_edge(p, q);
 	}
 
 	getline(in, line);
@@ -104,9 +132,9 @@ void VoronoiGridGenerator::init_from_file(string file){
 	getline(in, line);
 	iss.str(line);
 	iss.clear();
-	iss >> name >> count;
+	iss >> name >> n;
 
-	for (int i = 0; i < count; i++){
+	for (int i = 0; i < n; i++){
 		getline(in, line);
 		iss.str(line);
 		iss.clear();
@@ -118,8 +146,16 @@ void VoronoiGridGenerator::init_from_file(string file){
 		for (int i = 0; i < t.edges.size(); i++){
 			Edge e = t.edges[i];
 			//want the point or the label of the point?
-			pt_face_map[rev_pt_map[e.p]].push_back(name);
-			pt_face_map[rev_pt_map[e.q]].push_back(name);
+			vector<string> *p_vec = &pt_face_map[rev_vert_map[e.p]];
+			vector<string> *q_vec = &pt_face_map[rev_vert_map[e.q]];
+			
+			if(count(p_vec->begin(), p_vec->end(), name) == 0){
+				p_vec->push_back(name);				
+			}
+
+			if(count(q_vec->begin(), q_vec->end(), name) == 0){
+				q_vec->push_back(name);				
+			}
 		}
 	}
 }
@@ -137,12 +173,14 @@ void VoronoiGridGenerator::init_voronoi(){
 			Tri t1 = tri_map[adj_faces[i]];
 			Point v1 = get_circumcenter(t1);
 
-			verts.push_back(v1);
+			if(count(verts.begin(), verts.end(), v1) == 0){
+				verts.push_back(v1);
+			}
 
 			for(int j = 0; j < adj_faces.size(); j++){
 				if(i != j){
 					Tri t2 = tri_map[adj_faces[j]];	
-					if(t2.shares_edge(t1)){
+					if(!(t1 == t2) && t2.shares_edge(t1)){
 						Point v2 = get_circumcenter(t2);
 						face_edges.push_back(Edge(v1, v2));
 						break;
@@ -150,20 +188,28 @@ void VoronoiGridGenerator::init_voronoi(){
 				}
 			}
 		}
-		new_edges.insert(new_edges.end(), face_edges.begin(), face_edges.end());
+
+		for(int i = 0; i < face_edges.size(); i++){
+			if(count(new_edges.begin(), new_edges.end(), face_edges[i]) == 0){
+				new_edges.push_back(face_edges[i]);
+			}
+		}
+
 		faces.push_back(Poly(face_edges));
 
 	}
+	edges.clear();
 	edges = new_edges;
 	edge_map.clear();
 	rev_edge_map.clear();
-	//pt_map.clear();
-	//rev_pt_map.clear();
+	pt_map.clear();
+	rev_vert_map.clear();
 }
 
 void VoronoiGridGenerator::generate_graph(){}
 
 int main(){
+	/*
 	Point p1(0,0);
 	Point p2(0,1);
 	Point p3(1,0);
@@ -177,7 +223,9 @@ int main(){
 
 	cout << t1.shares_edge(t2) << endl;
 	return 0;
-
+	*/
+	
 	VoronoiGridGenerator v("test.txt");
-	//v.grid_to_file("vtest.txt");
+	v.grid_to_file("vtest.txt");
+	v.grid_to_dot("vtest");
 }

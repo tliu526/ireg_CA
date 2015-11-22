@@ -265,7 +265,7 @@ int main() {
 	cout << "Circumcenter: " << get_circumcenter(t) << endl;
 	return 0;
 */
-	vector<Point> pts = generate_uniform_rand(1000, 70.0, 70.0);
+	vector<Point> pts = generate_uniform_rand(900, 70.0, 70.0);
 	DelaunayGridGenerator gen(pts);
 	
 	//cout << "After Delaunay Triangulation" << endl;

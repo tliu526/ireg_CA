@@ -45,10 +45,9 @@ protected:
 	std::map <std::string, Edge> edge_map;
 	//std::map <std::string, Poly> face_map;
 	
-	std::map<Point, std::string> rev_vert_map; 
-	std::map<Point, std::string> rev_gen_pt_map; 
-	std::map<Edge, std::string> rev_edge_map;
-	//TODO
+	std::map<Point, std::string> rev_vert_map; //for polygonal representation
+	std::map<Point, std::string> rev_gen_pt_map; //for graph representation
+	std::map<Edge, std::string> rev_edge_map; //associated with verts
 	//std::map<Poly, std::string> rev_face_map;
 };
 
