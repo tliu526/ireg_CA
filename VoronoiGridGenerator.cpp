@@ -9,10 +9,129 @@ Grid Generator.
 
 #include "VoronoiGridGenerator.h"
 
-#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <cstdlib>
 
 using namespace std;
 
 VoronoiGridGenerator::VoronoiGridGenerator(string file){
+	init_from_file(file);
+}
+
+void VoronoiGridGenerator::init_from_file(string file){
+	string line, name, coord, neighbor;
+	int count;
+	bool isAlive;
+	istringstream iss;
+	ifstream in(file);
 	
+	/**** POINTS ****/
+	getline(in, line);
+
+	iss.str(line);
+	iss.clear();
+	iss >> name >> count;
+
+	//TODO attributes, this line is ignored for now
+	getline(in, line);
+
+	for (int i = 0; i < count; i++){
+		getline(in,line);
+		iss.str(line);
+		iss.clear();
+
+		iss >> name >> coord >> isAlive;
+
+		//TODO attribute list
+		/*
+	    while(count){
+	        iss >> attr;
+	        //do something
+	    }
+		*/
+
+		//TODO something's up with mingw
+		//float x = stof(coord.substr(0, coord.find(","));
+		//float y = stof(coord.substr(coord.find(",")+1, coord.size());
+
+		float x = atof(coord.substr(0, coord.find(",")).c_str());
+		float y = atof(coord.substr(coord.find(",")+1, coord.size()).c_str());
+
+		Point p(x,y);
+		gen_pts.push_back(p);
+		pt_map[name] = p;
+		rev_pt_map[p] = name;
+		graph.add_vertex(name, Cell(p, name, isAlive));
+
+	    /*
+		while(!iss.eof()){
+			iss >> neighbor;
+			//cout << neighbor << " ";
+		}
+        */
+	}
+
+	getline(in, line);
+	
+	/**** EDGES ****/
+	string p, q;
+	getline(in, line);
+	
+	iss.str(line);
+	iss.clear();
+	iss >> name >> count;
+
+	for(int i = 0; i < count; i++){
+		getline(in, line);
+		iss.str(line);
+		iss.clear();
+
+		iss >> name >> p >> q;
+		Edge e(pt_map[p], pt_map[q]);
+		edges.push_back(e);
+		edge_map[name] = e;
+		rev_edge_map[e] = name;
+		graph.add_edge(p, q);
+	}
+
+	getline(in, line);
+
+	/**** FACES ****/
+	string e1, e2, e3;
+	getline(in, line);
+	iss.str(line);
+	iss.clear();
+	iss >> name >> count;
+
+	for (int i = 0; i < count; i++){
+		getline(in, line);
+		iss.str(line);
+		iss.clear();
+		iss >> name >> e1 >> e2 >> e3;
+
+		Tri t(edge_map[e1], edge_map[e2], edge_map[e3]);
+		faces.push_back(t);
+		tri_map[name] = t;
+
+		for (int i = 0; i < t.edges.size(); i++){
+			Edge e = t.edges[i];
+			//want the point or the label of the point?
+			pt_face_map[rev_pt_map[e.p]].push_back(name);
+			pt_face_map[rev_pt_map[e.q]].push_back(name);
+		}
+	}
+}
+
+void VoronoiGridGenerator::init_voronoi(){
+	typename map<string, vector<string> >::iterator map_it;
+	//TODO clear edges, populate verts, and faces
+}
+
+void VoronoiGridGenerator::generate_graph(){}
+
+int main(){
+	VoronoiGridGenerator v("test.txt");
+	v.grid_to_file("vtest.txt");
 }

@@ -38,13 +38,13 @@ bool point_xcomparator(Point a, Point b){
 void DelaunayGridGenerator::generate_graph() {
 
 	typename map<Point, string>::iterator map_it;
-	for(map_it = pt_map.begin(); map_it != pt_map.end(); map_it++) {
+	for(map_it = rev_pt_map.begin(); map_it != rev_pt_map.end(); map_it++) {
 		graph.add_vertex(map_it->second, Cell(map_it->first, map_it->second));		
 	}
 
 	for (int i = 0; i < edges.size(); i++){
-		string p1 = pt_map[edges[i].p];
-		string p2 = pt_map[edges[i].q];
+		string p1 = rev_pt_map[edges[i].p];
+		string p2 = rev_pt_map[edges[i].q];
 		graph.add_edge(p1,p2);
 	}
 
@@ -261,18 +261,16 @@ int main() {
 	Point p2(4,7);
 	Point p3(-5,10);
 
-	Tri t(Edge(p1,p2), Edge(p2,p3), Edge(p1,p3));
+	Tri t(Edge(p2,p1), Edge(p2,p3), Edge(p3,p1));
 	cout << "Circumcenter: " << get_circumcenter(t) << endl;
 	return 0;
 */
-	vector<Point> pts = generate_uniform_rand(4000, 70.0, 70.0);
+	vector<Point> pts = generate_uniform_rand(1000, 70.0, 70.0);
 	DelaunayGridGenerator gen(pts);
 	
 	//cout << "After Delaunay Triangulation" << endl;
 	//cout << "Number of faces: " << gen.faces.size() << endl;
 	//cout << "Number of edges: " << gen.edges.size() << endl;
-
-	//gen.generate_graph();
 
 	gen.grid_to_file("test.txt");
 	gen.grid_to_dot("test");

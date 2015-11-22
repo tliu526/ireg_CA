@@ -10,6 +10,7 @@ Delaunay triangulation.
 #include "GridGenerator.h"
 
 #include <string>
+#include <map>
 
 class VoronoiGridGenerator : public GridGenerator {
 	public:
@@ -18,4 +19,11 @@ class VoronoiGridGenerator : public GridGenerator {
 		void generate_graph();
 
 	private:
-}
+		void init_from_file(std::string file); //initializes gen_pts, edges, pt_face_map, tri_map from delaunay file
+
+		std::map <std::string, std::vector<std::string> > pt_face_map; // keeps track of faces the given pt is a part of
+		std::map <std::string, Tri> tri_map; //for building voronoi diagrams from delaunay
+};
+
+#endif
+

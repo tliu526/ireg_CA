@@ -18,6 +18,7 @@ class Cell {
 public:
 	
 	Cell(Point p, std::string label);
+	Cell(Point p, std::string label, bool alive);
 	Cell() {};
 	//TODO other constructors?
 

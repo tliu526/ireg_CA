@@ -16,9 +16,13 @@ GridGenerator::GridGenerator(vector<Point>& p) :
 	gen_pts(p) 
 	{}
 
+GridGenerator::GridGenerator(string file){
+	//TODO (needed?)
+}
+
 void GridGenerator::init_maps(){
 
-	//pt_map
+	//rev_pt_map
 	for (int i = 0; i < verts.size(); i++) {
 		stringstream ss;
 		ss << "p";
@@ -27,11 +31,10 @@ void GridGenerator::init_maps(){
 		while(n--) { ss << "0"; }
 			
 		ss << i; 
-		pt_map[verts[i]] = ss.str();
+		rev_pt_map[verts[i]] = ss.str();
 	}
 
-
-	//edge_map
+	//rev_edge_map
 	for (int i = 0; i < edges.size(); i++) {
 		stringstream ss;
 		ss << "e";
@@ -40,7 +43,7 @@ void GridGenerator::init_maps(){
 		while(n--) { ss << "0"; }
 			
 		ss << i; 
-		edge_map[edges[i]] = ss.str();
+		rev_edge_map[edges[i]] = ss.str();
 	}
 
 	//face_map
@@ -69,7 +72,7 @@ void GridGenerator::grid_to_file(string f){
 	file << "Neighbors" << endl;
 
 	for (int i = 0; i < verts.size(); i++){
-		string v_id = pt_map[verts[i]];
+		string v_id = rev_pt_map[verts[i]];
 		Cell c = graph.get_data(v_id);
 		file << v_id << " " << verts[i] << " " << c.is_alive();
 
@@ -88,17 +91,17 @@ void GridGenerator::grid_to_file(string f){
 
 	/**** EDGES ****/
 	file << "Edges" << " " << edges.size() << endl;
-	file << "Label" << " " << "p" << " " << "q" << endl;
+	//file << "Label" << " " << "p" << " " << "q" << endl;
 
 	for (int i = 0; i < edges.size(); i++){
-		string e_id = edge_map[edges[i]];
-		file << e_id << " " << pt_map[edges[i].p] << " " << pt_map[edges[i].q] << endl;
+		string e_id = rev_edge_map[edges[i]];
+		file << e_id << " " << rev_pt_map[edges[i].p] << " " << rev_pt_map[edges[i].q] << endl;
 	}
 
 	file << endl;
 	/**** FACES ****/
 	file << "Faces" << " " << faces.size() << endl;
-	file << "Label" << " " << "Edges" << endl;
+	//file << "Label" << " " << "Edges" << endl;
 
 	for (int i = 0; i < faces.size(); i++) {
 		stringstream ss;
@@ -112,7 +115,7 @@ void GridGenerator::grid_to_file(string f){
 		file << f_id;
 		vector<Edge> edge_vec(faces[i].edges);
 		for (int j = 0; j < edge_vec.size(); j++){
-			file << " " << edge_map[edge_vec[j]];
+			file << " " << rev_edge_map[edge_vec[j]];
 		}
 
 		file << endl;
@@ -129,11 +132,11 @@ void GridGenerator::grid_to_dot(string name){
 
 
 	for (int i = 0; i < verts.size(); i++){
-		string v_id = pt_map[verts[i]];
+		string v_id = rev_pt_map[verts[i]];
 		stringstream ss;
 		ss << verts[i];
 		string coord = ss.str();
-		coord = coord.substr(1, coord.size()-2);
+		//coord = coord.substr(1, coord.size()-2);
 		//cout << "Coord: " << coord << endl;
 		file << v_id << " [pos = \"" << coord << "!\"];" << endl;
 	}
@@ -141,7 +144,7 @@ void GridGenerator::grid_to_dot(string name){
 	file << endl;
 
 	for (int i = 0; i < edges.size(); i++){
-		file << pt_map[edges[i].p] << " -- " << pt_map[edges[i].q] << ";" << endl;
+		file << rev_pt_map[edges[i].p] << " -- " << rev_pt_map[edges[i].q] << ";" << endl;
 	}
 
 	file << "}" << endl;

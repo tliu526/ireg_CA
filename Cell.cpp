@@ -16,6 +16,13 @@ Cell::Cell(Point p, string label)
 	pt = p;
 }
 
+Cell::Cell(Point p, string label, bool a)
+{
+	alive = a;
+	id = label;
+	pt = p;
+}
+
 bool Cell::is_alive() {
 	return alive; 
 }
