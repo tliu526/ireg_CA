@@ -19,8 +19,6 @@ using namespace std;
 
 VoronoiGridGenerator::VoronoiGridGenerator(string file){
 	init_from_file(file);
-	init_voronoi();
-
 	//worries about overwriting rev_gen_pts_map
 	init_maps();
 }
@@ -123,6 +121,8 @@ void VoronoiGridGenerator::init_from_file(string file){
 		edges.push_back(e);
 		edge_map[name] = e;
 		rev_edge_map[e] = name;
+
+		graph.add_edge(rev_gen_pt_map[pt_map[p]], rev_gen_pt_map[pt_map[q]]);
 	}
 
 	getline(in, line);
@@ -158,6 +158,9 @@ void VoronoiGridGenerator::init_from_file(string file){
 			}
 		}
 	}
+
+	//Now, build up voronoi diagram from circumcenters of triangles
+	init_voronoi();
 }
 
 void VoronoiGridGenerator::init_voronoi(){
@@ -177,10 +180,11 @@ void VoronoiGridGenerator::init_voronoi(){
 				verts.push_back(v1);
 			}
 
+			//build up the edges of the Voronoi polygon
 			for(int j = 0; j < adj_faces.size(); j++){
 				if(i != j){
 					Tri t2 = tri_map[adj_faces[j]];	
-					if(/*!(t1 == t2) && */t2.shares_edge(t1)){
+					if(t2.shares_edge(t1)){
 						Point v2 = get_circumcenter(t2);
 						Edge e(v1, v2);
 
@@ -200,6 +204,7 @@ void VoronoiGridGenerator::init_voronoi(){
 
 		faces.push_back(Poly(face_edges));
 	}
+	
 	edges.clear();
 	edges = new_edges;
 	edge_map.clear();
