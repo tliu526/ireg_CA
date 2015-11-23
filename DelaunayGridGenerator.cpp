@@ -23,12 +23,13 @@ Need to look at optimizing some of the other functions, or switching to an alter
 
 using namespace std;
 
-DelaunayGridGenerator::DelaunayGridGenerator(vector<Point> &pts) : GridGenerator(pts) {
+DelaunayGridGenerator::DelaunayGridGenerator(vector<Point> &pts, float x, float y) : GridGenerator(pts, x, y) {
 	verts = pts;
 	init_triangulation();
 	delaunay_triangulation();
-	init_maps();	
+	init_maps();
 	generate_graph();
+	grid_type = "Delaunay";
 }
 
 bool point_xcomparator(Point a, Point b){
@@ -265,8 +266,8 @@ int main() {
 	cout << "Circumcenter: " << get_circumcenter(t) << endl;
 	return 0;
 */
-	vector<Point> pts = generate_uniform_rand(1000, 70.0, 70.0);
-	DelaunayGridGenerator gen(pts);
+	vector<Point> pts = generate_uniform_rand(1000, 70, 70);
+	DelaunayGridGenerator gen(pts, 70, 70);
 	
 	//cout << "After Delaunay Triangulation" << endl;
 	//cout << "Number of faces: " << gen.faces.size() << endl;

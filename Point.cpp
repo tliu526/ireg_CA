@@ -11,7 +11,14 @@ Point::Point(float xi, float yi){
 }
 
 bool Point::operator<(const Point &p) const{
-	return x < p.x;
+	if(x != p.x){
+		return x < p.x;
+	}
+	else if(y != p.y){
+		return y < p.y;
+	}
+
+	return false;
 }
 
 bool Point::operator!=(Point &p){

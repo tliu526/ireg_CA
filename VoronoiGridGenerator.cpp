@@ -18,6 +18,7 @@ Grid Generator.
 using namespace std;
 
 VoronoiGridGenerator::VoronoiGridGenerator(string file){
+	grid_type = "Voronoi";
 	init_from_file(file);
 	//worries about overwriting rev_gen_pts_map
 	init_maps();
@@ -30,6 +31,23 @@ void VoronoiGridGenerator::init_from_file(string file){
 	istringstream iss;
 	ifstream in(file);
 	
+	/**** BOUNDARY ****/
+	getline(in, line);
+	iss.str(line);
+	iss.clear();
+	iss >> name;
+
+	if(name.compare("Delaunay") != 0){
+		throw "Incorrect input file, Delaunay needed";
+	}
+
+	iss >> min_x >> max_x >> min_y >> max_y;	
+
+	cout << "min_x: " << min_x << endl;
+	cout << "max_x: " << max_x << endl;
+	cout << "min_y: " << min_y << endl;
+	cout << "max_y: " << max_y << endl;
+
 	/**** GEN POINTS ****/
 	getline(in, line);
 
@@ -174,8 +192,7 @@ void VoronoiGridGenerator::init_voronoi(){
 
 		for(int i = 0; i < adj_faces.size(); i++){
 			Tri t1 = tri_map[adj_faces[i]];
-			Point v1 = get_circumcenter(t1);
-
+			Point v1 = clamp_pt(get_circumcenter(t1));
 			if(count(verts.begin(), verts.end(), v1) == 0){
 				verts.push_back(v1);
 			}
@@ -185,7 +202,7 @@ void VoronoiGridGenerator::init_voronoi(){
 				if(i != j){
 					Tri t2 = tri_map[adj_faces[j]];	
 					if(t2.shares_edge(t1)){
-						Point v2 = get_circumcenter(t2);
+						Point v2 = clamp_pt(get_circumcenter(t2));
 						Edge e(v1, v2);
 
 						if(count(face_edges.begin(), face_edges.end(), e) == 0){
@@ -204,13 +221,23 @@ void VoronoiGridGenerator::init_voronoi(){
 
 		faces.push_back(Poly(face_edges));
 	}
-	
+
 	edges.clear();
 	edges = new_edges;
 	edge_map.clear();
 	rev_edge_map.clear();
 	pt_map.clear();
 	rev_vert_map.clear();
+}
+
+//TODO instead of a straight clamp, calculate equation for line and then clamp at border
+Point VoronoiGridGenerator::clamp_pt(Point p){
+	float x, y;
+	
+	x = max(min(max_x+100, p.x), min_x-100);
+	y = max(min(max_y+100, p.y), min_y-100);
+
+	return Point(x,y);
 }
 
 void VoronoiGridGenerator::generate_graph(){}

@@ -16,7 +16,7 @@ Things to think about:
 
 class DelaunayGridGenerator : public GridGenerator {
 	public:
-		DelaunayGridGenerator(std::vector<Point>& p);
+		DelaunayGridGenerator(std::vector<Point>& p, float x, float y);
 
 		void generate_graph();
 

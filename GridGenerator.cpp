@@ -12,8 +12,12 @@ graph_to_file.
 
 using namespace std;
 
-GridGenerator::GridGenerator(vector<Point>& p) :
-	gen_pts(p) 
+GridGenerator::GridGenerator(vector<Point>& p, float x, float y) :
+	gen_pts(p), 
+	max_x(x),
+	max_y(y),
+	min_x(-1*x),
+	min_y(-1*y)
 	{}
 
 GridGenerator::GridGenerator(string file){
@@ -76,6 +80,10 @@ void GridGenerator::init_maps(){
 void GridGenerator::grid_to_file(string f){
 	ofstream file;
 	file.open(f);
+
+	file << grid_type << " ";
+	file << min_x << " " << max_x << " " ;
+	file << min_y << " " << max_y << endl;
 
 	/**** CELLS ****/
 	file << "GenPoints" << " " << gen_pts.size() << endl;
