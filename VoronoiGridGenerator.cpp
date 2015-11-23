@@ -180,10 +180,13 @@ void VoronoiGridGenerator::init_voronoi(){
 			for(int j = 0; j < adj_faces.size(); j++){
 				if(i != j){
 					Tri t2 = tri_map[adj_faces[j]];	
-					if(!(t1 == t2) && t2.shares_edge(t1)){
+					if(/*!(t1 == t2) && */t2.shares_edge(t1)){
 						Point v2 = get_circumcenter(t2);
-						face_edges.push_back(Edge(v1, v2));
-						break;
+						Edge e(v1, v2);
+
+						if(count(face_edges.begin(), face_edges.end(), e) == 0){
+							face_edges.push_back(e);
+						}
 					}
 				}
 			}
@@ -196,7 +199,6 @@ void VoronoiGridGenerator::init_voronoi(){
 		}
 
 		faces.push_back(Poly(face_edges));
-
 	}
 	edges.clear();
 	edges = new_edges;
