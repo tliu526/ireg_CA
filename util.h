@@ -79,6 +79,11 @@ From https://en.wikipedia.org/wiki/Circumscribed_circle#Cartesian_coordinates_2
 */
 Point get_circumcenter(Tri &t);
 
+/*
+Returns the (slope, intercept) of the line given by p1 and p2.
+*/
+std::pair<float,float> get_line(Point p1, Point p2);
+
 /**** LINEAR ALG FUNCTIONS ****/
 
 

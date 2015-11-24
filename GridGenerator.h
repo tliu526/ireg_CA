@@ -27,6 +27,8 @@ public:
 	void grid_to_dot(std::string out_name); //converts the grid to a (neato) graphviz file
 	std::vector<Poly> get_faces();
 
+	bool pt_in_grid(Point p); //checks whether p lies within the bounds of the grid, border points return false
+
 protected:
 	/*
 	initializes pt, edge, face maps

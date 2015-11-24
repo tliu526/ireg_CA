@@ -19,11 +19,23 @@ class VoronoiGridGenerator : public GridGenerator {
 		void generate_graph();
 
 	private:
+		Edge top_border, bottom_border, left_border, right_border;
+        /*
+        Utilizes the fact that the circumcenter of the triangles in a delaunay triangulation are the vertices of the
+        voronoi polygons.
+        From: http://stackoverflow.com/questions/85275/how-do-i-derive-a-voronoi-diagram-given-its-point-set-and-its-delaunay-triangula
+	    */
 		void init_from_file(std::string file); //initializes gen_pts, edges, pt_face_map, tri_map from delaunay file
 		void init_voronoi();
+		void init_borders();
+
 
 		Point clamp_pt(Point p); //Clamps a given point to the bounds of the grid
+		Edge clamp_edge(Edge e); //"cuts off" a given edge by the bounds of the grid
+		void add_border_edge(vector<Edge> &edges);
 
+		Point eval_at_border(std::pair<float, float> line_params, Edge border); //evaluates the line based on the given border
+		Edge closest_border(Edge e); // returns the closest border for an edge that has both points outside the bounds of the grid
 		std::map <std::string, std::vector<std::string> > pt_face_map; // keeps track of faces the given pt is a part of
 		std::map <std::string, Tri> tri_map; //for building voronoi diagrams from delaunay
 };

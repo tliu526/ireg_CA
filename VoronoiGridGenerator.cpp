@@ -178,7 +178,22 @@ void VoronoiGridGenerator::init_from_file(string file){
 	}
 
 	//Now, build up voronoi diagram from circumcenters of triangles
+	init_borders();
 	init_voronoi();
+
+}
+
+void VoronoiGridGenerator::init_borders(){
+	/*
+	min_x -= 10;
+	min_y -= 10;
+	max_x += 10;
+	max_y += 10;
+    */
+	top_border = Edge(Point(min_x, max_y), Point(max_x, max_y));
+	bottom_border = Edge(Point(min_x, min_y), Point(max_x, min_y));
+	left_border = Edge(Point(min_x, min_y), Point(min_x, max_y));
+	right_border = Edge(Point(max_x, min_y), Point(max_x, max_y));
 }
 
 void VoronoiGridGenerator::init_voronoi(){
@@ -192,26 +207,41 @@ void VoronoiGridGenerator::init_voronoi(){
 
 		for(int i = 0; i < adj_faces.size(); i++){
 			Tri t1 = tri_map[adj_faces[i]];
+			/*
 			Point v1 = clamp_pt(get_circumcenter(t1));
 			if(count(verts.begin(), verts.end(), v1) == 0){
 				verts.push_back(v1);
 			}
-
+	        */
+			Point v1 = get_circumcenter(t1);
+			
 			//build up the edges of the Voronoi polygon
 			for(int j = 0; j < adj_faces.size(); j++){
 				if(i != j){
 					Tri t2 = tri_map[adj_faces[j]];	
 					if(t2.shares_edge(t1)){
-						Point v2 = clamp_pt(get_circumcenter(t2));
-						Edge e(v1, v2);
+						//Point v2 = clamp_pt(get_circumcenter(t2));
+						Point v2 = get_circumcenter(t2);
+						Edge e = clamp_edge(Edge(v1, v2));
+						if(e.p != e.q){
+							if(count(verts.begin(), verts.end(), e.p) == 0){
+								verts.push_back(e.p);
+							}
 
-						if(count(face_edges.begin(), face_edges.end(), e) == 0){
-							face_edges.push_back(e);
+							if(count(verts.begin(), verts.end(), e.q) == 0){
+								verts.push_back(e.q);
+							}						
+
+							if(count(face_edges.begin(), face_edges.end(), e) == 0){
+								face_edges.push_back(e);
+							}
 						}
 					}
 				}
 			}
 		}
+
+		add_border_edge(face_edges);
 
 		for(int i = 0; i < face_edges.size(); i++){
 			if(count(new_edges.begin(), new_edges.end(), face_edges[i]) == 0){
@@ -238,6 +268,99 @@ Point VoronoiGridGenerator::clamp_pt(Point p){
 	y = max(min(max_y+100, p.y), min_y-100);
 
 	return Point(x,y);
+}
+
+Edge VoronoiGridGenerator::clamp_edge(Edge e){
+	//case 1: both ends in boundary
+	if(pt_in_grid(e.q) && pt_in_grid(e.p)){
+		return e;
+	}
+	//case 2: one end in boundary
+	else if(pt_in_grid(e.q) || pt_in_grid(e.p)){
+		Point border_pt;
+		pair<float, float> line_params;
+		line_params = (get_line(e.q, e.p));
+
+		if(edge_intersect(top_border, e)) border_pt = eval_at_border(line_params, top_border);
+		else if(edge_intersect(bottom_border, e)) border_pt = eval_at_border(line_params, bottom_border);
+		else if(edge_intersect(left_border, e)) border_pt = eval_at_border(line_params, left_border);
+		else if(edge_intersect(right_border, e)) border_pt = eval_at_border(line_params, right_border);
+
+		if(pt_in_grid(e.q)){
+			return Edge(e.q, border_pt);
+		}
+		else {
+			return Edge(e.p, border_pt);
+		}
+	}
+	//case 3: both ends out of the boundary
+	else {
+		Point border_pt;
+		pair<float, float> line_params;
+		line_params = (get_line(e.q, e.p));
+		border_pt = eval_at_border(line_params, closest_border(e));
+		return Edge(border_pt, border_pt); //we're returning a self edge
+	}
+}
+
+void VoronoiGridGenerator::add_border_edge(vector<Edge> &edges){
+	Point *p1 = NULL;
+	Point *p2 = NULL;
+	for(int i = 0; i < edges.size(); i++){
+		Edge e = edges[i];
+		if(!pt_in_grid(e.p)){
+			p1 = &e.p;
+			break;
+		}
+
+		if(!pt_in_grid(e.q)){
+			p1 = &e.q;
+			break;
+		}
+	}
+	if(p1 != NULL){
+		for(int i = 0; i < edges.size(); i++){
+			Edge e = edges[i];
+			if((e.p != *p1) && !pt_in_grid(e.p)){
+				p2 = &e.p;
+				break;
+			}
+
+			if((e.q != *p1) && !pt_in_grid(e.q)){
+				p2 = &e.q;
+				break;
+			}
+		}
+		if(p2 != NULL){
+			edges.push_back(Edge(*p1,*p2));
+		}
+	}	
+}
+
+//pre: border is one of the grid borders
+Point VoronoiGridGenerator::eval_at_border(pair<float, float> line_params, Edge border) {
+	//L/R border
+	if(border.p.x == border.q.x){
+		float y = (line_params.first * border.p.x) + line_params.second;
+		return Point(border.p.x, y);
+	}
+	//T/D border
+	else {
+		float x = (border.p.y - line_params.second) / line_params.first;
+		return Point(x, border.p.y);
+	}
+	
+}
+
+//pre: Edge e has both points outside the grid
+Edge VoronoiGridGenerator::closest_border(Edge e){
+	if((e.q.y > max_y) && (e.p.y > max_y)) return top_border;
+	if((e.q.y < min_y) && (e.p.y < min_y)) return bottom_border;
+	if((e.q.x < min_x) && (e.p.x < min_x)) return left_border;
+	if((e.q.x > max_x) && (e.p.x > max_x)) return right_border;
+
+	//shouldn't get here
+	return top_border;
 }
 
 void VoronoiGridGenerator::generate_graph(){}

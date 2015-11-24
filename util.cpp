@@ -125,6 +125,16 @@ Point get_circumcenter(Tri &t) {
     return Point(x,y);
 }
 
+//ax + b
+pair<float, float> get_line(Point p1, Point p2) {
+    float a, b; 
+
+    a = (p2.y - p1.y) / (p2.x - p1.x);
+    b = p1.y - (a*p1.x);
+
+    return pair<float,float>(a,b);
+}
+
 int num_digits(int n){
     int n_digits = 0;
 

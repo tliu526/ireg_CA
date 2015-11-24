@@ -182,6 +182,10 @@ void GridGenerator::grid_to_dot(string name){
 	file.close();
 }
 
+bool GridGenerator::pt_in_grid(Point p) {
+	return (p.x < max_x) && (p.x > min_x) && (p.y < max_y) && (p.y > min_y);
+}
+
 vector<Poly> GridGenerator::get_faces(){
 	return faces;
 }
