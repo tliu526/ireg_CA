@@ -21,6 +21,10 @@ GridGenerator::GridGenerator(vector<Point>& p, float x, float y) :
 	{}
 
 GridGenerator::GridGenerator(string file){
+	init_from_file(file);
+}
+
+void GridGenerator::init_from_file(string file){
 	string line, name, coord, neighbor;
 	int n;
 	bool isAlive;
@@ -33,16 +37,7 @@ GridGenerator::GridGenerator(string file){
 	iss.clear();
 	iss >> name;
 
-	if(name.compare("Delaunay") != 0){
-		throw "Incorrect input file, Delaunay needed";
-	}
-
 	iss >> min_x >> max_x >> min_y >> max_y;	
-
-	cout << "min_x: " << min_x << endl;
-	cout << "max_x: " << max_x << endl;
-	cout << "min_y: " << min_y << endl;
-	cout << "max_y: " << max_y << endl;
 
 	/**** GEN POINTS ****/
 	getline(in, line);
@@ -162,23 +157,8 @@ GridGenerator::GridGenerator(string file){
 		}
 
 		Poly face(face_edges);
+		faces.push_back(face);
 		face_map[name] = face;
-/*
-		for (int i = 0; i < t.edges.size(); i++){
-			Edge edge = t.edges[i];
-			//want the point or the label of the point?
-			vector<string> *p_vec = &pt_face_map[rev_vert_map[edge.p]];
-			vector<string> *q_vec = &pt_face_map[rev_vert_map[edge.q]];
-			
-			if(count(p_vec->begin(), p_vec->end(), name) == 0){
-				p_vec->push_back(name);				
-			}
-
-			if(count(q_vec->begin(), q_vec->end(), name) == 0){
-				q_vec->push_back(name);				
-			}
-		}
-*/
 	}
 }
 
@@ -220,7 +200,7 @@ void GridGenerator::init_maps(){
 		rev_edge_map[edges[i]] = ss.str();
 	}
 
-	//face_map
+	//TODO vert_map, edge_map, face_map
 	/*
 	for (int i = 0; i < faces.size(); i++) {
 		stringstream ss;

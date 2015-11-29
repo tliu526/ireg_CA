@@ -279,8 +279,7 @@ int main() {
 
 	//gen.grid_to_file("test.txt");
 	//gen.grid_to_dot("test");
-
-
+	
 	DelaunayGridGenerator gen("test.txt");
 	gen.grid_to_file("test_from_file.txt");
 	gen.grid_to_dot("test_from_file");

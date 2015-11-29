@@ -25,9 +25,9 @@ class VoronoiGridGenerator : public GridGenerator {
         voronoi polygons.
         From: http://stackoverflow.com/questions/85275/how-do-i-derive-a-voronoi-diagram-given-its-point-set-and-its-delaunay-triangula
 	    */
-		void init_from_file(std::string file); //initializes gen_pts, edges, pt_face_map, tri_map from delaunay file
-		void init_voronoi();
-		void init_borders();
+		void init_from_delaunay(); //called when VGG is constructed from a Delaunay data file
+		void init_voronoi(); //called from init_from_delaunay
+		void init_borders(); //called from init_from_delaunay
 
 
 		Point clamp_pt(Point p); //Clamps a given point to the bounds of the grid

@@ -19,7 +19,7 @@ and edges.
 class GridGenerator {
 public:
 	GridGenerator(std::vector<Point>& p, float x, float y); // defines starting grid of size 2x by 2y
-	GridGenerator(std::string file); //reads from data file, graph still needs to be built
+	GridGenerator(std::string file); //reads from data file
 	GridGenerator() {};
 
 	virtual void generate_graph() = 0;
@@ -35,6 +35,7 @@ protected:
 	pre: verts, edges, faces are initialized
 	*/
 	void init_maps(); 
+	void init_from_file(std::string file); //initializes the grid generator from file
 
 	std::string grid_type;
 	float min_x, max_x, min_y, max_y; //For defining bounds on the grid

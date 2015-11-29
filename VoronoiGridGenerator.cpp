@@ -19,165 +19,55 @@ using namespace std;
 
 VoronoiGridGenerator::VoronoiGridGenerator(string file){
 	grid_type = "Voronoi";
-	init_from_file(file);
-	
-	//worries about overwriting rev_gen_pts_map
-	init_maps();
-}
 
-void VoronoiGridGenerator::init_from_file(string file){
-	string line, name, coord, neighbor;
-	int n;
-	bool isAlive;
+	string line, name;
 	istringstream iss;
 	ifstream in(file);
 	
-	/**** BOUNDARY ****/
+	//Check if correct input data type
 	getline(in, line);
 	iss.str(line);
 	iss.clear();
 	iss >> name;
 
-	if(name.compare("Delaunay") != 0){
-		throw "Incorrect input file, Delaunay needed";
-	}
-
-	iss >> min_x >> max_x >> min_y >> max_y;	
-
-	cout << "min_x: " << min_x << endl;
-	cout << "max_x: " << max_x << endl;
-	cout << "min_y: " << min_y << endl;
-	cout << "max_y: " << max_y << endl;
-
-	/**** GEN POINTS ****/
-	getline(in, line);
-
-	iss.str(line);
-	iss.clear();
-	iss >> name >> n;
-
-	//TODO attributes, this line is ignored for now
-	getline(in, line);
-
-	for (int i = 0; i < n; i++){
-		getline(in,line);
-		iss.str(line);
-		iss.clear();
-
-		iss >> name >> coord >> isAlive;
-
-		//TODO attribute list
-		/*
-	    while(n){
-	        iss >> attr;
-	        //do something
-	    }
-		*/
-
-		//TODO something's up with mingw
-		//float x = stof(coord.substr(0, coord.find(","));
-		//float y = stof(coord.substr(coord.find(",")+1, coord.size());
-
-		float x = atof(coord.substr(0, coord.find(",")).c_str());
-		float y = atof(coord.substr(coord.find(",")+1, coord.size()).c_str());
-
-		Point p(x,y);
-		gen_pts.push_back(p);
-		pt_map[name] = p;
-		rev_gen_pt_map[p] = name;
-		graph.add_vertex(name, Cell(p, name, isAlive));
-
-	    /*
-		while(!iss.eof()){
-			iss >> neighbor;
-			//cout << neighbor << " ";
-		}
-        */
-	}
-
-	getline(in, line);
+	//ifstream.close();
 	
-	/**** VERTS ****/
-	getline(in, line);
-	iss.str(line);
-	iss.clear();
-	iss >> name >> n;
-
-	for (int i = 0; i < n; i++){
-		getline(in, line);
-		iss.str(line);
-		iss.clear();
-
-		iss >> name >> coord;
-
-		float x = atof(coord.substr(0, coord.find(",")).c_str());
-		float y = atof(coord.substr(coord.find(",")+1, coord.size()).c_str());
-
-		Point p(x,y);
-
-		//verts.push_back(p);
-		pt_map[name] = p;
-		rev_vert_map[p] = name;
+	if(name.compare("Delaunay") == 0){
+		init_from_file(file); //reads in file
+		init_from_delaunay();			
+	}
+	else{
+		cout << "Incorrect input file" << endl;
 	}
 
-	getline(in, line);
+	//worries about overwriting rev_gen_pts_map
+	init_maps();
+}
 
-	/**** EDGES ****/
-	string p, q;
-	getline(in, line);
-	
-	iss.str(line);
-	iss.clear();
-	iss >> name >> n;
+void VoronoiGridGenerator::init_from_delaunay(){
 
-	for(int i = 0; i < n; i++){
-		getline(in, line);
-		iss.str(line);
-		iss.clear();
 
-		iss >> name >> p >> q;
-		Edge e(pt_map[p], pt_map[q]);
-		edges.push_back(e);
-		edge_map[name] = e;
-		rev_edge_map[e] = name;
+	//initialize pt_face_map for fast voronoi face generation
+	typename map<string, Poly>::iterator map_it;
+	for(map_it = face_map.begin(); map_it != face_map.end(); map_it++) {
+		Poly face = map_it->second;
+		string f_name = map_it->first;
 
-		graph.add_edge(rev_gen_pt_map[pt_map[p]], rev_gen_pt_map[pt_map[q]]);
-	}
-
-	getline(in, line);
-
-	/**** FACES ****/
-	string e1, e2, e3;
-	getline(in, line);
-	iss.str(line);
-	iss.clear();
-	iss >> name >> n;
-
-	for (int i = 0; i < n; i++){
-		getline(in, line);
-		iss.str(line);
-		iss.clear();
-		iss >> name >> e1 >> e2 >> e3;
-
-		Tri t(edge_map[e1], edge_map[e2], edge_map[e3]);
-		tri_map[name] = t;
-
-		for (int i = 0; i < t.edges.size(); i++){
-			Edge e = t.edges[i];
+		for (int i = 0; i < face.edges.size(); i++){
+			Edge e = face.edges[i];
 			//want the point or the label of the point?
 			vector<string> *p_vec = &pt_face_map[rev_vert_map[e.p]];
 			vector<string> *q_vec = &pt_face_map[rev_vert_map[e.q]];
 			
-			if(count(p_vec->begin(), p_vec->end(), name) == 0){
-				p_vec->push_back(name);				
+			if(count(p_vec->begin(), p_vec->end(), f_name) == 0){
+				p_vec->push_back(f_name);				
 			}
 
-			if(count(q_vec->begin(), q_vec->end(), name) == 0){
-				q_vec->push_back(name);				
+			if(count(q_vec->begin(), q_vec->end(), f_name) == 0){
+				q_vec->push_back(f_name);				
 			}
 		}
 	}
-
 	//Now, build up voronoi diagram from circumcenters of triangles
 	init_borders();
 	init_voronoi();
@@ -192,7 +82,10 @@ void VoronoiGridGenerator::init_borders(){
 }
 
 void VoronoiGridGenerator::init_voronoi(){
+	verts.clear();
+	rev_vert_map.clear();
 	vector<Edge> new_edges;
+	vector<Poly> new_faces;
 
 	typename map<string, vector<string> >::iterator map_it;
 	for(map_it = pt_face_map.begin(); map_it != pt_face_map.end(); map_it++){
@@ -201,22 +94,16 @@ void VoronoiGridGenerator::init_voronoi(){
 		vector<Edge> face_edges;
 
 		for(int i = 0; i < adj_faces.size(); i++){
-			Tri t1 = tri_map[adj_faces[i]];
-			/*
-			Point v1 = clamp_pt(get_circumcenter(t1));
-			if(count(verts.begin(), verts.end(), v1) == 0){
-				verts.push_back(v1);
-			}
-	        */
-			Point v1 = get_circumcenter(t1);
+			Tri *t1 = (Tri*)&face_map[adj_faces[i]];
+			Point v1 = get_circumcenter(*t1);
 			
 			//build up the edges of the Voronoi polygon
 			for(int j = 0; j < adj_faces.size(); j++){
 				if(i != j){
-					Tri t2 = tri_map[adj_faces[j]];	
-					if(t2.shares_edge(t1)){
+					Tri *t2 = (Tri*)&face_map[adj_faces[j]];	
+					if(t2->shares_edge(*t1)){
 						//Point v2 = clamp_pt(get_circumcenter(t2));
-						Point v2 = get_circumcenter(t2);
+						Point v2 = get_circumcenter(*t2);
 						Edge e = clamp_edge(Edge(v1, v2));
 						if(e.p != e.q){
 							if(count(verts.begin(), verts.end(), e.p) == 0){
@@ -244,12 +131,18 @@ void VoronoiGridGenerator::init_voronoi(){
 			}
 		}
 
-		faces.push_back(Poly(face_edges));
+		new_faces.push_back(Poly(face_edges));
 	}
+
+	//clear data from delaunay initialization
+	faces.clear();
+	face_map.clear();
+	faces = new_faces;
 
 	edges.clear();
 	edges = new_edges;
 	edge_map.clear();
+	
 	rev_edge_map.clear();
 	pt_map.clear();
 	rev_vert_map.clear();
@@ -378,6 +271,6 @@ int main(){
 	*/
 	
 	VoronoiGridGenerator v("test.txt");
-	v.grid_to_file("vtest.txt");
-	v.grid_to_dot("vtest");
+	v.grid_to_file("vtest2.txt");
+	v.grid_to_dot("vtest2");
 }
