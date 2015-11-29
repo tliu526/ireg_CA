@@ -19,7 +19,7 @@ and edges.
 class GridGenerator {
 public:
 	GridGenerator(std::vector<Point>& p, float x, float y); // defines starting grid of size 2x by 2y
-	GridGenerator(std::string file); //reads from data file TODO needed?
+	GridGenerator(std::string file); //reads from data file, graph still needs to be built
 	GridGenerator() {};
 
 	virtual void generate_graph() = 0;
@@ -48,6 +48,7 @@ protected:
 
 	std::map <std::string, Point> pt_map;
 	std::map <std::string, Edge> edge_map;
+	std::map <std::string, Poly> face_map;
 	
 	std::map<Point, std::string> rev_vert_map; //for polygonal representation
 	std::map<Point, std::string> rev_gen_pt_map; //for graph representation

@@ -21,7 +21,165 @@ GridGenerator::GridGenerator(vector<Point>& p, float x, float y) :
 	{}
 
 GridGenerator::GridGenerator(string file){
-	//TODO (needed?)
+	string line, name, coord, neighbor;
+	int n;
+	bool isAlive;
+	istringstream iss;
+	ifstream in(file);
+	
+	/**** BOUNDARY ****/
+	getline(in, line);
+	iss.str(line);
+	iss.clear();
+	iss >> name;
+
+	if(name.compare("Delaunay") != 0){
+		throw "Incorrect input file, Delaunay needed";
+	}
+
+	iss >> min_x >> max_x >> min_y >> max_y;	
+
+	cout << "min_x: " << min_x << endl;
+	cout << "max_x: " << max_x << endl;
+	cout << "min_y: " << min_y << endl;
+	cout << "max_y: " << max_y << endl;
+
+	/**** GEN POINTS ****/
+	getline(in, line);
+
+	iss.str(line);
+	iss.clear();
+	iss >> name >> n;
+
+	//TODO attributes, this line is ignored for now
+	getline(in, line);
+
+	for (int i = 0; i < n; i++){
+		getline(in,line);
+		iss.str(line);
+		iss.clear();
+
+		iss >> name >> coord >> isAlive;
+
+		//TODO attribute list
+		/*
+	    while(n){
+	        iss >> attr;
+	        //do something
+	    }
+		*/
+
+		//TODO something's up with mingw
+		//float x = stof(coord.substr(0, coord.find(","));
+		//float y = stof(coord.substr(coord.find(",")+1, coord.size());
+
+		float x = atof(coord.substr(0, coord.find(",")).c_str());
+		float y = atof(coord.substr(coord.find(",")+1, coord.size()).c_str());
+
+		Point p(x,y);
+		gen_pts.push_back(p);
+		pt_map[name] = p;
+		rev_gen_pt_map[p] = name;
+		graph.add_vertex(name, Cell(p, name, isAlive));
+
+	    /*
+		while(!iss.eof()){
+			iss >> neighbor;
+			//cout << neighbor << " ";
+		}
+        */
+	}
+
+	getline(in, line);
+	
+	/**** VERTS ****/
+	getline(in, line);
+	iss.str(line);
+	iss.clear();
+	iss >> name >> n;
+
+	for (int i = 0; i < n; i++){
+		getline(in, line);
+		iss.str(line);
+		iss.clear();
+
+		iss >> name >> coord;
+
+		float x = atof(coord.substr(0, coord.find(",")).c_str());
+		float y = atof(coord.substr(coord.find(",")+1, coord.size()).c_str());
+
+		Point p(x,y);
+
+		verts.push_back(p);
+		pt_map[name] = p;
+		rev_vert_map[p] = name;
+	}
+
+	getline(in, line);
+
+	/**** EDGES ****/
+	string p, q;
+	getline(in, line);
+	
+	iss.str(line);
+	iss.clear();
+	iss >> name >> n;
+
+	for(int i = 0; i < n; i++){
+		getline(in, line);
+		iss.str(line);
+		iss.clear();
+
+		iss >> name >> p >> q;
+		Edge e(pt_map[p], pt_map[q]);
+		edges.push_back(e);
+		edge_map[name] = e;
+		rev_edge_map[e] = name;
+
+		graph.add_edge(rev_gen_pt_map[pt_map[p]], rev_gen_pt_map[pt_map[q]]);
+	}
+
+	getline(in, line);
+
+	/**** FACES ****/
+	string e_label;
+	getline(in, line);
+	iss.str(line);
+	iss.clear();
+	iss >> name >> n;
+
+	for (int i = 0; i < n; i++){
+		getline(in, line);
+		iss.str(line);
+		iss.clear();
+
+
+		iss >> name;
+		vector<Edge> face_edges;
+		while(!iss.eof()){
+			iss >> e_label;
+			face_edges.push_back(edge_map[e_label]);
+		}
+
+		Poly face(face_edges);
+		face_map[name] = face;
+/*
+		for (int i = 0; i < t.edges.size(); i++){
+			Edge edge = t.edges[i];
+			//want the point or the label of the point?
+			vector<string> *p_vec = &pt_face_map[rev_vert_map[edge.p]];
+			vector<string> *q_vec = &pt_face_map[rev_vert_map[edge.q]];
+			
+			if(count(p_vec->begin(), p_vec->end(), name) == 0){
+				p_vec->push_back(name);				
+			}
+
+			if(count(q_vec->begin(), q_vec->end(), name) == 0){
+				q_vec->push_back(name);				
+			}
+		}
+*/
+	}
 }
 
 void GridGenerator::init_maps(){

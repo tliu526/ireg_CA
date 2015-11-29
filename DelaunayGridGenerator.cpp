@@ -32,6 +32,10 @@ DelaunayGridGenerator::DelaunayGridGenerator(vector<Point> &pts, float x, float 
 	grid_type = "Delaunay";
 }
 
+DelaunayGridGenerator::DelaunayGridGenerator(std::string file) : GridGenerator(file) {
+	grid_type = "Delaunay";
+};
+
 bool point_xcomparator(Point a, Point b){
 	return a.x < b.x;
 };
@@ -266,13 +270,18 @@ int main() {
 	cout << "Circumcenter: " << get_circumcenter(t) << endl;
 	return 0;
 */
-	vector<Point> pts = generate_uniform_rand(1000, 70, 70);
-	DelaunayGridGenerator gen(pts, 70, 70);
+	//vector<Point> pts = generate_uniform_rand(1000, 70, 70);
+	//DelaunayGridGenerator gen(pts, 70, 70);
 	
 	//cout << "After Delaunay Triangulation" << endl;
 	//cout << "Number of faces: " << gen.faces.size() << endl;
 	//cout << "Number of edges: " << gen.edges.size() << endl;
 
-	gen.grid_to_file("test.txt");
-	gen.grid_to_dot("test");
+	//gen.grid_to_file("test.txt");
+	//gen.grid_to_dot("test");
+
+
+	DelaunayGridGenerator gen("test.txt");
+	gen.grid_to_file("test_from_file.txt");
+	gen.grid_to_dot("test_from_file");
 }
