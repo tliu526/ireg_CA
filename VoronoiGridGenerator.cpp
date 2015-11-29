@@ -39,14 +39,9 @@ VoronoiGridGenerator::VoronoiGridGenerator(string file){
 	else{
 		cout << "Incorrect input file" << endl;
 	}
-
-	//worries about overwriting rev_gen_pts_map
-	init_maps();
 }
 
 void VoronoiGridGenerator::init_from_delaunay(){
-
-
 	//initialize pt_face_map for fast voronoi face generation
 	typename map<string, Poly>::iterator map_it;
 	for(map_it = face_map.begin(); map_it != face_map.end(); map_it++) {
@@ -72,9 +67,16 @@ void VoronoiGridGenerator::init_from_delaunay(){
 	init_borders();
 	init_voronoi();
 
+	//worries about overwriting rev_gen_pts_map
+	init_maps();
 }
 
 void VoronoiGridGenerator::init_borders(){
+	min_x -= 10;
+	min_y -= 10;
+	max_x += 10;
+	max_y += 10;
+
 	top_border = Edge(Point(min_x, max_y), Point(max_x, max_y));
 	bottom_border = Edge(Point(min_x, min_y), Point(max_x, min_y));
 	left_border = Edge(Point(min_x, min_y), Point(min_x, max_y));
