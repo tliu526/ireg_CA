@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <cmath>
+#include <cstdlib>
 
 using namespace std;
 	
@@ -63,9 +65,115 @@ bool edge_intersect(Edge e1, Edge e2) {
     return false;
 }
 
+//k is limit of rejection sample size, using algorithm from br07
+//pre: pts is empty
+vector<Point> generate_poisson_disk(float x, float y, int k, float r){
+    vector<Point> pts;
 
-void generate_poisson_disk(vector<Point>& pts, int n, float x, float y, float r){
-    //TODO
+    float cell_size = r / sqrt(2);
+
+    int w = (int)ceil(x / cell_size);
+    int h = (int)ceil(y / cell_size);
+
+    //init grid to -1
+    vector<vector<int>> grid(w);
+    for (int i = 0; i < grid.size(); i++){
+        grid[i] = vector<int>(h, -1);
+    }
+    /*
+    for (int i = 0; i < w; i++){
+        for(int j = 0; j < h; j++){
+            cout << grid[i][j] << endl;
+        }
+    }
+    cout << "w: "  << w << endl;
+    cout << grid.size() << endl;
+    cout << "h: "  << h << endl;
+    cout << grid[0].size() << endl;
+    */
+    vector<Point> active;
+
+    default_random_engine gen;
+    uniform_real_distribution<float> x_distr(0, x);
+    uniform_real_distribution<float> y_distr(0, y);
+
+    Point first(x_distr(gen), y_distr(gen));
+
+    active.push_back(first);
+    while(active.size() > 0){
+
+        random_shuffle(active.begin(), active.end());
+        
+        Point p = active[active.size()-1];
+        active.pop_back();
+
+        for(int i = 0; i < k; i++){
+            Point sample = generate_annulus_pt(p, r);
+
+            if((sample.x > 0) && (sample.x < x) && (sample.y > 0) && (sample.y < y)){
+                if(check_neighborhood(sample, grid, r, pts, cell_size)){
+                    int sample_w = (int)(sample.x / cell_size);
+                    int sample_h = (int)(sample.y / cell_size);
+
+                    grid[sample_w][sample_h] = pts.size();
+                    pts.push_back(sample);
+                    active.push_back(sample);
+                }
+            }
+
+        }
+    }
+
+    cout << "Number of points: " << pts.size() << endl;
+    return pts;
+}
+
+bool check_neighborhood(Point p, vector<vector<int>> &grid, float min_dist, vector<Point> &pts, float cell_size){
+    int sample_w = (int)(p.x / cell_size);
+    int sample_h = (int)(p.y / cell_size);
+/*
+    cout << p << endl;
+    cout << sample_w << endl;
+    cout << sample_h << endl;
+*/
+    //need to check the 5x5 neighborhood around the point
+    int w_begin = max(0, sample_w-2);
+    int w_end = min(w_begin + 3, grid.size());
+    int h_begin = max(0, sample_h-2);
+    int h_end = min(h_begin + 3, grid[0].size());
+/*
+    for(int i = w_begin; i < w_end; i++){
+        for(int j = h_begin; j < h_end; j++){
+            if((grid[i][j] != -1) && (distance(p, pts[grid[i][j]]) < min_dist)) {
+                return false;
+            }
+        }
+    }                
+*/
+    for (int i = 0; i < pts.size(); i++){
+        if (distance(p, pts[i]) < min_dist){
+            return false;
+        }
+    }
+    return true;
+}
+
+Point generate_annulus_pt(Point p, float min_dist){
+
+    float rand_angle = 2 * 4*atan(1) * (rand() / float(RAND_MAX));
+    float rand_rad = min_dist * ((rand()/ float(RAND_MAX)) + 1); //in between min_dist and 2 * min_dist
+
+    float x = p.x + rand_rad * cos(rand_angle); 
+    float y = p.y + rand_rad * sin(rand_angle); 
+
+    return Point(x,y);
+}
+
+float distance(Point p1, Point p2){
+    float x = p2.x - p1.x;
+    float y = p2.y - p1.y;
+
+    return sqrt((x*x) + (y*y));
 }
 
 bool pt_in_tri(Point pt, Tri& tri){
@@ -152,13 +260,14 @@ int digit_diff(int n, int m){
 /*
 //For debugging my incompetence in C++
 int main() {
-	vector<point> points;
-	generate_uniform_rand(points, 10, 10.0f, 10.0f);
+	vector<Point> points;
+    cout << points.size() << endl;
 
-	for (int i = 0; i < points.size(); i++){
-		cout << points[i].x << "," << points[i].y << "\n";
-	}
-
+    generate_poisson_disk(points, 50, 50, 30, 0.5);
+    
+    for (int i = 0; i < points.size(); i++){
+        cout << points[i] << endl;
+    }
 	return 0;
 }
 */

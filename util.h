@@ -31,17 +31,31 @@ inline int min(int a, int b){ return (a>b) ? b : a; }
 /**** POINT GENERATION ****/
 
 /*
-Populates pts vector with n points sampled uniformly in a 2x by 2y dimension space.
+Populates pts vector with n points sampled uniformly in a 2x by 2y space.
 */
 std::vector<Point> generate_uniform_rand(int n, float x, float y);
 
 /*
-Populates pts vector with n points from a poisson disk in a x by y dimension space.
+Populates pts vector with points from a poisson disk distribution (2x by 2y) with radius r.
 */
-void generate_poisson_disk(std::vector<Point>& pts, int n, float x, float y);
+std::vector<Point> generate_poisson_disk(float x, float y, int n, float r);
 
+/*
+generates a point uniformly from within the minDist, 2*minDist annulus
+*/
+Point generate_annulus_pt(Point p, float minDist);
+
+/*
+Helper for poisson disk. Checks if a point p has 
+*/
+bool check_neighborhood(Point p, std::vector<std::vector<int> >&grid, float min_dist, std::vector<Point> &pts, float cell_size);
 
 /**** GEOMETRY FUNCTIONS ****/
+
+/*
+Gives the distance between two points
+*/
+float distance(Point p1, Point p2);
 
 /*
 Determines the orientation of the two points.

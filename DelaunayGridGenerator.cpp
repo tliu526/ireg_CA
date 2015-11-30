@@ -261,26 +261,21 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 
 // for debugging
 int main() {
-/*
-	Point p1(1,2);
-	Point p2(4,7);
-	Point p3(-5,10);
-
-	Tri t(Edge(p2,p1), Edge(p2,p3), Edge(p3,p1));
-	cout << "Circumcenter: " << get_circumcenter(t) << endl;
-	return 0;
-*/
 	//vector<Point> pts = generate_uniform_rand(1000, 70, 70);
 	//DelaunayGridGenerator gen(pts, 70, 70);
 	
-	//cout << "After Delaunay Triangulation" << endl;
-	//cout << "Number of faces: " << gen.faces.size() << endl;
-	//cout << "Number of edges: " << gen.edges.size() << endl;
-
 	//gen.grid_to_file("test.txt");
 	//gen.grid_to_dot("test");
-	
-	DelaunayGridGenerator gen("test.txt");
-	gen.grid_to_file("test_from_file.txt");
-	gen.grid_to_dot("test_from_file");
+
+	//DelaunayGridGenerator gen("test.txt");
+	//gen.grid_to_file("test_from_file.txt");
+	//gen.grid_to_dot("test_from_file");
+
+	vector<Point> pts = generate_poisson_disk(50, 50, 30, 3);
+	DelaunayGridGenerator gen(pts, 50, 50);
+
+	gen.grid_to_file("test_poisson.txt");
+	gen.grid_to_dot("test_poisson");
+
+	return 0;	
 }

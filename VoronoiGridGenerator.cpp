@@ -72,6 +72,7 @@ void VoronoiGridGenerator::init_from_delaunay(){
 }
 
 void VoronoiGridGenerator::init_borders(){
+	//TODO standardize
 	min_x -= 10;
 	min_y -= 10;
 	max_x += 10;
