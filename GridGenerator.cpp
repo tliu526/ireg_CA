@@ -12,12 +12,12 @@ graph_to_file.
 
 using namespace std;
 
-GridGenerator::GridGenerator(vector<Point>& p, float x, float y) :
+GridGenerator::GridGenerator(vector<Point>& p, float min_x, float max_x, float min_y, float max_y) :
 	gen_pts(p), 
-	max_x(x),
-	max_y(y),
-	min_x(-1*x),
-	min_y(-1*y)
+	max_x(max_x),
+	max_y(max_y),
+	min_x(min_x),
+	min_y(min_y)
 	{}
 
 GridGenerator::GridGenerator(string file){

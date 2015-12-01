@@ -23,7 +23,7 @@ Need to look at optimizing some of the other functions, or switching to an alter
 
 using namespace std;
 
-DelaunayGridGenerator::DelaunayGridGenerator(vector<Point> &pts, float x, float y) : GridGenerator(pts, x, y) {
+DelaunayGridGenerator::DelaunayGridGenerator(vector<Point> &pts, float min_x, float max_x, float min_y, float max_y) : GridGenerator(pts, min_x, max_x, min_y, max_y) {
 	verts = pts;
 	init_triangulation();
 	delaunay_triangulation();
@@ -276,9 +276,9 @@ int main() {
 	//DelaunayGridGenerator gen("test.txt");
 	//gen.grid_to_file("test_from_file.txt");
 	//gen.grid_to_dot("test_from_file");
-	
+
 	vector<Point> pts = generate_poisson_disk(70, 70, 30, 4);
-	DelaunayGridGenerator gen(pts, 50, 50);
+	DelaunayGridGenerator gen(pts, 0,70, 0, 70);
 
 	gen.grid_to_file("test_poisson.txt");
 	gen.grid_to_dot("test_poisson");

@@ -18,7 +18,7 @@ and edges.
 
 class GridGenerator {
 public:
-	GridGenerator(std::vector<Point>& p, float x, float y); // defines starting grid of size 2x by 2y
+	GridGenerator(std::vector<Point>& p, float min_x, float max_x, float min_y, float max_y); // defines starting grid of size 2x by 2y
 	GridGenerator(std::string file); //reads from data file
 	GridGenerator() {};
 

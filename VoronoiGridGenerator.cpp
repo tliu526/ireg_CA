@@ -257,21 +257,6 @@ Edge VoronoiGridGenerator::closest_border(Edge e){
 void VoronoiGridGenerator::generate_graph(){}
 
 int main(){
-	/*
-	Point p1(0,0);
-	Point p2(0,1);
-	Point p3(1,0);
-	Point p4(0,-1);
-
-	Tri t1(Edge(p1,p2),Edge(p2,p3), Edge(p1,p3));
-	Tri t2(Edge(p1,p2),Edge(p2,p4), Edge(p1,p4));
-
-	cout << t1 << endl;
-	cout << t2 << endl;
-
-	cout << t1.shares_edge(t2) << endl;
-	return 0;
-	*/
 	//VoronoiGridGenerator v("test.txt");
 	//v.grid_to_file("vtest2.txt");
 	//v.grid_to_dot("vtest2");
