@@ -101,6 +101,9 @@ void DelaunayGridGenerator::add_tris(Point anchor, std::vector<Edge> &new_edges)
 					Tri t(e1,e2,e3);
 				
 					if(isValidTri(t) && (count(faces.begin(), faces.end(), t) == 0)){
+						edge_tri_map[e1].push_back(t);
+						edge_tri_map[e2].push_back(t);
+						edge_tri_map[e3].push_back(t);
 						faces.push_back(t);
 					}
 				}
@@ -134,7 +137,12 @@ vector<Edge> DelaunayGridGenerator::init_triangulation() {
 	edges.push_back(e1);
 	edges.push_back(e2);
 	edges.push_back(e3);
-	faces.push_back(Tri(e1,e2,e3));
+	Tri t(e1,e2,e3);
+	faces.push_back(t);
+
+	edge_tri_map[e1].push_back(t);
+	edge_tri_map[e2].push_back(t);
+	edge_tri_map[e3].push_back(t);
 
 	vector<Edge> new_edges;
 	//add all edges where the point is visible 
@@ -197,6 +205,22 @@ void DelaunayGridGenerator::flip_edge(Edge e, Tri t1, Tri t2){
 
 	edges.erase(remove(edges.begin(), edges.end(), e), edges.end());
 	edges.push_back(new_e);
+	edge_tri_map.erase(e);
+
+	//update edge_tri_map
+	for (int i = 0; i < new_t1.edges.size(); i++){
+		vector<Tri>* tris = &edge_tri_map[new_t1.edges[i]];
+		tris->push_back(new_t1);
+		tris->erase(remove(tris->begin(), tris->end(), t1), tris->end());
+		tris->erase(remove(tris->begin(), tris->end(), t2), tris->end());
+	}
+
+	for (int i = 0; i < new_t2.edges.size(); i++){
+		vector<Tri>* tris = &edge_tri_map[new_t2.edges[i]];
+		tris->push_back(new_t2);
+		tris->erase(remove(tris->begin(), tris->end(), t1), tris->end());
+		tris->erase(remove(tris->begin(), tris->end(), t2), tris->end());
+	}
 
 	//sanity check
 	if(pt_in_circumcircle(e.p, new_t2) || pt_in_circumcircle(e.q, new_t1)) {
@@ -215,6 +239,31 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 		edge_stack.pop();
 		marked.erase(remove(marked.begin(), marked.end(), e), marked.end());
 
+		if(edge_tri_map[e].size() > 1){
+			Tri t1 = edge_tri_map[e][0];
+			Tri t2 = edge_tri_map[e][1];
+
+			if(!is_locally_delaunay(e, t1, t2)){
+
+				for(int i = 0; i < t1.edges.size(); i++){
+					if((e != t1.edges[i]) && (count(marked.begin(), marked.end(), t1.edges[i]) == 0)){
+						marked.push_back(t1.edges[i]);
+						edge_stack.push(t1.edges[i]);
+					}
+				}
+
+				for(int i = 0; i < t2.edges.size(); i++){
+					if((e != t2.edges[i]) && (count(marked.begin(), marked.end(), t2.edges[i]) == 0)){
+						marked.push_back(t2.edges[i]);
+						edge_stack.push(t2.edges[i]);
+					}
+				}
+
+				flip_edge(e, t1, t2);
+			}
+		}
+
+		/*
 		Tri *t1 = NULL;
 		Tri *t2 = NULL;
 
@@ -256,26 +305,27 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 				flip_edge(e, *t1, *t2);
 			}
 		}
+	*/
 	}
 }
 
 // for debugging
 int main() {
-	//vector<Point> pts = generate_uniform_rand(1000, 70, 70);
-	//DelaunayGridGenerator gen(pts, 70, 70);
+	vector<Point> pts = generate_uniform_rand(2000, 70, 70);
+	DelaunayGridGenerator gen(pts, 70, 70);
 	
-	//gen.grid_to_file("test.txt");
-	//gen.grid_to_dot("test");
+	gen.grid_to_file("fast.txt");
+	gen.grid_to_dot("fast");
 
 	//DelaunayGridGenerator gen("test.txt");
 	//gen.grid_to_file("test_from_file.txt");
 	//gen.grid_to_dot("test_from_file");
 
-	vector<Point> pts = generate_poisson_disk(50, 50, 30, 3);
-	DelaunayGridGenerator gen(pts, 50, 50);
+	//vector<Point> pts = generate_poisson_disk(50, 50, 30, 1.5);
+	//DelaunayGridGenerator gen(pts, 50, 50);
 
-	gen.grid_to_file("test_poisson.txt");
-	gen.grid_to_dot("test_poisson");
+	//gen.grid_to_file("test_poisson.txt");
+	//gen.grid_to_dot("test_poisson");
 
 	return 0;	
 }

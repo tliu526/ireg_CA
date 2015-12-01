@@ -131,11 +131,9 @@ vector<Point> generate_poisson_disk(float x, float y, int k, float r){
 bool check_neighborhood(Point p, vector<vector<int>> &grid, float min_dist, vector<Point> &pts, float cell_size){
     int sample_w = (int)(p.x / cell_size);
     int sample_h = (int)(p.y / cell_size);
-/*
-    cout << p << endl;
-    cout << sample_w << endl;
-    cout << sample_h << endl;
-*/
+
+
+
     //need to check the 5x5 neighborhood around the point
     int w_begin = max(0, sample_w-2);
     int w_end = min(w_begin + 3, grid.size());
@@ -144,17 +142,27 @@ bool check_neighborhood(Point p, vector<vector<int>> &grid, float min_dist, vect
 /*
     for(int i = w_begin; i < w_end; i++){
         for(int j = h_begin; j < h_end; j++){
+            
+            if(grid[i][j] != -1) {
+                cout << "Point" << p << endl;
+                cout << "i " << i << endl;
+                cout << "j " << j << endl;
+                cout << "Neighbor " << pts[grid[i][j]] << endl;
+            }
+            
             if((grid[i][j] != -1) && (distance(p, pts[grid[i][j]]) < min_dist)) {
                 return false;
             }
         }
     }                
 */
+    //TODO slower, but works
     for (int i = 0; i < pts.size(); i++){
         if (distance(p, pts[i]) < min_dist){
             return false;
         }
     }
+
     return true;
 }
 
@@ -256,14 +264,10 @@ int num_digits(int n){
 int digit_diff(int n, int m){
     return num_digits(m) - num_digits(n);
 }
-
 /*
 //For debugging my incompetence in C++
 int main() {
-	vector<Point> points;
-    cout << points.size() << endl;
-
-    generate_poisson_disk(points, 50, 50, 30, 0.5);
+    vector<Point> points = generate_poisson_disk(50, 50, 30, 0.5);
     
     for (int i = 0; i < points.size(); i++){
         cout << points[i] << endl;

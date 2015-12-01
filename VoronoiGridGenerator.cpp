@@ -272,8 +272,11 @@ int main(){
 	cout << t1.shares_edge(t2) << endl;
 	return 0;
 	*/
-	
-	VoronoiGridGenerator v("test.txt");
-	v.grid_to_file("vtest2.txt");
-	v.grid_to_dot("vtest2");
+	//VoronoiGridGenerator v("test.txt");
+	//v.grid_to_file("vtest2.txt");
+	//v.grid_to_dot("vtest2");
+
+	VoronoiGridGenerator v("test_poisson.txt");
+	v.grid_to_file("vtest2_poisson.txt");
+	v.grid_to_dot("vtest2_poisson");
 }

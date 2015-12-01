@@ -13,6 +13,7 @@ Things to think about:
 #include "GridGenerator.h"
 #include "Tri.h"
 #include <vector>
+#include <map>
 
 class DelaunayGridGenerator : public GridGenerator {
 	public:
@@ -21,6 +22,7 @@ class DelaunayGridGenerator : public GridGenerator {
 		void generate_graph();
 
 	private:
+		std::map<Edge, std::vector<Tri>> edge_tri_map; //to keep track of the triangles associated with edges
 		/*
 		Determines whether point q is visible from point p, i.e. the edge pq does not intersect other edges.
 		*/

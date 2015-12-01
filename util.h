@@ -37,6 +37,7 @@ std::vector<Point> generate_uniform_rand(int n, float x, float y);
 
 /*
 Populates pts vector with points from a poisson disk distribution (2x by 2y) with radius r.
+From http://devmag.org.za/2009/05/03/poisson-disk-sampling/, br07
 */
 std::vector<Point> generate_poisson_disk(float x, float y, int n, float r);
 
