@@ -6,7 +6,6 @@ Things to think about:
 
 (c) Tony Liu 2015.
 */
-
 #ifndef DELAUNAYGRIDGENERATOR_H
 #define DELAUNAYGRIDGENERATOR_H
 
