@@ -262,70 +262,26 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 				flip_edge(e, t1, t2);
 			}
 		}
-
-		/*
-		Tri *t1 = NULL;
-		Tri *t2 = NULL;
-
-		//is there a better way to do this?
-		int i;
-		for(i = 0; i < faces.size(); i++) {
-			if(faces[i].contains_edge(e)) {
-				t1 = (Tri*)&faces[i];
-				i++;
-				break;
-			}
-		}
-
-		for(i; i < faces.size(); i++) {
-			if (faces[i].contains_edge(e)) {
-				t2 = (Tri*)&faces[i];
-				break;
-			}
-		}
-
-		//if we find another tri with the shared edge, could be a border edge
-		if (t2 != NULL){
-			if(!is_locally_delaunay(e, *t1, *t2)){
-
-				for(int i = 0; i < t1->edges.size(); i++){
-					if((e != t1->edges[i]) && (count(marked.begin(), marked.end(), t1->edges[i]) == 0)){
-						marked.push_back(t1->edges[i]);
-						edge_stack.push(t1->edges[i]);
-					}
-				}
-
-				for(int i = 0; i < t2->edges.size(); i++){
-					if((e != t2->edges[i]) && (count(marked.begin(), marked.end(), t2->edges[i]) == 0)){
-						marked.push_back(t2->edges[i]);
-						edge_stack.push(t2->edges[i]);
-					}
-				}
-
-				flip_edge(e, *t1, *t2);
-			}
-		}
-	*/
 	}
 }
 
 // for debugging
 int main() {
-	vector<Point> pts = generate_uniform_rand(2000, 70, 70);
-	DelaunayGridGenerator gen(pts, 70, 70);
+	//vector<Point> pts = generate_uniform_rand(2000, 70, 70);
+	//DelaunayGridGenerator gen(pts, 70, 70);
 	
-	gen.grid_to_file("fast.txt");
-	gen.grid_to_dot("fast");
+	//gen.grid_to_file("fast.txt");
+	//gen.grid_to_dot("fast");
 
 	//DelaunayGridGenerator gen("test.txt");
 	//gen.grid_to_file("test_from_file.txt");
 	//gen.grid_to_dot("test_from_file");
+	
+	vector<Point> pts = generate_poisson_disk(70, 70, 30, 4);
+	DelaunayGridGenerator gen(pts, 50, 50);
 
-	//vector<Point> pts = generate_poisson_disk(50, 50, 30, 1.5);
-	//DelaunayGridGenerator gen(pts, 50, 50);
-
-	//gen.grid_to_file("test_poisson.txt");
-	//gen.grid_to_dot("test_poisson");
+	gen.grid_to_file("test_poisson.txt");
+	gen.grid_to_dot("test_poisson");
 
 	return 0;	
 }

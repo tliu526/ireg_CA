@@ -80,17 +80,7 @@ vector<Point> generate_poisson_disk(float x, float y, int k, float r){
     for (int i = 0; i < grid.size(); i++){
         grid[i] = vector<int>(h, -1);
     }
-    /*
-    for (int i = 0; i < w; i++){
-        for(int j = 0; j < h; j++){
-            cout << grid[i][j] << endl;
-        }
-    }
-    cout << "w: "  << w << endl;
-    cout << grid.size() << endl;
-    cout << "h: "  << h << endl;
-    cout << grid[0].size() << endl;
-    */
+ 
     vector<Point> active;
 
     default_random_engine gen;
@@ -100,6 +90,7 @@ vector<Point> generate_poisson_disk(float x, float y, int k, float r){
     Point first(x_distr(gen), y_distr(gen));
 
     active.push_back(first);
+
     while(active.size() > 0){
 
         random_shuffle(active.begin(), active.end());
@@ -115,8 +106,8 @@ vector<Point> generate_poisson_disk(float x, float y, int k, float r){
                     int sample_w = (int)(sample.x / cell_size);
                     int sample_h = (int)(sample.y / cell_size);
 
-                    grid[sample_w][sample_h] = pts.size();
                     pts.push_back(sample);
+                    grid[sample_w][sample_h] = (find(pts.begin(), pts.end(), sample) - pts.begin());
                     active.push_back(sample);
                 }
             }
@@ -132,36 +123,19 @@ bool check_neighborhood(Point p, vector<vector<int>> &grid, float min_dist, vect
     int sample_w = (int)(p.x / cell_size);
     int sample_h = (int)(p.y / cell_size);
 
-
-
     //need to check the 5x5 neighborhood around the point
     int w_begin = max(0, sample_w-2);
-    int w_end = min(w_begin + 3, grid.size());
+    int w_end = min(sample_w + 3, grid.size());
     int h_begin = max(0, sample_h-2);
-    int h_end = min(h_begin + 3, grid[0].size());
-/*
+    int h_end = min(sample_h + 3, grid[0].size());
+
     for(int i = w_begin; i < w_end; i++){
         for(int j = h_begin; j < h_end; j++){
-            
-            if(grid[i][j] != -1) {
-                cout << "Point" << p << endl;
-                cout << "i " << i << endl;
-                cout << "j " << j << endl;
-                cout << "Neighbor " << pts[grid[i][j]] << endl;
-            }
-            
             if((grid[i][j] != -1) && (distance(p, pts[grid[i][j]]) < min_dist)) {
                 return false;
             }
         }
     }                
-*/
-    //TODO slower, but works
-    for (int i = 0; i < pts.size(); i++){
-        if (distance(p, pts[i]) < min_dist){
-            return false;
-        }
-    }
 
     return true;
 }

@@ -127,7 +127,7 @@ void VoronoiGridGenerator::init_voronoi(){
 		}
 
 		add_border_edge(face_edges);
-
+		
 		for(int i = 0; i < face_edges.size(); i++){
 			if(count(new_edges.begin(), new_edges.end(), face_edges[i]) == 0){
 				new_edges.push_back(face_edges[i]);
@@ -277,6 +277,6 @@ int main(){
 	//v.grid_to_dot("vtest2");
 
 	VoronoiGridGenerator v("test_poisson.txt");
-	v.grid_to_file("vtest2_poisson.txt");
-	v.grid_to_dot("vtest2_poisson");
+	v.grid_to_file("vtest_poisson.txt");
+	v.grid_to_dot("vtest_poisson");
 }
