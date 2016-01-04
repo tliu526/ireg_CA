@@ -234,11 +234,11 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 	stack<Edge, vector<Edge> > edge_stack(marked);
 
 	while (!edge_stack.empty()){
-		//cout << "stack size: " << edge_stack.size() << endl;
 		Edge e = edge_stack.top();
 		edge_stack.pop();
 		marked.erase(remove(marked.begin(), marked.end(), e), marked.end());
 
+		//only if edge_tri_map has two Tris, else we're at a border edge
 		if(edge_tri_map[e].size() > 1){
 			Tri t1 = edge_tri_map[e][0];
 			Tri t2 = edge_tri_map[e][1];
@@ -277,8 +277,8 @@ int main() {
 	//gen.grid_to_file("test_from_file.txt");
 	//gen.grid_to_dot("test_from_file");
 
-	vector<Point> pts = generate_poisson_disk(70, 70, 30, 4);
-	DelaunayGridGenerator gen(pts, 0,70, 0, 70);
+	vector<Point> pts = generate_poisson_disk(100, 100, 30, 3);
+	DelaunayGridGenerator gen(pts, 0, 100, 0, 100);
 
 	gen.grid_to_file("test_poisson.txt");
 	gen.grid_to_dot("test_poisson");
