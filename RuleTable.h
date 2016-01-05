@@ -2,10 +2,16 @@
 An abstract class for transition rules. This will take a Cell as well as a Graph and 
 transition it to the next specified state.
 
+A data structure for storing all transition rules for non-Euclidean rule tables. The idea is 
+to hold a byte array for each possible number of neighbors, with the byte array corresponding to
+the same representation as 1D CA rule representations (like rule 110).
+
+Or, if we only care about counts of number of neighbors being on or off, we have an bit array with
+length equal to the total number of neighbors.
+
 Things to think about:
 - state history (separate checksum class?)
 - need a way to store rule tables to be mutated/iterated through (ala lambda)
-
 
 (c) 2015 Tony Liu.
 */
