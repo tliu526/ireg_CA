@@ -6,13 +6,35 @@ Implementation of the Simulator class. Currently pseudocode.
 
 #include "Simulator.h"
 
+//for main (Debugging)
+#include "SimpleMajorityRule.h"
+#include "DelaunayGridGenerator.h"
+static bool debug = true;
+
+#define dout if(debug) cout
+
 using namespace std;
+
+Simulator::Simulator(GridGenerator& g, RuleTable& r) :
+    generator(g),
+    rule_table(r)
+{
+    grid = generator.get_graph();
+    cur_time = 0;
+    max_steps = 10; //TODO abstract to options
+}
 
 void Simulator::simulate() {
 
+    event_queue.push(UPDATE_GRAPH);
+
     while(!event_queue.empty()){
-        //process top of queue
+        Event e = event_queue.front();
+        event_queue.pop();
+        process_event(e);
     }
+
+    dout << "Finished simulation" << endl;
 }
 
 void Simulator::process_event(Event e){
@@ -22,12 +44,12 @@ void Simulator::process_event(Event e){
 
     switch (e) {
         case UPDATE_GRAPH:
-        update_graph();
-        //set trigger_flag to update_display and update_stats;
+        update_graph(trigger_flags);
+
         break;
 
         case WRITE_TO_FILE:
-        stats_to_file();
+        //stats_to_file();
         //set trigger_flag for what?;       
         break;
 
@@ -40,6 +62,26 @@ void Simulator::process_event(Event e){
 }
 
 void Simulator::process_triggers(int flags) {
-    //for each flag set, push event onto the queue
+    if(flags & UPDATE_GRAPH) {
+        event_queue.push(UPDATE_GRAPH);
+    }
+    //TODO the rest of the elseifs
 }
 
+void Simulator::update_graph(int &flags){
+    rule_table.transition(grid);
+    dout << "Current time step: " << cur_time << endl;
+    cur_time++;
+    if(cur_time < max_steps){
+        flags |= UPDATE_GRAPH;   
+    } 
+
+}
+
+int main() {
+    vector<Point> pts = generate_poisson_disk(100, 100, 30, 3);
+    DelaunayGridGenerator gen(pts, 0, 100, 0, 100);
+    SimpleMajorityRule rule;
+    Simulator s(gen, rule);
+    s.simulate();
+}

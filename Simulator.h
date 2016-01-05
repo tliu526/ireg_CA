@@ -11,22 +11,23 @@ Things to think about:
 #define SIMULATOR_H
 
 #include "GridGenerator.h"
+#include "RuleTable.h"
 
 #include <queue>
 #include <map>
 #include <string>
 
-typedef enum Event {
-    UPDATE_GRAPH,
-    CALC_METRICS,
-    STOP_SIMULATION,
-    UPDATE_DISPLAY,
-    WRITE_TO_FILE,
-} Event;
-
 class Simulator {
     public:
-        Simulator(GridGenerator& g, RuleTable& r); 
+        typedef enum Event {
+            UPDATE_GRAPH = 1,
+            CALC_METRICS = 2,
+            STOP_SIMULATION = 4,
+            UPDATE_DISPLAY = 8,
+            WRITE_TO_FILE = 16,
+        } Event;
+
+        Simulator(GridGenerator& g, RuleTable& r); //TODO a struct of options to pass
         Simulator() {};
 
         /**
@@ -42,19 +43,32 @@ class Simulator {
         void stats_to_file(std::string file);
 
     protected:
-        GridGenerator* generator;
-        Graph* grid;
-        RuleTable* rule_table;
+        GridGenerator generator;
+        Graph<std::string, Cell>* grid;
+        RuleTable rule_table;
         std::queue<Event> event_queue;
+
+        /**
+        checks all triggers and appropriately pushes events to queue
+        */
+        void process_triggers(int flags); 
         
-        void process_triggers(int flags); //checks all triggers and appropriately pushes events to queue
-        void process_event(Event e); //processes a single event
+        /**
+        processes a single event
+        */
+        void process_event(Event e); 
+
+        /**
+        Updates graph and sets flags as appropriate
+        */
+        void update_graph(int &flags);
 
         /**** STATE VARIABLES ****/
         int cur_time;
-        float lambda;
+        int max_steps;
+        //TODO module for keeping track of all statistics
+        //float lambda;
         std::map<unsigned int, int> chksum_map;
 };
-
 
 #endif 

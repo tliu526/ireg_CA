@@ -205,7 +205,7 @@ void GridGenerator::init_maps(){
 	for (int i = 0; i < faces.size(); i++) {
 		stringstream ss;
 		ss << "f";
-		
+p		
 		int n = digit_diff(i, faces.size());
 		while(n--) { ss << "0"; }
 			
@@ -326,4 +326,12 @@ bool GridGenerator::pt_in_grid(Point p) {
 
 vector<Poly> GridGenerator::get_faces(){
 	return faces;
+}
+
+Graph<string, Cell>* GridGenerator::get_graph() {
+	return &graph;
+}
+
+void GridGenerator::generate_graph(){
+	//does nothing, TODO abstract?
 }

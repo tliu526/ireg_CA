@@ -12,7 +12,7 @@ length equal to the total number of neighbors.
 Things to think about:
 - state history (separate checksum class?)
 - need a way to store rule tables to be mutated/iterated through (ala lambda)
-
+- Consistent directionality of rule application
 (c) 2015 Tony Liu.
 */
 
@@ -25,15 +25,19 @@ Things to think about:
 #include <string>
 #include <vector>
 
-typedef enum RuleType = { 
-	EUCLIDEAN, 
-	MOORE, 
-	VON_NEUMANN
-} RuleType;
-
 class RuleTable {
 	public:
-		void transition(Graph<std::string,Cell> graph) = 0;
+		RuleTable() {};
+
+		//Enumeration holds the rule type
+		typedef enum RuleType { 
+			EUCLIDEAN, 
+			MOORE, 
+			VON_NEUMANN,
+			OTHER
+		} RuleType;
+
+		virtual void transition(Graph<std::string,Cell>* graph);
 
 	protected:
 		RuleType rule_type;
@@ -41,7 +45,7 @@ class RuleTable {
 		//keeps track of the checksums for previous states, TODO checksum class?
 		std::vector<long> state_history; 
 
-		void apply_rule(std::string label) = 0;
+		virtual void apply_rule(std::string label, Graph<std::string,Cell>* graph);
 };
 
 #endif

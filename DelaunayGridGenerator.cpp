@@ -265,6 +265,7 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 	}
 }
 
+/*
 // for debugging
 int main() {
 	//vector<Point> pts = generate_uniform_rand(2000, 70, 70);
@@ -284,4 +285,4 @@ int main() {
 	gen.grid_to_dot("test_poisson");
 
 	return 0;	
-}
+}*/

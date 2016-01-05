@@ -22,10 +22,12 @@ public:
 	GridGenerator(std::string file); //reads from data file
 	GridGenerator() {};
 
-	virtual void generate_graph() = 0;
+	virtual void generate_graph(); //TODO make abstract?
 	void grid_to_file(std::string f);
 	void grid_to_dot(std::string out_name); //converts the grid to a (neato) graphviz file
+	
 	std::vector<Poly> get_faces();
+	Graph<std::string, Cell> *get_graph();
 
 	bool pt_in_grid(Point p); //checks whether p lies within the bounds of the grid, border points return false
 

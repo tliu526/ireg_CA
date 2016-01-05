@@ -2,9 +2,6 @@
 A graph implementation that utilizes adjacency lists, as the graphs will be relatively sparse. Currently the 
 graph is undirected.
 
-TODO: hang an additional template object for holding additional information, such as a cell.
-http://stackoverflow.com/questions/5545948/how-to-avoid-repeating-class-name-and-template-call-in-implementation
-
 (c) 2015 Tony Liu.
 */
 #ifndef GRAPH_H
