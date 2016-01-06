@@ -1,5 +1,5 @@
 #Irregular Cellular Automata
 
-Folder organization upcoming.
+Description of project here.
 
 Questions? Email tl4@williams.edu.
