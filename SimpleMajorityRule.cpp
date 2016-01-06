@@ -15,7 +15,6 @@ SimpleMajorityRule::SimpleMajorityRule() {
     
 void SimpleMajorityRule::transition(Graph<std::string,Cell>* graph){
     //write current state to state_history
-
     //iterate over all cells in a consistent order, calling apply_rule on each cell
     //for all cells (label):
     //  apply_rule(label)

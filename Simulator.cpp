@@ -6,11 +6,11 @@ Implementation of the Simulator class. Currently pseudocode.
 
 #include "Simulator.h"
 
-//for main (Debugging)
 #include "SimpleMajorityRule.h"
 #include "DelaunayGridGenerator.h"
-static bool debug = true;
 
+//for main (Debugging)
+static bool debug = true;
 #define dout if(debug) cout
 
 using namespace std;
