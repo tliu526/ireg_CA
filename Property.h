@@ -14,23 +14,33 @@ class Property {
         typedef enum Tag {
             INT,
             FLOAT,
+            BOOL,
             STRING
         } Tag;
 
         Property(){};
         ~Property(){};
-        Property(int i);
-        Property(float f);
-        Property(std::string s);
+        Property(std::string label, int i);
+        Property(std::string label, float f);
+        Property(std::string label, bool b);
+        Property(std::string label, std::string s);
 
-        //The property type
-        Tag type;
-
+        //TODO make this protected?
         union {
             int i;
             float f;
+            bool b;
             std::string s;
         };
+
+        std::string get_label();
+        Tag         get_type();
+        std::string to_string();
+    protected:
+        //The property type
+        Tag type;
+        //The Property label
+        std::string label;
 };
 
 #endif
