@@ -13,19 +13,19 @@ using namespace std;
 Property::Property(string l, int in){
     i = in;
     type = INT;
-    label = l;
+    label = "I:" + l;
 }
 
 Property::Property(string l, float in){
     f = in;
     type = FLOAT;
-    label = l;
+    label = "F:" + l;
 }
 
 Property::Property(string l, bool in){
     b = in;
     type = BOOL;
-    label = l;
+    label = "B:" + l;
 }
 
 /*

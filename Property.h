@@ -12,9 +12,9 @@ A disjoint union/tagged union for Cell properties.
 class Property {
     public:
         typedef enum Tag {
-            INT,
-            FLOAT,
-            BOOL,
+            INT = 'I',
+            FLOAT = 'F',
+            BOOL = 'B',
             STRING
         } Tag;
 

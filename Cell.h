@@ -31,8 +31,8 @@ public:
 
 	Property get_property(std::string label);
 	void add_property(Property& p);
-	//needed?
-	//std::vector<std::string>* get_prop_labels();
+
+	std::map<std::string, Property>* get_prop_map();
 protected:
 	bool alive;
 	Point pt; // the point in the space that corresponds to 

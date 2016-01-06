@@ -25,7 +25,7 @@ GridGenerator::GridGenerator(string file){
 }
 
 void GridGenerator::init_from_file(string file){
-	string line, name, coord, neighbor;
+	string line, name, coord, neighbor, prop;
 	int n;
 	bool isAlive;
 	istringstream iss;
@@ -46,23 +46,31 @@ void GridGenerator::init_from_file(string file){
 	iss.clear();
 	iss >> name >> n;
 
-	//TODO attributes, this line is ignored for now
+	//Grab all the attributes
+	vector<string> prop_labels;
 	getline(in, line);
+	iss.str(line);
+	iss.clear();
+	iss >> name >> coord >> prop;
+
+	while(prop.compare("Neighbors") != 0){
+		prop_labels.push_back(prop);
+		iss >> prop;
+	}
 
 	for (int i = 0; i < n; i++){
 		getline(in,line);
 		iss.str(line);
 		iss.clear();
 
-		iss >> name >> coord >> isAlive;
+		iss >> name >> coord;
 
-		//TODO attribute list
-		/*
-	    while(n){
-	        iss >> attr;
-	        //do something
+		//Build properties vector
+		vector<Property> properties;
+	    for (size_t i = 0; i < prop_labels.size(); i++){
+	    	iss >> prop;
+	    	properties.push_back(build_property(prop_labels[i], prop));
 	    }
-		*/
 
 		//TODO something's up with mingw
 		//float x = stof(coord.substr(0, coord.find(","));
@@ -75,7 +83,8 @@ void GridGenerator::init_from_file(string file){
 		gen_pts.push_back(p);
 		pt_map[name] = p;
 		rev_gen_pt_map[p] = name;
-		graph.add_vertex(name, Cell(p, name, isAlive));
+		//graph.add_vertex(name, Cell(p, name, isAlive));
+		graph.add_vertex(name, Cell(p, name, properties));
 
 	    /*
 		while(!iss.eof()){
@@ -225,22 +234,37 @@ void GridGenerator::grid_to_file(string f){
 
 	/**** CELLS ****/
 	file << "GenPoints" << " " << gen_pts.size() << endl;
-	file << "Label" << " " << "Point" << " " << "isAlive" << " ";
-	//TODO property list
+	file << "Label" << " " << "Point" << " ";
+
+	//Writes all the present properties to the header of the file
+	//Assumes all the cells have the same properties, TODO safe assumption?
+	map<string, Property>* prop_map = graph.get_data(rev_gen_pt_map[gen_pts[0]]).get_prop_map();
+    typename map<string, Property>::iterator map_it;
+    for (map_it = prop_map->begin(); map_it != prop_map->end(); map_it++) {
+    	file << map_it->first << " "; 
+    }
+
 	file << "Neighbors" << endl;
 
 	for (int i = 0; i < gen_pts.size(); i++){
 		string p_id = rev_gen_pt_map[gen_pts[i]];
 		Cell c = graph.get_data(p_id);
-		file << p_id << " " << gen_pts[i] << " " << c.is_alive();
+		file << p_id << " " << gen_pts[i] << " "; //<< c.is_alive();
 
-		//TODO print property list
+
+		map<string, Property>* prop_map = c.get_prop_map();
+		typename map<string, Property>::iterator map_it;
+		for (map_it = prop_map->begin(); map_it != prop_map->end(); map_it++) {
+			file << (map_it->second).to_string() << " "; 
+		}
 
 		typename list<string>::iterator list_it;
 		list<string>* neighbors = graph.get_neighbors(p_id);
 		
 		for (list_it = neighbors->begin(); list_it != neighbors->end(); list_it++) {
-			file << " " << *list_it;
+			//file << " " << *list_it;
+			//TODO will trailing space mess things up?
+			file << *list_it << " ";
 		}
 
 		file << endl;
@@ -334,4 +358,32 @@ Graph<string, Cell>* GridGenerator::get_graph() {
 
 void GridGenerator::generate_graph(){
 	//does nothing, TODO abstract?
+}
+
+Property GridGenerator::build_property(std::string& name, std::string& value) {
+	char tag;
+	string label;
+
+	tag = name.at(0);
+	label = name.substr(2);
+/*
+	cout << "Tag: " << tag << endl;
+	cout << "Label: " << label << endl;
+	cout << "Value: " << value << endl;
+*/
+	switch(tag){
+		case Property::INT:
+		return Property(label, stoi(value));
+
+		case Property::BOOL:
+		return Property(label, bool(stoi(value)));
+
+		case Property::FLOAT:
+		return Property(label, stof(value));
+
+		default:
+		break;
+	}
+
+	return Property();
 }

@@ -11,6 +11,7 @@ and edges.
 #include "Graph.h"
 #include "Cell.h"
 #include "Poly.h"
+#include "Property.h"
 
 #include <vector>
 #include <string>
@@ -22,6 +23,7 @@ public:
 	GridGenerator(std::string file); //reads from data file
 	GridGenerator() {};
 
+	//TODO add capability for different property additions
 	virtual void generate_graph(); //TODO make abstract?
 	void grid_to_file(std::string f);
 	void grid_to_dot(std::string out_name); //converts the grid to a (neato) graphviz file
@@ -31,6 +33,8 @@ public:
 
 	bool pt_in_grid(Point p); //checks whether p lies within the bounds of the grid, border points return false
 
+	//Builds property according to the labels
+	Property build_property(std::string& label, std::string& value); 
 protected:
 	/*
 	initializes pt, edge, face maps

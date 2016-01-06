@@ -56,12 +56,12 @@ Property Cell::get_property(string label){
 	}
 }
 
-/*
-vector<string>* get_prop_labels(){
-	return &prop_labels;
-}
-*/
 
+map<string, Property>* Cell::get_prop_map(){
+	return &prop_map;
+}
+
+/*
 //for debugging because I'm bad at C++
 int main() {
 	Point p(5.0, 0.1);
@@ -84,3 +84,4 @@ int main() {
 	Property prop = cell.get_property("is_alive");
 	cout << "is_alive " << prop.to_string() << endl;
 }
+*/
