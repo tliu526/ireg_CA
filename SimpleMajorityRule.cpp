@@ -9,8 +9,9 @@ Implementation of SimpleMajorityRule.
 using namespace std;
 
 SimpleMajorityRule::SimpleMajorityRule() {
-    rule_type = OTHER;
+    type = OTHER;
     radius = 0;
+    stencil = Stencil();
 }
     
 void SimpleMajorityRule::transition(Graph<std::string,Cell>* graph){

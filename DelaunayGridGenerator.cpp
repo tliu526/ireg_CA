@@ -233,7 +233,7 @@ void DelaunayGridGenerator::flip_edge(Edge e, Tri t1, Tri t2){
 
     //sanity check
     if(pt_in_circumcircle(e.p, new_t2) || pt_in_circumcircle(e.q, new_t1)) {
-        cout << "something horrible has happened" << endl;
+        cout << "something horrible has happened in flip_edge" << endl;
     }
 }
 
@@ -274,7 +274,7 @@ void DelaunayGridGenerator::delaunay_triangulation() {
     }
 }
 
-
+/*
 // for debugging
 int main() {
     //vector<Point> pts = generate_uniform_rand(2000, 70, 70);
@@ -295,3 +295,4 @@ int main() {
 
     return 0;   
 }
+*/

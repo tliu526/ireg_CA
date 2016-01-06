@@ -22,6 +22,9 @@ public:
     void print_adj_list(); // for debugging purposes
     
     std::list<T> *get_neighbors(T label);
+
+    std::vector<T> get_vert_labels();
+    
     D             get_data(T label);
 
 private:

@@ -1,5 +1,5 @@
 /*
-An abstract class for transition rules. This will take a Cell as well as a Graph and 
+A base class for transition rules. This will take a Cell as well as a Graph and 
 transition it to the next specified state.
 
 A data structure for storing all transition rules for non-Euclidean rule tables. The idea is 
@@ -21,26 +21,28 @@ Things to think about:
 
 #include "Cell.h"
 #include "Graph.h"
+#include "Stencil.h"
 
 #include <string>
 #include <vector>
 
+
 class RuleTable {
 	public:
 		RuleTable() {};
+		RuleTable(Stencil& s);
 
-		//Enumeration holds the rule type
-		typedef enum RuleType { 
-			EUCLIDEAN, 
-			MOORE, 
-			VON_NEUMANN,
-			OTHER
-		} RuleType;
-
+		/**
+		Transitions the entire grid to the next timestep.
+		*/
 		virtual void transition(Graph<std::string,Cell>* graph);
+		
+		virtual void initialize();
 
 	protected:
-		RuleType rule_type;
+		RuleType type;
+		Stencil stencil;
+
 		float radius; //determines size of neighborhood
 		//keeps track of the checksums for previous states, TODO checksum class?
 		std::vector<long> state_history; 

@@ -74,6 +74,17 @@ list<T> *Graph<T,D>::get_neighbors(T label){
   return dict[label].get_neighbors();
 }
 
+template<class T, class D>
+vector<T> Graph<T,D>::get_vert_labels(){
+    vector<T> labels;
+
+    typename map<T, Vertex>::iterator dict_it;
+    for(dict_it = dict.begin(); dict_it != dict.end(); dict_it++){
+        labels.push_back(dict_it->first);
+    }
+
+    return labels;
+}
 
 /**** VERTEX IMPLEMENTATION ****/
 
@@ -111,18 +122,18 @@ list<T> *Graph<T,D>::Vertex::get_neighbors() {
 /*
 //debugging
 int main() {
-	Graph<int, int> g;
+    Graph<int, int> g;
 
-	int a = g.add_vertex(1,2);
-	int b = g.add_vertex(2,2);
-	int c = g.add_vertex(3,2);
-	int d = g.add_vertex(4,2);
+    int a = g.add_vertex(1,2);
+    int b = g.add_vertex(2,2);
+    int c = g.add_vertex(3,2);
+    int d = g.add_vertex(4,2);
 
-	g.add_edge(a,b);
-	g.add_edge(b,c);
-	g.add_edge(c,d);
-	g.add_edge(d,a);
+    g.add_edge(a,b);
+    g.add_edge(b,c);
+    g.add_edge(c,d);
+    g.add_edge(d,a);
 
-	g.print_adj_list();
+    g.print_adj_list();
 }
 */

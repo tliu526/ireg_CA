@@ -1,6 +1,11 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##1/6/2016
+This morning: implemented variatic Properties to be stored in cells using unions. GridGenerators can now write different property lists to file.
+
+This afternoon:
+
 ##1/5/2016
 
 ###__Week 1 Goals__
