@@ -10,6 +10,7 @@ only has one property (is_alive) as well as its label.
 #define CELL_H
 
 #include "util.h"
+#include "Property.h"
 
 #include <vector>
 #include <map>
@@ -19,6 +20,8 @@ public:
 	
 	Cell(Point p, std::string label);
 	Cell(Point p, std::string label, bool alive);
+	Cell(Point p, std::string label, std::vector<Property>& props);
+
 	Cell() {};
 	//TODO other constructors?
 
@@ -26,16 +29,18 @@ public:
 	std::string get_id();
 	Point       get_point();
 
-	std::string get_property(std::string label);
-	std::vector<std::string> get_prop_list();
+	Property get_property(std::string label);
+	void add_property(Property& p);
+	//needed?
+	//std::vector<std::string>* get_prop_labels();
 protected:
 	bool alive;
 	Point pt; // the point in the space that corresponds to 
 	std::string id;
 
-	static std::vector<std::string> properties;
-	//TODO make the value of variable type?
-	std::map<std::string, std::string> prop_map;
+	//Holds the property label, needed?
+	//std::vector<std::string> prop_labels;
+	std::map<std::string, Property> prop_map;
 };
 
 #endif

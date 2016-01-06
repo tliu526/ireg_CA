@@ -23,14 +23,14 @@ class Property {
         Property(std::string label, int i);
         Property(std::string label, float f);
         Property(std::string label, bool b);
-        Property(std::string label, std::string s);
+//        Property(std::string label, std::string s);
 
-        //TODO make this protected?
+        //TODO make this protected? Is string needed?
         union {
             int i;
             float f;
             bool b;
-            std::string s;
+            //std::string s;
         };
 
         std::string get_label();

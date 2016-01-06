@@ -28,11 +28,13 @@ Property::Property(string l, bool in){
     label = l;
 }
 
+/*
 Property::Property(string l, string in){
     new (&s) string(in);
     type = STRING;
     label = l;
 }
+*/
 
 string Property::get_label(){
     return label;
@@ -55,11 +57,11 @@ string Property::to_string() {
         case BOOL:
         return std::to_string(b);
         break;
-
+/*
         case STRING:
         return s;
         break;
-
+*/
         default:
         break;
     }
@@ -68,6 +70,7 @@ string Property::to_string() {
 }
 
 //for debugging
+/*
 int main(){
     Property p1("int", 15);
     Property p2("float", float(5.5));
@@ -79,3 +82,4 @@ int main(){
     cout << p3.to_string() << endl;
     cout << p4.to_string() << endl;
 }
+*/

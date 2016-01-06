@@ -23,6 +23,17 @@ Cell::Cell(Point p, string label, bool a)
 	pt = p;
 }
 
+Cell::Cell(Point p, string label, vector<Property>& props){
+	id = label;
+	pt = p;	
+	
+	for (size_t i = 0; i < props.size(); i++){
+		add_property(props[i]);
+	//	Property p = props[i];
+	//	prop_map[p.get_label()] = p;
+	}
+}
+
 bool Cell::is_alive() {
 	return alive; 
 }
@@ -34,8 +45,24 @@ string Cell::get_id() {
 Point Cell::get_point() {
 	return pt;
 }
+
+void Cell::add_property(Property& p) {
+	prop_map[p.get_label()] = p;
+}
+
+Property Cell::get_property(string label){
+	if(prop_map.count(label) != 0) {
+		return prop_map[label];
+	}
+}
+
 /*
-//for debugging because I'm bad at B++
+vector<string>* get_prop_labels(){
+	return &prop_labels;
+}
+*/
+
+//for debugging because I'm bad at C++
 int main() {
 	Point p(5.0, 0.1);
 
@@ -48,5 +75,12 @@ int main() {
 
 	cout << d.get_point().y << "\n";
 	cout << d.get_id() << "\n";
+
+	vector<Property> v;
+	v.push_back(Property("is_alive", false));
+	
+	Cell cell(p, "test", v);
+
+	Property prop = cell.get_property("is_alive");
+	cout << "is_alive " << prop.to_string() << endl;
 }
-*/
