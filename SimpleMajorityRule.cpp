@@ -8,24 +8,62 @@ Implementation of SimpleMajorityRule.
 
 using namespace std;
 
-SimpleMajorityRule::SimpleMajorityRule() {
+SimpleMajorityRule::SimpleMajorityRule(Graph<string, Cell>* graph) 
+    : RuleTable(graph)
+{
     type = OTHER;
     radius = 0;
-    stencil = Stencil();
-}
-    
-void SimpleMajorityRule::transition(Graph<std::string,Cell>* graph){
-    //write current state to state_history
-    //iterate over all cells in a consistent order, calling apply_rule on each cell
-    //for all cells (label):
-    //  apply_rule(label)
 }
 
-void SimpleMajorityRule::apply_rule(std::string label, Graph<std::string,Cell>* graph){
+//TODO write current state to state_history    
+void SimpleMajorityRule::transition(){
+    vector<string> labels = graph->get_vert_labels();
 
-    std::list<std::string>* neighbors = graph->get_neighbors(label);
+    int on_cells = 0;
+    for(size_t i = 0; i < labels.size(); i++){
+        Property p = graph->get_data(labels[i])->get_property(B_STATE);
+        
+        if(p.get_type() == Property::BOOL && p.b){
+            on_cells++;
+        }
 
-    //for all neighbors:
-    //check state of the neighbors in state_history
-    //set state of current cell
+        apply_rule(labels[i]);
+    }
+
+    cout << "Number of on cells:" << " " << on_cells << endl;
+
+    update_graph();
+}
+
+//only looks for B_STATE
+void SimpleMajorityRule::apply_rule(std::string& vert_label){
+    vector<string>* neighbors = stencil.get_neighbors(vert_label);
+    Property p;
+
+    int count = 0;
+    for(size_t i = 0 ; i < neighbors->size(); i++){
+        p = graph->get_data((*neighbors)[i])->get_property(B_STATE);
+        
+        if(p.get_type() == Property::BOOL){
+            if(p.b){
+                count++;
+            }            
+        }
+        else {
+            cout << "Invalid State type" << endl;
+            return;
+        }
+        
+    }
+
+    //switch to majority value of its neighbors
+    if (count > (neighbors->size()/2)) {
+        p.set_bool(true);
+    }
+
+    else {
+        p.set_bool(false);
+    }
+
+    state_map[vert_label] = p;
 }

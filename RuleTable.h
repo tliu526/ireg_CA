@@ -13,6 +13,10 @@ Things to think about:
 - state history (separate checksum class?)
 - need a way to store rule tables to be mutated/iterated through (ala lambda)
 - Consistent directionality of rule application
+
+Currently, RuleTable looks for the keyword property "State" in order for it to make 
+rule transitions.
+
 (c) 2015 Tony Liu.
 */
 
@@ -22,32 +26,56 @@ Things to think about:
 #include "Cell.h"
 #include "Graph.h"
 #include "Stencil.h"
+#include "Property.h"
 
 #include <string>
 #include <vector>
-
-
+#include <map>
 class RuleTable {
 	public:
 		RuleTable() {};
-		RuleTable(Stencil& s);
+		RuleTable(Graph<std::string, Cell> *graph);
+		RuleTable(Graph<std::string, Cell> *graph, Stencil& s);
 
 		/**
-		Transitions the entire grid to the next timestep.
+		Transitions the entire grid to the next timestep. Calls apply_rule and update_graph.
 		*/
-		virtual void transition(Graph<std::string,Cell>* graph);
+		virtual void transition();
 		
+		/**
+		Initializes both the RuleTable and its corresponding stencil. All hard computation
+		should go here.
+		*/
 		virtual void initialize();
 
 	protected:
+		//string constants for finding the state property in the cell
+		static const std::string B_STATE;
+		static const std::string I_STATE;
+		static const std::string F_STATE;
+
+		/**
+		Computes the next state and stores it in state_map
+		*/
+		virtual void apply_rule(std::string& label);
+		/**
+		Writes all the new states to the graph. 
+		*/
+		virtual void update_graph();
+
 		RuleType type;
 		Stencil stencil;
 
-		float radius; //determines size of neighborhood
+		//pointer to the graph to be updated
+        Graph<std::string, Cell>* graph;
+
+        //map containing all the states that need to be updated
+        std::map<std::string, Property> state_map;
+		//determines size of neighborhood
+		float radius;
+
 		//keeps track of the checksums for previous states, TODO checksum class?
 		std::vector<long> state_history; 
-
-		virtual void apply_rule(std::string label, Graph<std::string,Cell>* graph);
 };
 
 #endif

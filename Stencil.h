@@ -30,20 +30,20 @@ typedef enum RuleType {
 
 class Stencil {
     public:
-        Stencil();
-        //Stencil(Graph<std::string, Cell>* g);
+        Stencil() {};
+        Stencil(Graph<std::string, Cell>* g);
         /**
         Initialize the neighborhood map
         */
-        virtual void initialize(Graph<std::string, Cell>* g);
+        virtual void initialize();
 
         /**
         Returns the neighbor list as specified by the stencil.
         */
         std::vector<std::string>* get_neighbors(std::string& label);
     protected:
+        Graph<string, Cell>* graph;
         RuleType type;
-        Graph <std::string, Cell>* graph;
         std::map<std::string, std::vector<std::string>> neighbor_map;
 };
 

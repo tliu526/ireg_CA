@@ -238,7 +238,7 @@ void GridGenerator::grid_to_file(string f){
 
 	//Writes all the present properties to the header of the file
 	//Assumes all the cells have the same properties, TODO safe assumption?
-	map<string, Property>* prop_map = graph.get_data(rev_gen_pt_map[gen_pts[0]]).get_prop_map();
+	map<string, Property>* prop_map = graph.get_data(rev_gen_pt_map[gen_pts[0]])->get_prop_map();
     typename map<string, Property>::iterator map_it;
     for (map_it = prop_map->begin(); map_it != prop_map->end(); map_it++) {
     	file << map_it->first << " "; 
@@ -248,11 +248,11 @@ void GridGenerator::grid_to_file(string f){
 
 	for (int i = 0; i < gen_pts.size(); i++){
 		string p_id = rev_gen_pt_map[gen_pts[i]];
-		Cell c = graph.get_data(p_id);
+		Cell *c = graph.get_data(p_id);
 		file << p_id << " " << gen_pts[i] << " "; //<< c.is_alive();
 
 
-		map<string, Property>* prop_map = c.get_prop_map();
+		map<string, Property>* prop_map = c->get_prop_map();
 		typename map<string, Property>::iterator map_it;
 		for (map_it = prop_map->begin(); map_it != prop_map->end(); map_it++) {
 			file << (map_it->second).to_string() << " "; 

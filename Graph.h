@@ -21,11 +21,14 @@ public:
 
     void print_adj_list(); // for debugging purposes
     
-    std::list<T> *get_neighbors(T label);
+    std::list<T>  *get_neighbors(T label);
 
     std::vector<T> get_vert_labels();
     
-    D             get_data(T label);
+    /**
+    Returns a pointer to the data being held at the node.
+    */
+    D             *get_data(T label);
 
 private:
     class Vertex { //nested vertex class
@@ -34,7 +37,7 @@ private:
       Vertex (T label, D dat);
       
       T            get_label();    
-      D            get_data();
+      D            *get_data();
       void         add_neighbor(T label);
       void         remove_neighbor(T label);
       std::list<T> *get_neighbors();

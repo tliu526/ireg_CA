@@ -65,7 +65,7 @@ void Graph<T,D>::print_adj_list() {
 }
 
 template<class T, class D>
-D Graph<T,D>::get_data(T label){
+D* Graph<T,D>::get_data(T label){
   return dict[label].get_data();
 }
 
@@ -100,8 +100,8 @@ T Graph<T,D>::Vertex::get_label(){
 }
 
 template<class T, class D>
-D Graph<T,D>::Vertex::get_data() {
-  return data;
+D* Graph<T,D>::Vertex::get_data() {
+  return &data;
 }
 
 template<class T, class D>

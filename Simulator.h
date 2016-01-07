@@ -27,7 +27,7 @@ class Simulator {
             WRITE_TO_FILE = 16,
         } Event;
 
-        Simulator(GridGenerator& g, RuleTable& r); //TODO a struct of options to pass
+        Simulator(GridGenerator* g, RuleTable* r); //TODO a struct of options to pass
         Simulator() {};
 
         /**
@@ -43,9 +43,9 @@ class Simulator {
         void stats_to_file(std::string file);
 
     protected:
-        GridGenerator generator;
+        GridGenerator* generator;
         Graph<std::string, Cell>* grid;
-        RuleTable rule_table;
+        RuleTable* rule_table;
         std::queue<Event> event_queue;
 
         /**

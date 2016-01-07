@@ -15,7 +15,7 @@ class Property {
             INT = 'I',
             FLOAT = 'F',
             BOOL = 'B',
-            STRING
+            STRING = 'S'
         } Tag;
 
         Property(){};
@@ -36,6 +36,11 @@ class Property {
         std::string get_label();
         Tag         get_type();
         std::string to_string();
+
+        void set_bool(bool b);
+        void set_int(int i);
+        void set_float(float f);
+
     protected:
         //The property type
         Tag type;

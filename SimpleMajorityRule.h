@@ -15,19 +15,18 @@ neighbors.
 
 class SimpleMajorityRule : public RuleTable {
 	public: 
-		SimpleMajorityRule();
+		SimpleMajorityRule(Graph<std::string,Cell>* graph);
 	
 		/**
 		Applies the transition rule to the entire graph.
 		*/
-		void transition(Graph<std::string,Cell>* graph);
+		void transition();
 
 	protected:
-		
 		/**
 		Makes a single rule application.
 		*/
-		void apply_rule(std::string label, Graph<std::string,Cell>* graph);
+		void apply_rule(std::string& label);
 };
 
 #endif

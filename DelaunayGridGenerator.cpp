@@ -51,7 +51,7 @@ void DelaunayGridGenerator::generate_graph() {
 
         bool is_alive = rand() % 2;
         vector<Property> v;
-        v.push_back(Property("is_alive", is_alive));
+        v.push_back(Property("State", is_alive));
 
         graph.add_vertex(map_it->second, Cell(map_it->first, map_it->second, v));      
     }

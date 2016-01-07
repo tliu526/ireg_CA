@@ -44,6 +44,21 @@ Property::Tag Property::get_type() {
     return type;
 }
 
+void Property::set_bool(bool in){
+    b = in;
+    type = BOOL;
+}
+
+void Property::set_int(int in){
+    i = in;
+    type = INT;
+}
+
+void Property::set_float(float in){
+    f = in;
+    type = FLOAT;
+}
+
 string Property::to_string() {
     switch(type) {
         case INT:

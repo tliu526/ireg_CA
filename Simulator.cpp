@@ -15,17 +15,18 @@ static bool debug = true;
 
 using namespace std;
 
-Simulator::Simulator(GridGenerator& g, RuleTable& r) :
+Simulator::Simulator(GridGenerator* g, RuleTable* r) :
     generator(g),
     rule_table(r)
 {
-    grid = generator.get_graph();
+    grid = generator->get_graph();
     cur_time = 0;
     max_steps = 10; //TODO abstract to options
 }
 
 void Simulator::simulate() {
 
+    rule_table->initialize();
     event_queue.push(UPDATE_GRAPH);
 
     while(!event_queue.empty()){
@@ -45,7 +46,6 @@ void Simulator::process_event(Event e){
     switch (e) {
         case UPDATE_GRAPH:
         update_graph(trigger_flags);
-
         break;
 
         case WRITE_TO_FILE:
@@ -69,7 +69,7 @@ void Simulator::process_triggers(int flags) {
 }
 
 void Simulator::update_graph(int &flags){
-    rule_table.transition(grid);
+    rule_table->transition();
     dout << "Current time step: " << cur_time << endl;
     cur_time++;
     if(cur_time < max_steps){
@@ -81,7 +81,7 @@ void Simulator::update_graph(int &flags){
 int main() {
     vector<Point> pts = generate_poisson_disk(100, 100, 30, 3);
     DelaunayGridGenerator gen(pts, 0, 100, 0, 100);
-    SimpleMajorityRule rule;
-    Simulator s(gen, rule);
+    SimpleMajorityRule rule(gen.get_graph());
+    Simulator s(&gen, &rule);
     s.simulate();
 }

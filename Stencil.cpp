@@ -8,12 +8,14 @@ Implementation of Stencils.
 
 using namespace std;
 
-Stencil::Stencil() {
+Stencil::Stencil(Graph<std::string, Cell>* g) :
+    graph(g)
+{
     type = OTHER;
 }
 
 //defaults to mapping cells to adjacent neighbors
-void Stencil::initialize(Graph<string, Cell>* graph) {
+void Stencil::initialize() {
     vector<string> labels = graph->get_vert_labels();
 
     for(size_t i = 0; i < labels.size(); i++){
@@ -21,4 +23,12 @@ void Stencil::initialize(Graph<string, Cell>* graph) {
         list<string> *neighbors = graph->get_neighbors(labels[i]);
         neighbor_map[labels[i]] = vector<string> {begin(*neighbors), end(*neighbors)};
     }
+}
+
+vector<string>* Stencil::get_neighbors(string& label){
+    if(neighbor_map.count(label) != 0){
+        return &neighbor_map[label];
+    }
+
+    return NULL;
 }
