@@ -9,11 +9,13 @@
 
 using namespace std;
 	
-vector<Point> generate_uniform_rand(int n, float x, float y) { 
+vector<Point> generate_uniform_rand(int n, float x, float y, float seed) { 
 	vector<Point> pts;
 
 	default_random_engine gen;
-	uniform_real_distribution<float> x_distr(-x, x);
+    gen.seed(seed);
+
+    uniform_real_distribution<float> x_distr(-x, x);
 	uniform_real_distribution<float> y_distr(-y, y);
 
 	for (int i = 0; i < n; i++) {
@@ -67,7 +69,7 @@ bool edge_intersect(Edge e1, Edge e2) {
 
 //k is limit of rejection sample size, using algorithm from br07
 //pre: pts is empty
-vector<Point> generate_poisson_disk(float x, float y, int k, float r){
+vector<Point> generate_poisson_disk(float x, float y, int k, float r, float seed){
     vector<Point> pts;
 
     float cell_size = r / sqrt(2);
@@ -84,6 +86,7 @@ vector<Point> generate_poisson_disk(float x, float y, int k, float r){
     vector<Point> active;
 
     default_random_engine gen;
+    gen.seed(seed);
     uniform_real_distribution<float> x_distr(0, x);
     uniform_real_distribution<float> y_distr(0, y);
 

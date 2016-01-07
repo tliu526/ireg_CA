@@ -2,7 +2,9 @@
 __More recent entries are at the top.__
 
 ##1/7/2016
+Morning: Finished SimpleMajorityRule as well as RuleTable and Stencil. Rudimentary majority task simulations can now be run.
 
+Afternoon:
 
 ##1/6/2016
 This morning: implemented variatic Properties to be stored in cells using unions. GridGenerators can now write different property lists to file.

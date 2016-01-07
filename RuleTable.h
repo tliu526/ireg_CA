@@ -31,6 +31,8 @@ rule transitions.
 #include <string>
 #include <vector>
 #include <map>
+#include <bitset>
+
 class RuleTable {
 	public:
 		RuleTable() {};
@@ -48,6 +50,16 @@ class RuleTable {
 		*/
 		virtual void initialize();
 
+		/**
+		Computes the relevant metrics for the Rule Table.
+		*/
+		virtual void compute_metrics();
+
+		/**
+		Gives the current state of the grid into a bitset and returns it. TODO MD5 hash
+		*/
+		virtual std::bitset get_grid_state();
+		
 	protected:
 		//string constants for finding the state property in the cell
 		static const std::string B_STATE;
@@ -58,24 +70,31 @@ class RuleTable {
 		Computes the next state and stores it in state_map
 		*/
 		virtual void apply_rule(std::string& label);
+
 		/**
 		Writes all the new states to the graph. 
 		*/
 		virtual void update_graph();
 
+		//The rule type, must match with Stencil type
 		RuleType type;
+		//The mapping between the rule table and irregular neighborhoods
 		Stencil stencil;
-
 		//pointer to the graph to be updated
         Graph<std::string, Cell>* graph;
-
         //map containing all the states that need to be updated
         std::map<std::string, Property> state_map;
+		
+		//A map of all relevant metrics
+        std::map<std::string, Property> metrics;
+
 		//determines size of neighborhood
 		float radius;
 
-		//keeps track of the checksums for previous states, TODO checksum class?
-		std::vector<long> state_history; 
+		int num_cells;
+
+		//TODO keeps track of the checksums for previous states
+		//std::vector<long> state_history; 
 };
 
 #endif

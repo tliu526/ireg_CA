@@ -34,6 +34,10 @@ void RuleTable::apply_rule(std::string& label) {
 
 }
 
+void RuleTable::compute_metrics(){
+    
+}
+
 void RuleTable::update_graph(){
 
     typename map<string, Property>::iterator map_it;

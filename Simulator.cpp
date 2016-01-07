@@ -15,13 +15,13 @@ static bool debug = true;
 
 using namespace std;
 
-Simulator::Simulator(GridGenerator* g, RuleTable* r) :
+Simulator::Simulator(GridGenerator* g, RuleTable* r, int max) :
     generator(g),
     rule_table(r)
 {
     grid = generator->get_graph();
     cur_time = 0;
-    max_steps = 10; //TODO abstract to options
+    max_steps = max; //TODO abstract to options
 }
 
 void Simulator::simulate() {
@@ -79,9 +79,11 @@ void Simulator::update_graph(int &flags){
 }
 
 int main() {
-    vector<Point> pts = generate_poisson_disk(100, 100, 30, 3);
+    vector<Point> pts = generate_poisson_disk(100, 100, 30, 3.5, 123);
+    //vector<Point> pts = generate_uniform_rand(500, 100, 100, 10);
     DelaunayGridGenerator gen(pts, 0, 100, 0, 100);
-    SimpleMajorityRule rule(gen.get_graph());
-    Simulator s(&gen, &rule);
+    SimpleMajorityRule rule(gen.get_graph(), 0.85, 12);
+
+    Simulator s(&gen, &rule, 50);
     s.simulate();
 }

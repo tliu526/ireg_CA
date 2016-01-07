@@ -4,6 +4,9 @@ Simulates the computation. Holds a grid generator for fast reading and writing t
 Things to think about:
 - Scripting capability
 
+TODOs:
+- Detecting repeated/periodic states
+
 (c) 2015 Tony Liu.
 */
 
@@ -27,7 +30,7 @@ class Simulator {
             WRITE_TO_FILE = 16,
         } Event;
 
-        Simulator(GridGenerator* g, RuleTable* r); //TODO a struct of options to pass
+        Simulator(GridGenerator* g, RuleTable* r, int max); //TODO a struct of options to pass
         Simulator() {};
 
         /**
@@ -46,6 +49,7 @@ class Simulator {
         GridGenerator* generator;
         Graph<std::string, Cell>* grid;
         RuleTable* rule_table;
+
         std::queue<Event> event_queue;
 
         /**

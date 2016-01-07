@@ -48,13 +48,19 @@ void DelaunayGridGenerator::generate_graph() {
 
     typename map<Point, string>::iterator map_it;
     for(map_it = rev_gen_pt_map.begin(); map_it != rev_gen_pt_map.end(); map_it++) {
-
+    
+    //this has been moved to RuleTables
+    /*
         bool is_alive = rand() % 2;
         vector<Property> v;
         v.push_back(Property("State", is_alive));
 
-        graph.add_vertex(map_it->second, Cell(map_it->first, map_it->second, v));      
+        graph.add_vertex(map_it->second, Cell(map_it->first, map_it->second, v));
+    */      
+
+        graph.add_vertex(map_it->second, Cell(map_it->first, map_it->second));
     }
+
 
     for (int i = 0; i < edges.size(); i++){
         string p1 = rev_gen_pt_map[edges[i].p];

@@ -23,8 +23,8 @@ public:
 	GridGenerator(std::string file); //reads from data file
 	GridGenerator() {};
 
-	//TODO add capability for different property additions
-	virtual void generate_graph(); //TODO make abstract?
+	//TODO add capability for different property additions and starting configurations
+	virtual void generate_graph(); 
 	void grid_to_file(std::string f);
 	void grid_to_dot(std::string out_name); //converts the grid to a (neato) graphviz file
 	

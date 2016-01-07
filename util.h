@@ -31,15 +31,15 @@ inline int min(int a, int b){ return (a>b) ? b : a; }
 /**** POINT GENERATION ****/
 
 /*
-Populates pts vector with n points sampled uniformly in a 2x by 2y space.
+Populates pts vector with n points sampled uniformly in a 2x by 2y space. Uses a seed.
 */
-std::vector<Point> generate_uniform_rand(int n, float x, float y);
+std::vector<Point> generate_uniform_rand(int n, float x, float y, float seed);
 
 /*
 Populates pts vector with points from a poisson disk distribution (2x by 2y) with radius r.
-From http://devmag.org.za/2009/05/03/poisson-disk-sampling/, br07
+From http://devmag.org.za/2009/05/03/poisson-disk-sampling/, br07. Uses a seed.
 */
-std::vector<Point> generate_poisson_disk(float x, float y, int n, float r);
+std::vector<Point> generate_poisson_disk(float x, float y, int n, float r, float seed);
 
 /*
 generates a point uniformly from within the minDist, 2*minDist annulus
