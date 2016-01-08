@@ -30,7 +30,8 @@ class Simulator {
             WRITE_TO_FILE = 16,
         } Event;
 
-        Simulator(GridGenerator* g, RuleTable* r, int max); //TODO a struct of options to pass
+        //TODO a struct of options to pass
+        Simulator(GridGenerator* g, RuleTable* r, int max, std::string file);
         Simulator() {};
 
         /**
@@ -45,6 +46,12 @@ class Simulator {
         */
         void stats_to_file(std::string file);
 
+        /**
+        Writes state statistics as well as other calculations to file. Uses stat_file as
+        output file.
+        */
+        void stats_to_file();
+
     protected:
         GridGenerator* generator;
         Graph<std::string, Cell>* grid;
@@ -54,6 +61,9 @@ class Simulator {
 
         //whether or not the simulation is running
         bool running;
+
+        //output file for metrics
+        std::string stats_file;
 
         /**
         checks all triggers and appropriately pushes events to queue

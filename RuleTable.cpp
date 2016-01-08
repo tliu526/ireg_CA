@@ -38,6 +38,10 @@ void RuleTable::compute_metrics(){
     
 }
 
+map<string, Property>* RuleTable::get_metrics() {
+    return &metrics;
+}
+
 void RuleTable::update_graph(){
 
     typename map<string, Property>::iterator map_it;

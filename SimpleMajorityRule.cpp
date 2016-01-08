@@ -6,10 +6,13 @@ Implementation of SimpleMajorityRule.
 
 #include "SimpleMajorityRule.h"
 
+#include <algorithm>
+
 using namespace std;
 
 const string SimpleMajorityRule::CORRECT_CLASS = "CorrectClass";
 const string SimpleMajorityRule::PERCENT_ON = "PercentOn";
+const string SimpleMajorityRule::INIT_PERCENT = "InitPercent";
 
 SimpleMajorityRule::SimpleMajorityRule(Graph<string, Cell>* graph, float percent_on, float s) 
     : RuleTable(graph)
@@ -27,19 +30,27 @@ void SimpleMajorityRule::initialize() {
     //initialize metrics 
     Property correct_class(CORRECT_CLASS, false);
     Property percent_on(PERCENT_ON, float(0.0));
+    Property init_percent(INIT_PERCENT, int(init_percent_on*100));
 
+    metrics[INIT_PERCENT] = init_percent;
     metrics[CORRECT_CLASS] = correct_class;
     metrics[PERCENT_ON] = percent_on;
 
     //initialize cell state
     default_random_engine gen;
     gen.seed(seed);
-    uniform_real_distribution<float> unif_distr(0,1);
+    //uniform_real_distribution<float> unif_distr(0,1);
 
     vector<string> vert_labels = graph->get_vert_labels();
 
+    int num_on = int(init_percent_on * vert_labels.size());
+
+    //randomize vector with seeded random number generator
+    shuffle(vert_labels.begin(), vert_labels.end(), gen);
+
     for(size_t i = 0; i < vert_labels.size(); i++) {
-        bool state = (unif_distr(gen) < init_percent_on);
+        bool state = i < num_on;
+
         Property p("State", state);
 
         Cell *c = graph->get_data(vert_labels[i]);
@@ -48,12 +59,7 @@ void SimpleMajorityRule::initialize() {
 
     num_cells = vert_labels.size();
 
-    if (float(get_on_count()) / float(num_cells) > 0.5){
-        target_class = true;
-    }
-    else {
-        target_class = false;
-    }
+    target_class = (float(get_on_count()) / float(num_cells)) > 0.5;
 }
 
 int SimpleMajorityRule::get_on_count() {
@@ -72,16 +78,23 @@ int SimpleMajorityRule::get_on_count() {
 
 void SimpleMajorityRule::compute_metrics() {
     float percentage = float(get_on_count()) / float(num_cells);
-    if(percentage > 0.5){
-        //currently have majority of ON cells
+    if(get_on_count() == num_cells){
+        //currently have all ON cells
         metrics[CORRECT_CLASS].set_bool(target_class);    
     }
-    else {
-        //currently have majority of OFF cells
+    else if(get_on_count() == 0){
+        //currently have all OFF cells
         metrics[CORRECT_CLASS].set_bool(!target_class);
+    }
+    else {
+        //we have incorrect classification
+        metrics[CORRECT_CLASS].set_bool(false);
     }
 
     metrics[PERCENT_ON].set_float(percentage);
+
+    //cout << "Correct Classification: " << metrics[CORRECT_CLASS].to_string() << endl;
+    //cout << "Percent On: " << metrics[PERCENT_ON].to_string() << endl;
 }
 
 void SimpleMajorityRule::transition(){
@@ -91,7 +104,7 @@ void SimpleMajorityRule::transition(){
         apply_rule(labels[i]);
     }
 
-    cout << "Number of on cells:" << " " << get_on_count() << endl;
+    //cout << "Number of on cells:" << " " << get_on_count() << endl;
 
     update_graph();
 }
@@ -102,7 +115,7 @@ void SimpleMajorityRule::apply_rule(std::string& vert_label){
     Property p;
 
     int count = 0;
-    for(size_t i = 0 ; i < neighbors->size(); i++){
+    for(size_t i = 0; i < neighbors->size(); i++){
         p = graph->get_data((*neighbors)[i])->get_property(B_STATE);
         
         if(p.get_type() == Property::BOOL){
@@ -117,7 +130,7 @@ void SimpleMajorityRule::apply_rule(std::string& vert_label){
     }
 
     //change to majority value of its neighbors
-    if (count > (neighbors->size()/2)) {
+    if (count > (float(neighbors->size())/float(2))) {
         p.set_bool(true);
     }
 

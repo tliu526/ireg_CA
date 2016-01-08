@@ -60,7 +60,12 @@ class RuleTable {
 		TODO MD5 hash
 		*/
 		virtual size_t get_grid_state();
-		
+
+		/**
+		Returns a pointer to the metrics map
+		*/
+		std::map<std::string, Property>* get_metrics();
+
 	protected:
 		//string constants for finding the state property in the cell
 		static const std::string B_STATE;

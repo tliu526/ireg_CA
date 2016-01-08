@@ -31,6 +31,7 @@ class SimpleMajorityRule : public RuleTable {
 		//metric names
 		static const std::string CORRECT_CLASS;
 		static const std::string PERCENT_ON;
+		static const std::string INIT_PERCENT;
 
 		/**
 		Makes a single rule application.

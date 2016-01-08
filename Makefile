@@ -12,3 +12,6 @@ util: util.cpp
 
 Simulator: Simulator.cpp
 	g++ -g -o Simulator.out -std=c++11 DelaunayGridGenerator.cpp Cell.cpp GridGenerator.cpp util.cpp Tri.cpp Poly.cpp Edge.cpp Point.cpp RuleTable.cpp Simulator.cpp SimpleMajorityRule.cpp Stencil.cpp Property.cpp
+
+LMBaseline: LMBaseline.cpp
+	g++ -g -o LMBaseline.out -std=c++11 DelaunayGridGenerator.cpp Cell.cpp GridGenerator.cpp util.cpp Tri.cpp Poly.cpp Edge.cpp Point.cpp RuleTable.cpp Simulator.cpp SimpleMajorityRule.cpp Stencil.cpp Property.cpp LMBaseline.cpp

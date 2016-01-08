@@ -1,10 +1,23 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##1/8/2016
+Morning Goal: Set up replication of Messinger et al.'s (me07) baseline local majority computation. 
+
+Relevant Parameters:
+- 15 by 15 grid (225 cells)
+- Increments of 1 percent from 1:99 on/off ratio to 99:1
+- Maximum of 450 time steps
+- Only concerned with completely correct classification
+- 1000 randomly assigned initial network configurations for each initial ratio
+
 ##1/7/2016
 Morning: Finished SimpleMajorityRule as well as RuleTable and Stencil. Rudimentary majority task simulations can now be run.
 
-Afternoon:
+Afternoon: Laid out foundation for updating and writing metrics within the Simulator event
+loop. 
+
+Evening: Implemented a simple checksum using STD hash to store previous grid state. TODO implement md5 hash for the checksum, STD hash collision rate remains to be tested.
 
 ##1/6/2016
 This morning: implemented variatic Properties to be stored in cells using unions. GridGenerators can now write different property lists to file.
