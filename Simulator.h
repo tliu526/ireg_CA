@@ -52,6 +52,9 @@ class Simulator {
 
         std::queue<Event> event_queue;
 
+        //whether or not the simulation is running
+        bool running;
+
         /**
         checks all triggers and appropriately pushes events to queue
         */
@@ -67,12 +70,24 @@ class Simulator {
         */
         void update_graph(int &flags);
 
+        /**
+        Sends signal to stop adding to event_queue
+        */
+        void stop_simulation(int &flags);
+
+        /**
+        Computes and updates metrics in the given RuleTable
+        */
+        void calc_metrics(int &flags);
+
         /**** STATE VARIABLES ****/
         int cur_time;
         int max_steps;
         //TODO module for keeping track of all statistics
         //float lambda;
-        std::map<unsigned int, int> chksum_map;
+
+        //TODO md5
+        std::map<size_t, int> chksum_map;
 };
 
 #endif 

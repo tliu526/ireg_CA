@@ -56,9 +56,10 @@ class RuleTable {
 		virtual void compute_metrics();
 
 		/**
-		Gives the current state of the grid into a bitset and returns it. TODO MD5 hash
+		Gives the current state of the grid into a bitvec and returns a bitvec hash. 
+		TODO MD5 hash
 		*/
-		virtual std::bitset get_grid_state();
+		virtual size_t get_grid_state();
 		
 	protected:
 		//string constants for finding the state property in the cell

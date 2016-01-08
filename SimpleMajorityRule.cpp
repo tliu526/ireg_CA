@@ -128,18 +128,20 @@ void SimpleMajorityRule::apply_rule(std::string& vert_label){
     state_map[vert_label] = p;
 }
 
-bitset SimpleMajorityRule::get_grid_state(){
+size_t SimpleMajorityRule::get_grid_state(){
     //TODO optimize get_vert_labels() and ensure consistency
     vector<string> vert_labels = graph->get_vert_labels();
 
-    bitset<vert_labels.size()> b_set;
+    vector<bool> b_vec;
 
     for (size_t i = 0; i < vert_labels.size(); i++){
-        Property p = graph->get_data()->get_property(B_STATE);
+        Property p = graph->get_data(vert_labels[i])->get_property(B_STATE);
         if(p.get_type() == Property::BOOL){
-            bitset[i] = p.b;
+            b_vec.push_back(p.b);
         }
     }
 
-    return b_set;
+    hash<vector<bool>> hash_fn;
+
+    return hash_fn(b_vec);
 }

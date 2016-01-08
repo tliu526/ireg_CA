@@ -241,14 +241,26 @@ int num_digits(int n){
 int digit_diff(int n, int m){
     return num_digits(m) - num_digits(n);
 }
+
+/*
+size_t hash_bitset(bitset& b) {
+    hash<bitset<b.size()>> hash_fn;
+
+    return hash_fn(b);    
+}
+*/
 /*
 //For debugging my incompetence in C++
 int main() {
-    vector<Point> points = generate_poisson_disk(50, 50, 30, 0.5);
-    
-    for (int i = 0; i < points.size(); i++){
-        cout << points[i] << endl;
-    }
+    bitset<8> b1(1);
+    bitset<8> b2(1); 
+    bitset<8> b3(4); 
+
+    cout << hash_bitset(b1) << endl;
+    cout << hash_bitset(b2) << endl;
+    cout << hash_bitset(b3) << endl;
+
 	return 0;
 }
 */
+

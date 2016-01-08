@@ -9,7 +9,6 @@ Current methods for generating points:
 - uniform random
 - Poisson disk sampling
 
-TODO: do we want integer coordinates or floating point coordinates?
 (c) Tony Liu 2015.
 */
 
@@ -24,6 +23,7 @@ TODO: do we want integer coordinates or floating point coordinates?
 #include <string>
 #include <iostream>
 #include <random>
+#include <bitset>
 
 inline int max(int a, int b){ return (a<b) ? b : a; }
 inline int min(int a, int b){ return (a>b) ? b : a; }
@@ -112,4 +112,10 @@ int digit_diff(int n, int m);
 Returns the number of digits in n, useful for pretty printing.
 */
 int num_digits(int n);
+
+/**
+Returns a hash of the given bitset using the c++ library hash. A stopgap until md5 is 
+implemented.
+*/
+//size_t hash_bitset(std::bitset& b);
 #endif

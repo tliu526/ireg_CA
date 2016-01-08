@@ -25,7 +25,7 @@ class SimpleMajorityRule : public RuleTable {
 		void initialize();
 		void compute_metrics();
 
-		std::bitset get_grid_state();
+		size_t get_grid_state();
 
 	protected:
 		//metric names
