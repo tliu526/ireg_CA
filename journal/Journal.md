@@ -11,6 +11,16 @@ Relevant Parameters:
 - Only concerned with completely correct classification
 - 1000 randomly assigned initial network configurations for each initial ratio
 
+Afternoon: Finished replication of LM baseline computation. In order to account for variations in irregular grids, ran 10 different grid configurations with 100 random initial starting configruations for each initial ratio, for 1000 total.
+
+1,000 simulations takes ~2.5 minutes, 10,000 simulations takes ~20-25 minutes.
+
+###Goals for Tuesday
+- Look at Wooters (wo90), Hill (hi05), Messinger (me07) for any other experiments that can be easily performed
+- Replicate LM Baseline with a standard regular grid to verify correct performance
+- Have some basic visualization of the interesting values for LMBaseline
+- Keep scripting and modularity in mind, look into rigging up call-back functions
+
 ##1/7/2016
 Morning: Finished SimpleMajorityRule as well as RuleTable and Stencil. Rudimentary majority task simulations can now be run.
 

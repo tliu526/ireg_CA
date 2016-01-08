@@ -22,10 +22,10 @@ using namespace std;
 
 static const int NUM_STEPS = 250;
 static const int NUM_GRID_CONFIGS = 10;
-static const int NUM_STATE_CONFIGS = 10;
+static const int NUM_STATE_CONFIGS = 100;
 
 int main(void){
-    string f = "LM_baseline2.csv";
+    string f = "LM_baseline2_large.csv";
 
     //TODO no hardcoding
     fstream file;
