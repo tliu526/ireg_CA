@@ -115,6 +115,11 @@ void SimpleMajorityRule::apply_rule(std::string& vert_label){
     Property p;
 
     int count = 0;
+    int neighborhood_size = neighbors->size() + 1;
+    bool cell_state = graph->get_data(vert_label)->get_property(B_STATE).b;
+
+    if (cell_state) count++;
+
     for(size_t i = 0; i < neighbors->size(); i++){
         p = graph->get_data((*neighbors)[i])->get_property(B_STATE);
         
@@ -129,16 +134,16 @@ void SimpleMajorityRule::apply_rule(std::string& vert_label){
         }
     }
 
-    //change to majority value of its neighbors
-    if (count > (float(neighbors->size())/float(2))) {
+    //change to majority value of its neighbors. If no majority, keep the same state
+    if (float(count) > (float(neighborhood_size)/float(2))) {
         p.set_bool(true);
+        state_map[vert_label] = p;
     }
-
-    else {
+    else if (float(count) < (float(neighborhood_size)/float(2))){
         p.set_bool(false);
+        state_map[vert_label] = p;
     }
-
-    state_map[vert_label] = p;
+    //if count is equal to half of neighborhood size, nothing happens
 }
 
 size_t SimpleMajorityRule::get_grid_state(){
