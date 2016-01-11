@@ -21,11 +21,17 @@ Afternoon: Finished replication of LM baseline computation. In order to account 
 - Have some basic visualization of the interesting values for LMBaseline
 - Keep scripting and modularity in mind, look into rigging up call-back functions
 
+![](LM_Baseline.jpg)
+
+![](LM_Baseline_Large.jpg)
+
+These graphs resemble the same data presented in Messinger for regular grids, with symmetric degradation of performance for both ON and OFF majority.
+
+
 ##1/7/2016
 Morning: Finished SimpleMajorityRule as well as RuleTable and Stencil. Rudimentary majority task simulations can now be run.
 
-Afternoon: Laid out foundation for updating and writing metrics within the Simulator event
-loop. 
+Afternoon: Laid out foundation for updating and writing metrics within the Simulator event loop. 
 
 Evening: Implemented a simple checksum using STD hash to store previous grid state. TODO implement md5 hash for the checksum, STD hash collision rate remains to be tested.
 
