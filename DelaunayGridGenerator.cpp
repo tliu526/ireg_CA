@@ -25,7 +25,8 @@ Need to look at optimizing some of the other functions, or switching to an alter
 
 using namespace std;
 
-DelaunayGridGenerator::DelaunayGridGenerator(vector<Point> &pts, float min_x, float max_x, float min_y, float max_y) : GridGenerator(pts, min_x, max_x, min_y, max_y) {
+DelaunayGridGenerator::DelaunayGridGenerator(vector<Point> &pts, float min_x, float max_x, float min_y, float max_y) 
+: GridGenerator(pts, min_x, max_x, min_y, max_y) {
     verts = pts;
     init_triangulation();
     delaunay_triangulation();
@@ -42,22 +43,10 @@ bool point_xcomparator(Point a, Point b){
     return a.x < b.x;
 };
 
-//TODO add capability for different property additions
-//currently assigns random dead/alive status 
 void DelaunayGridGenerator::generate_graph() {
 
     typename map<Point, string>::iterator map_it;
     for(map_it = rev_gen_pt_map.begin(); map_it != rev_gen_pt_map.end(); map_it++) {
-    
-    //this has been moved to RuleTables
-    /*
-        bool is_alive = rand() % 2;
-        vector<Property> v;
-        v.push_back(Property("State", is_alive));
-
-        graph.add_vertex(map_it->second, Cell(map_it->first, map_it->second, v));
-    */      
-
         graph.add_vertex(map_it->second, Cell(map_it->first, map_it->second));
     }
 

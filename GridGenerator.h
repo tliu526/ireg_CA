@@ -2,6 +2,8 @@
 An abstract class for generating grids. This includes the graph representation, the polygons, points, 
 and edges.
 
+TODO: a connection between faces and gen points?
+
 (c) Tony Liu 2015.
 */
 #ifndef GRIDGENERATOR_H
@@ -36,12 +38,16 @@ public:
 	//Builds property according to the labels
 	Property build_property(std::string& label, std::string& value); 
 protected:
-	/*
+	/**
 	initializes pt, edge, face maps
 	pre: verts, edges, faces are initialized
 	*/
 	void init_maps(); 
-	void init_from_file(std::string file); //initializes the grid generator from file
+	
+	/**
+	initializes the grid generator from file
+	*/
+	void init_from_file(std::string file); 
 
 	std::string grid_type;
 	float min_x, max_x, min_y, max_y; //For defining bounds on the grid

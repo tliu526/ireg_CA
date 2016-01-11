@@ -1,6 +1,9 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##1/11/2016
+Morning: Implemented Regular Grid Generator, some basic stencils.
+
 ##1/8/2016
 Morning Goal: Set up replication of Messinger et al.'s (me07) baseline local majority computation. 
 

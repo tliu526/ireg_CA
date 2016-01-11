@@ -19,7 +19,6 @@ class DelaunayGridGenerator : public GridGenerator {
 		DelaunayGridGenerator(std::vector<Point>& p, float min_x, float max_x, float min_y, float max_y);
 		DelaunayGridGenerator(std::string file);
 
-
 		void generate_graph();
 
 	private:

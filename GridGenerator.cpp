@@ -214,7 +214,7 @@ void GridGenerator::init_maps(){
 	for (int i = 0; i < faces.size(); i++) {
 		stringstream ss;
 		ss << "f";
-p		
+
 		int n = digit_diff(i, faces.size());
 		while(n--) { ss << "0"; }
 			
