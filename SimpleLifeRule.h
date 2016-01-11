@@ -7,13 +7,18 @@ A direct implementation of Game of Life rules (2 or 3 neighbors). Extends RuleTa
 #ifndef SIMPLELIFERULE_H
 #define SIMPLELIFERULE_H
 
-#include "RuleTable.h"
+#include "BinaryRuleTable.h"
 
-class SimpleLifeRule : public RuleTable {
+class SimpleLifeRule : public BinaryRuleTable {
     public:
         SimpleLifeRule(Graph<std::string,Cell>* graph, float init_percent, float seed);  
+
+        void transition();
+        void initialize();
+        void compute_metrics();
     protected:
 
+        void apply_rule(std::string& label);
 };
 
 #endif
