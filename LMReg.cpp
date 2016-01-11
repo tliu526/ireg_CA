@@ -12,10 +12,10 @@ A reproduction of the LM baseline computation with regular grids.
 using namespace std;
 
 static const int NUM_STEPS = 250;
-static const int NUM_STATE_CONFIGS = 1000;
+static const int NUM_STATE_CONFIGS = 50;
 
 int main(void){
-    string f = "LM_Reg_Large.csv";
+    string f = "test.csv";
 
     //TODO no hardcoding
     fstream file;
@@ -25,7 +25,7 @@ int main(void){
 
     //iterate through starting ratios 1:99 to 99:1
     for(int i = 1; i < 100; i++){
-        RegularGridGenerator gen(0, 15, 0, 15);
+        RegularGridGenerator gen(0, 15, 0, 15,true);
 
         //iterate through different initial state configurations, k is seed
         for(int j = 0; j < NUM_STATE_CONFIGS; j++){

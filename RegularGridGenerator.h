@@ -17,11 +17,13 @@ TODO:
 
 class RegularGridGenerator : public GridGenerator {
 public:
-    RegularGridGenerator(int min_x, int max_x, int min_y, int max_y);
+    RegularGridGenerator(int min_x, int max_x, int min_y, int max_y, bool toroidal = false);
 
     void generate_graph();
 
 protected:
+    bool is_toroidal; //whether or not the boundaries wrap around
+
     static const float OFFSET;
     /**
     Initializes all Points, Edges, Faces

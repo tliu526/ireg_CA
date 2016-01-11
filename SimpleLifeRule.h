@@ -11,9 +11,9 @@ A direct implementation of Game of Life rules (2 or 3 neighbors). Extends RuleTa
 
 class SimpleLifeRule : public RuleTable {
     public:
-        
+        SimpleLifeRule(Graph<std::string,Cell>* graph, float init_percent, float seed);  
     protected:
-        
+
 };
 
 #endif

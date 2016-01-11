@@ -99,6 +99,9 @@ class RuleTable {
 
 		int num_cells;
 
+		//seed for RNG
+		float seed;
+
 		//TODO keeps track of the checksums for previous states
 		//std::vector<long> state_history; 
 };

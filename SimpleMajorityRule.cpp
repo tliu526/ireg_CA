@@ -11,30 +11,21 @@ Implementation of SimpleMajorityRule.
 using namespace std;
 
 const string SimpleMajorityRule::CORRECT_CLASS = "CorrectClass";
-const string SimpleMajorityRule::PERCENT_ON = "PercentOn";
-const string SimpleMajorityRule::INIT_PERCENT = "InitPercent";
 
 SimpleMajorityRule::SimpleMajorityRule(Graph<string, Cell>* graph, float percent_on, float s) 
-    : RuleTable(graph)
-{
-
-    init_percent_on = percent_on;
-    seed = s;
-    type = OTHER;
-    radius = -1;
-}
+    : BinaryRuleTable(graph, percent_on, s) {}
 
 void SimpleMajorityRule::initialize() {
     RuleTable::initialize();
 
     //initialize metrics 
     Property correct_class(CORRECT_CLASS, false);
-    Property percent_on(PERCENT_ON, float(0.0));
-    Property init_percent(INIT_PERCENT, int(init_percent_on*100));
+    Property percent_on(BinaryRuleTable::PERCENT_ON, float(0.0));
+    Property init_percent(BinaryRuleTable::INIT_PERCENT, int(init_percent_on*100));
 
-    metrics[INIT_PERCENT] = init_percent;
+    metrics[BinaryRuleTable::INIT_PERCENT] = init_percent;
     metrics[CORRECT_CLASS] = correct_class;
-    metrics[PERCENT_ON] = percent_on;
+    metrics[BinaryRuleTable::PERCENT_ON] = percent_on;
 
     //initialize cell state
     default_random_engine gen;
@@ -60,20 +51,6 @@ void SimpleMajorityRule::initialize() {
     num_cells = vert_labels.size();
 
     target_class = (float(get_on_count()) / float(num_cells)) > 0.5;
-}
-
-int SimpleMajorityRule::get_on_count() {
-    vector<string> labels = graph->get_vert_labels();
-    int on_cells = 0;
-    for(size_t i = 0; i < labels.size(); i++){
-        Property p = graph->get_data(labels[i])->get_property(B_STATE);
-        
-        if(p.get_type() == Property::BOOL && p.b){
-            on_cells++;
-        }
-    }
-
-    return on_cells;
 }
 
 void SimpleMajorityRule::compute_metrics() {
@@ -144,22 +121,4 @@ void SimpleMajorityRule::apply_rule(std::string& vert_label){
         state_map[vert_label] = p;
     }
     //if count is equal to half of neighborhood size, nothing happens
-}
-
-size_t SimpleMajorityRule::get_grid_state(){
-    //TODO optimize get_vert_labels() and ensure consistency
-    vector<string> vert_labels = graph->get_vert_labels();
-
-    vector<bool> b_vec;
-
-    for (size_t i = 0; i < vert_labels.size(); i++){
-        Property p = graph->get_data(vert_labels[i])->get_property(B_STATE);
-        if(p.get_type() == Property::BOOL){
-            b_vec.push_back(p.b);
-        }
-    }
-
-    hash<vector<bool>> hash_fn;
-
-    return hash_fn(b_vec);
 }

@@ -6,15 +6,18 @@ Implementation of the RegularGridGenerator.
 
 #include "RegularGridGenerator.h"
 
+#include <cmath>
+
 using namespace std;
 
 const float RegularGridGenerator::OFFSET = 0.5; 
 
-RegularGridGenerator::RegularGridGenerator(int mi_x, int ma_x, int mi_y, int ma_y) {
+RegularGridGenerator::RegularGridGenerator(int mi_x, int ma_x, int mi_y, int ma_y, bool b) {
     min_x = mi_x;
     max_x = ma_x;
     max_y = ma_y;
     min_y = mi_y;
+    is_toroidal = b;
 
     init_grid();
     init_maps();
@@ -34,16 +37,24 @@ void RegularGridGenerator::init_grid() {
                 Point gen_pt(x, y);
                 gen_pts.push_back(gen_pt);
 
-                if (i < max_x-1) gen_edges.push_back(Edge(gen_pt, Point(x+1.0,y)));
-                if (j > min_y+1) gen_edges.push_back(Edge(gen_pt, Point(x,y-1.0)));
+    /*
+                if(is_toroidal){
+                    gen_edges.push_back(Edge(gen_pt, Point(fmod(x+1, max_x),y)));
+                    gen_edges.push_back(Edge(gen_pt, Point(x,fmod(y-1, ))));
+                }
+    */
+                if (i < max_x-1) gen_edges.push_back(Edge(gen_pt, Point(x+1,y)));
+                else if (is_toroidal) gen_edges.push_back(Edge(gen_pt, Point(min_x + OFFSET,y)));
+
+                if (j > min_y+1) gen_edges.push_back(Edge(gen_pt, Point(x,y-1)));
+                else if (is_toroidal) gen_edges.push_back(Edge(gen_pt, Point(x,max_y-OFFSET)));
             }
 
             Point v(Point(i, j));
             verts.push_back(v);
-            if(i < max_x) edges.push_back(Edge(v, Point(i+1.0, j)));
-            if(j > min_y) edges.push_back(Edge(v, Point(i, j-1.0)));
+            if(i < max_x) edges.push_back(Edge(v, Point(i+1, j)));
+            if(j > min_y) edges.push_back(Edge(v, Point(i, j-1)));
         }
-        //verts.push_back(Point(i, min_y));
     }
 
     //initialize faces
@@ -53,7 +64,6 @@ void RegularGridGenerator::init_grid() {
 }
 
 Poly RegularGridGenerator::construct_square(Point &gen_pt){
-
     vector<Edge> edges;
     
     Point p1(gen_pt.x-OFFSET, gen_pt.y+OFFSET);
@@ -80,23 +90,17 @@ void RegularGridGenerator::generate_graph() {
        string p1 = rev_gen_pt_map[gen_edges[i].p];
        string p2 = rev_gen_pt_map[gen_edges[i].q];
 
-/*
-       cout << "p " << gen_edges[i].p << endl; 
-       cout << "q " << gen_edges[i].q << endl; 
-
-       cout << "P1 " << p1 << endl; 
-       cout << "P2 " << p2 << endl; 
-*/
        graph.add_edge(p1,p2);
     }
 
-//    graph.print_adj_list();
+   //graph.print_adj_list();
 }
 /*
 int main(){
-    RegularGridGenerator gen(-5,5,-5,5);
+    RegularGridGenerator gen(-5,5,-5,5, true);
     gen.grid_to_file("reg_test.txt");
     gen.grid_to_dot("reg_test");
 
     return 0;
-}*/
+}
+*/
