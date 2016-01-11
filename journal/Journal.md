@@ -12,6 +12,16 @@ Morning: Implemented Regular Grid Generator, some basic stencils.
 
 These results show a more rapid degradation in performance than in me07, though this may be due to the non-periodic boundaries.
 
+###Results of Local Majority Baseline Experiment (Regular, Periodic)
+
+![](LM_Baseline_Reg_Tor.jpg)
+
+![](LM_Baseline_Reg_Tor_Large.jpg)
+
+With periodic boundaries, we replicate the results found in the initial experiment, as shown below (Figure 2, me07):
+
+![](me07_fig2_LMBaseline.png)
+
 ##1/8/2016
 Morning Goal: Set up replication of Messinger et al.'s (me07) baseline local majority computation. 
 
