@@ -4,6 +4,14 @@ __More recent entries are at the top.__
 ##1/11/2016
 Morning: Implemented Regular Grid Generator, some basic stencils.
 
+###Results of Local Majority Baseline Experiment (Regular, Non-Periodic)
+
+![](LM_Baseline_Reg.jpg)
+
+![](LM_Baseline_Reg_Large.jpg)
+
+These results show a more rapid degradation in performance than in me07, though this may be due to the non-periodic boundaries.
+
 ##1/8/2016
 Morning Goal: Set up replication of Messinger et al.'s (me07) baseline local majority computation. 
 
@@ -30,8 +38,7 @@ Afternoon: Finished replication of LM baseline computation. In order to account 
 
 ![](LM_Baseline_Large.jpg)
 
-These graphs resemble the same data presented in Messinger for regular grids, with symmetric degradation of performance for both ON and OFF majority.
-
+These graphs resemble the same data presented in Messinger for regular grids, with symmetric degradation of performance for both ON and OFF majority. However, there is a slightly slower degradation of performance in the irregular case than the regular case, with approximately 60% task performance for irregular configurations at 20:80 and 80:20 and approximately 40% task performance for regular configurations at 20:80 and 80:20 (me07). We will exactly replicate the original Messinger experiments as a comparison.
 
 ##1/7/2016
 Morning: Finished SimpleMajorityRule as well as RuleTable and Stencil. Rudimentary majority task simulations can now be run.
