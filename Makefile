@@ -18,3 +18,6 @@ LMBaseline: LMBaseline.cpp
 
 RGG: RegularGridGenerator.cpp
 	g++ -g -o RGG.out -std=c++11 RegularGridGenerator.cpp Cell.cpp GridGenerator.cpp util.cpp Tri.cpp Poly.cpp Edge.cpp Point.cpp Property.cpp
+
+LMReg: LMReg.cpp
+	g++ -g -o LMReg.out -std=c++11 RegularGridGenerator.cpp Cell.cpp GridGenerator.cpp util.cpp Tri.cpp Poly.cpp Edge.cpp Point.cpp RuleTable.cpp Simulator.cpp SimpleMajorityRule.cpp Stencil.cpp Property.cpp LMReg.cpp

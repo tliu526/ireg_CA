@@ -24,6 +24,8 @@ Afternoon: Finished replication of LM baseline computation. In order to account 
 - Have some basic visualization of the interesting values for LMBaseline
 - Keep scripting and modularity in mind, look into rigging up call-back functions
 
+###Results of Local Majority Baseline Experiment (Irregular)
+
 ![](LM_Baseline.jpg)
 
 ![](LM_Baseline_Large.jpg)

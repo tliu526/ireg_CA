@@ -25,7 +25,7 @@ static const int NUM_GRID_CONFIGS = 50;
 static const int NUM_STATE_CONFIGS = 20;
 
 int main(void){
-    string f = "LM_baseline_large.csv";
+    //string f = "LM_reg.csv";
 
     //TODO no hardcoding
     fstream file;
