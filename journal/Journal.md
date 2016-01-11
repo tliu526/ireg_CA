@@ -21,11 +21,12 @@ Afternoon: Finished replication of LM baseline computation. In order to account 
 - Have some basic visualization of the interesting values for LMBaseline
 - Keep scripting and modularity in mind, look into rigging up call-back functions
 
-![](LM_Baseline_small.jpg)
+![](LM_Baseline.jpg)
 
-![](LM_Baseline_large.jpg)
+![](LM_Baseline_Large.jpg)
 
-There is a clear asymmetry in the graph, unlike the corresponding regular grid LM performance. Further tests are needed to confirm the results.
+These graphs resemble the same data presented in Messinger for regular grids, with symmetric degradation of performance for both ON and OFF majority.
+
 
 ##1/7/2016
 Morning: Finished SimpleMajorityRule as well as RuleTable and Stencil. Rudimentary majority task simulations can now be run.
