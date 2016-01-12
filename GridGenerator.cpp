@@ -320,8 +320,7 @@ void GridGenerator::grid_to_dot(string name){
 	ofstream file;
 	file.open(name+".dot");
 	file << "Graph G {" << endl;
-	file << "node [shape = circle, style=filled, width=0.05, height=0.05];" << endl;
-
+	file << "node [shape=circle, style=filled, width=0.25, height=0.25, fixedsize=true, label=\"\"];" << endl;
 
 	for (int i = 0; i < verts.size(); i++){
 		string v_id = rev_vert_map[verts[i]];
