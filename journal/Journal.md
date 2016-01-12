@@ -14,7 +14,20 @@ Relevant Parameters:
 - Liftetime to stability against ash density, for initial densities D = 20%, 40%, 60%.
 
 ###Results of Ash Life Experiment
-TODO
+
+####Small Grids
+
+![](Lifetime_Stability_S.jpg)
+
+![](Ash_Density_S.jpg)
+
+####Medium Grids
+
+![](Lifetime_Stability_M.jpg)
+
+![](Ash_Density_M.jpg)
+
+The Lifetime Stability graphs show a symmetry in the lifetimes not found in the Penrose tilings (hi05). There may also be a weak correlation between ash density and lifetime to stability, particularly shown in the medium grid scatter plot.
 
 ###To-Do List
 - Implement "spreading activation" method of updating graph (optimizing, can track the number of states changing per timestep)
