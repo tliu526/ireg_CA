@@ -12,6 +12,7 @@ A direct implementation of Game of Life rules (2 or 3 neighbors). Extends RuleTa
 class SimpleLifeRule : public BinaryRuleTable {
     public:
         SimpleLifeRule(Graph<std::string,Cell>* graph, float init_percent, float seed);  
+        SimpleLifeRule(Graph<std::string,Cell>* graph, float init_percent, float seed, Stencil& s);  
 
         void transition();
         void initialize();

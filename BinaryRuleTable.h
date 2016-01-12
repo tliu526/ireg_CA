@@ -13,6 +13,8 @@ class BinaryRuleTable : public RuleTable {
     public:
         BinaryRuleTable(Graph<std::string,Cell>* graph, float init_percent, float seed);
 
+        BinaryRuleTable(Graph<std::string,Cell>* graph, float init_percent, float seed, Stencil& stencil);
+
         /**
         Applies the transition rule to the entire graph.
         */

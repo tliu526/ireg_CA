@@ -15,7 +15,7 @@ static const int NUM_STEPS = 250;
 static const int NUM_STATE_CONFIGS = 50;
 
 int main(void){
-//    string f = "test.csv";
+    string f = "test.csv";
 
     //TODO no hardcoding
     fstream file;

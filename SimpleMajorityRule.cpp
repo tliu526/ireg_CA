@@ -6,8 +6,6 @@ Implementation of SimpleMajorityRule.
 
 #include "SimpleMajorityRule.h"
 
-#include <algorithm>
-
 using namespace std;
 
 const string SimpleMajorityRule::CORRECT_CLASS = "CorrectClass";
@@ -16,39 +14,11 @@ SimpleMajorityRule::SimpleMajorityRule(Graph<string, Cell>* graph, float percent
     : BinaryRuleTable(graph, percent_on, s) {}
 
 void SimpleMajorityRule::initialize() {
-    RuleTable::initialize();
+    BinaryRuleTable::initialize();
 
     //initialize metrics 
     Property correct_class(CORRECT_CLASS, false);
-    Property percent_on(BinaryRuleTable::PERCENT_ON, float(0.0));
-    Property init_percent(BinaryRuleTable::INIT_PERCENT, int(init_percent_on*100));
-
-    metrics[BinaryRuleTable::INIT_PERCENT] = init_percent;
     metrics[CORRECT_CLASS] = correct_class;
-    metrics[BinaryRuleTable::PERCENT_ON] = percent_on;
-
-    //initialize cell state
-    default_random_engine gen;
-    gen.seed(seed);
-    //uniform_real_distribution<float> unif_distr(0,1);
-
-    vector<string> vert_labels = graph->get_vert_labels();
-
-    int num_on = int(init_percent_on * vert_labels.size());
-
-    //randomize vector with seeded random number generator
-    shuffle(vert_labels.begin(), vert_labels.end(), gen);
-
-    for(size_t i = 0; i < vert_labels.size(); i++) {
-        bool state = i < num_on;
-
-        Property p("State", state);
-
-        Cell *c = graph->get_data(vert_labels[i]);
-        c->add_property(p);
-    }
-
-    num_cells = vert_labels.size();
 
     target_class = (float(get_on_count()) / float(num_cells)) > 0.5;
 }
@@ -75,15 +45,7 @@ void SimpleMajorityRule::compute_metrics() {
 }
 
 void SimpleMajorityRule::transition(){
-    vector<string> labels = graph->get_vert_labels();
-
-    for(size_t i = 0; i < labels.size(); i++){
-        apply_rule(labels[i]);
-    }
-
-    //cout << "Number of on cells:" << " " << get_on_count() << endl;
-
-    update_graph();
+    BinaryRuleTable::transition();
 }
 
 //only looks for B_STATE
