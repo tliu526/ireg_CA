@@ -1,6 +1,11 @@
 /**
 A direct implementation of Game of Life rules (2 or 3 neighbors). Extends RuleTable.
 
+GoL Rules:
+- If a live cell has 2 or 3 living neighbors, then it remains alive
+- Otherwise, a live cell with <2 or >3 neighbors will die
+- Dead cells with exactly 3 living neighbors will be born
+
 (c) 2016 Tony Liu.
 */
 

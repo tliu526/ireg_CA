@@ -12,11 +12,23 @@ const string BinaryRuleTable::PERCENT_ON = "PercentOn";
 const string BinaryRuleTable::INIT_PERCENT = "InitPercent";
 
 using namespace std;
-
+/*
 BinaryRuleTable::BinaryRuleTable(Graph<string,Cell>* graph, float percent_on, float s) : 
     RuleTable(graph)
 {
+    init_percent_int = int(percent_on*100.0);
     init_percent_on = percent_on;
+    seed = s;
+    type = OTHER;
+    radius = -1;
+}
+*/
+
+BinaryRuleTable::BinaryRuleTable(Graph<string,Cell>* graph, int percent_on, float s) : 
+    RuleTable(graph)
+{
+    init_percent_int = percent_on;
+    init_percent_on = float(percent_on) / float(100);
     seed = s;
     type = OTHER;
     radius = -1;
@@ -25,6 +37,7 @@ BinaryRuleTable::BinaryRuleTable(Graph<string,Cell>* graph, float percent_on, fl
 BinaryRuleTable::BinaryRuleTable(Graph<string,Cell>* graph, float init_percent, float s, Stencil& stencil) : 
   RuleTable(graph, stencil) 
 {
+    init_percent_int = int(init_percent*100.0);
     init_percent_on = init_percent;
     seed = s;
     type = OTHER;
@@ -43,6 +56,28 @@ int BinaryRuleTable::get_on_count() {
     }
 
     return on_cells;
+}
+
+int BinaryRuleTable::get_on_count(string& s){
+    vector<string>* neighbors = stencil.get_neighbors(s);
+    int count;
+    Property p;
+
+    for(size_t i = 0; i < neighbors->size(); i++){
+        p = graph->get_data((*neighbors)[i])->get_property(B_STATE);
+        
+        if(p.get_type() == Property::BOOL){
+            if(p.b){
+                count++;
+            }            
+        }
+        else {
+            cout << "Invalid State type" << endl;
+            return -1;
+        }
+    }
+
+    return count;
 }
 
 size_t BinaryRuleTable::get_grid_state(){
@@ -68,7 +103,7 @@ void BinaryRuleTable::initialize() {
 
     //initialize metrics 
     Property percent_on(BinaryRuleTable::PERCENT_ON, float(0.0));
-    Property init_percent(BinaryRuleTable::INIT_PERCENT, int(init_percent_on*100));
+    Property init_percent(BinaryRuleTable::INIT_PERCENT, init_percent_int);
 
     metrics[BinaryRuleTable::INIT_PERCENT] = init_percent;
     metrics[BinaryRuleTable::PERCENT_ON] = percent_on;
@@ -107,6 +142,7 @@ void BinaryRuleTable::transition() {
 
     update_graph();
 }
+
 
 void BinaryRuleTable::compute_metrics() {}
 void BinaryRuleTable::apply_rule(string& l) {}

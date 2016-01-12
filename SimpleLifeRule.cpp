@@ -25,9 +25,30 @@ void SimpleLifeRule::compute_metrics() {
 
 
 void SimpleLifeRule::transition() {
-    //TODO
+    BinaryRuleTable::transition();
 }
 
-void apply_rule(string &label) {
-    //TODO
+void SimpleLifeRule::apply_rule(string &label) {
+    int count = get_on_count(label);
+    Property p = graph->get_data(label)->get_property(B_STATE);
+    bool cell_state;
+    
+    if(p.get_type() == Property::BOOL){
+        cell_state = p.b;
+    }
+    else {
+        cout << "Invalid State type" << endl;
+        return;
+    }
+
+    if(cell_state) {
+        if(count < 2 || count > 3){
+            p.set_bool(false);
+            state_map[label] = p;
+        }
+    }
+    else if(count == 3){
+        p.set_bool(true);
+        state_map[label] = p;
+    }
 }  

@@ -282,11 +282,11 @@ int main() {
     //gen.grid_to_file("test_from_file.txt");
     //gen.grid_to_dot("test_from_file");
 
-    vector<Point> pts = generate_poisson_disk(100, 100, 30, 3);
-    DelaunayGridGenerator gen(pts, 0, 100, 0, 100);
+    vector<Point> pts = generate_poisson_disk(118, 118, 30, 0.8, 1);
+    DelaunayGridGenerator gen(pts, 0, 118, 0, 118);
 
-    gen.grid_to_file("test_poisson.txt");
-    gen.grid_to_dot("test_poisson");
+    gen.grid_to_file("life_test_XL.txt");
+    gen.grid_to_dot("life_test_XL");
 
     return 0;   
 }

@@ -1,6 +1,27 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##1/12/2016
+Morning Goals:
+- Run some Life ash experiments
+- Produce some pictures of LM stable states
+
+For examining ash in GoL:
+
+Relevant Parameters:
+- Grid sizes: Small (~25x25), Med (~44x44), Large (~72x72), XLarge (118x118)
+- Mean lifetime to Stability experiment: Plot Initial Density (1% to 100%) against Mean Lifetime
+- Liftetime to stability against ash density, for initial densities D = 20%, 40%, 60%.
+
+###Results of Ash Life Experiment
+TODO
+
+###To-Do List
+- Implement "spreading activation" method of updating graph (optimizing, can track the number of states changing per timestep)
+- Hex grid 
+- Toroidal Voronoi diagrams
+- Visualizations of grids
+
 ##1/11/2016
 Morning: Implemented Regular Grid Generator, some basic stencils.
 
