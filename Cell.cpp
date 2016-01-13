@@ -50,10 +50,12 @@ void Cell::add_property(Property& p) {
 	prop_map[p.get_label()] = p;
 }
 
-Property Cell::get_property(string label){
-	if(prop_map.count(label) != 0) {
-		return prop_map[label];
+Property* Cell::get_property(string label){
+	if(prop_map.count(label) > 0) {
+		return &prop_map[label];
 	}
+
+	return NULL;
 }
 
 

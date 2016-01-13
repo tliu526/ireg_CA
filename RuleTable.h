@@ -27,6 +27,7 @@ rule transitions.
 #include "Graph.h"
 #include "Stencil.h"
 #include "Property.h"
+#include "GridGenerator.h"
 
 #include <string>
 #include <vector>
@@ -67,11 +68,6 @@ class RuleTable {
 		std::map<std::string, Property>* get_metrics();
 
 	protected:
-		//string constants for finding the state property in the cell
-		static const std::string B_STATE;
-		static const std::string I_STATE;
-		static const std::string F_STATE;
-
 		/**
 		Computes the next state and stores it in state_map
 		*/

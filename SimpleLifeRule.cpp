@@ -30,11 +30,11 @@ void SimpleLifeRule::transition() {
 
 void SimpleLifeRule::apply_rule(string &label) {
     int count = get_on_count(label);
-    Property p = graph->get_data(label)->get_property(B_STATE);
+    Property* p = graph->get_data(label)->get_property(GridGenerator::B_STATE);
     bool cell_state;
     
-    if(p.get_type() == Property::BOOL){
-        cell_state = p.b;
+    if(p->get_type() == Property::BOOL){
+        cell_state = p->b;
     }
     else {
         cout << "Invalid State type" << endl;
@@ -43,12 +43,12 @@ void SimpleLifeRule::apply_rule(string &label) {
 
     if(cell_state) {
         if(count < 2 || count > 3){
-            p.set_bool(false);
-            state_map[label] = p;
+            p->set_bool(false);
+            state_map[label] = *p;
         }
     }
     else if(count == 3){
-        p.set_bool(true);
-        state_map[label] = p;
+        p->set_bool(true);
+        state_map[label] = *p;
     }
 }  

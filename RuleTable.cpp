@@ -10,10 +10,6 @@ Implementation of the Rule Table class.
 
 using namespace std;
 
-const string RuleTable::B_STATE = "B:State";
-const string RuleTable::I_STATE = "I:State";
-const string RuleTable::F_STATE = "F:State";
-
 RuleTable::RuleTable(Graph<string, Cell>* g, Stencil& s) :
     graph(g),
     stencil(s)

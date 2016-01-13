@@ -48,10 +48,16 @@ int BinaryRuleTable::get_on_count() {
     vector<string> labels = graph->get_vert_labels();
     int on_cells = 0;
     for(size_t i = 0; i < labels.size(); i++){
-        Property p = graph->get_data(labels[i])->get_property(B_STATE);
+        Property* p = graph->get_data(labels[i])->get_property(GridGenerator::B_STATE);
         
-        if(p.get_type() == Property::BOOL && p.b){
-            on_cells++;
+        if(p->get_type() == Property::BOOL) {
+            if (p->b){
+                on_cells++;
+            }
+        }
+        else {
+            cout << "Invalid State type" << endl;
+            return -1;
         }
     }
 
@@ -61,13 +67,13 @@ int BinaryRuleTable::get_on_count() {
 int BinaryRuleTable::get_on_count(string& s){
     vector<string>* neighbors = stencil.get_neighbors(s);
     int count;
-    Property p;
+    Property* p;
 
     for(size_t i = 0; i < neighbors->size(); i++){
-        p = graph->get_data((*neighbors)[i])->get_property(B_STATE);
+        p = graph->get_data((*neighbors)[i])->get_property(GridGenerator::B_STATE);
         
-        if(p.get_type() == Property::BOOL){
-            if(p.b){
+        if(p->get_type() == Property::BOOL){
+            if(p->b){
                 count++;
             }            
         }
@@ -87,9 +93,9 @@ size_t BinaryRuleTable::get_grid_state(){
     vector<bool> b_vec;
 
     for (size_t i = 0; i < vert_labels.size(); i++){
-        Property p = graph->get_data(vert_labels[i])->get_property(B_STATE);
-        if(p.get_type() == Property::BOOL){
-            b_vec.push_back(p.b);
+        Property* p = graph->get_data(vert_labels[i])->get_property(GridGenerator::B_STATE);
+        if(p->get_type() == Property::BOOL){
+            b_vec.push_back(p->b);
         }
     }
 

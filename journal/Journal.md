@@ -1,6 +1,11 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##1/13/2016
+
+Morning:
+- added capability to show state in graphviz graphs
+
 ##1/12/2016
 Morning Goals:
 - Run some Life ash experiments

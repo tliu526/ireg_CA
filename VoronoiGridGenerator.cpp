@@ -261,7 +261,9 @@ int main(){
 	//v.grid_to_file("vtest2.txt");
 	//v.grid_to_dot("vtest2");
 
-	VoronoiGridGenerator v("test_poisson.txt");
-	v.grid_to_file("vtest_poisson.txt");
-	v.grid_to_dot("vtest_poisson");
+	VoronoiGridGenerator v("sim_test.txt");
+	v.grid_to_file("vsim_test");
+	v.grid_to_dot("vsim_test");
+
+	return 0;
 }

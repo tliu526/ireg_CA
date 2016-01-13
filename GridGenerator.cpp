@@ -12,6 +12,10 @@ graph_to_file.
 
 using namespace std;
 
+const string GridGenerator::B_STATE = "B:State";
+const string GridGenerator::I_STATE = "I:State";
+const string GridGenerator::F_STATE = "F:State";
+
 GridGenerator::GridGenerator(vector<Point>& p, float min_x, float max_x, float min_y, float max_y) :
 	gen_pts(p), 
 	max_x(max_x),
@@ -226,7 +230,7 @@ void GridGenerator::init_maps(){
 
 void GridGenerator::grid_to_file(string f){
 	ofstream file;
-	file.open(f);
+	file.open(f+".txt");
 
 	file << grid_type << " ";
 	file << min_x << " " << max_x << " " ;
@@ -322,18 +326,41 @@ void GridGenerator::grid_to_dot(string name){
 	file << "Graph G {" << endl;
 	file << "node [shape=circle, style=filled, width=0.25, height=0.25, fixedsize=true, label=\"\"];" << endl;
 
+	//verts
 	for (int i = 0; i < verts.size(); i++){
 		string v_id = rev_vert_map[verts[i]];
 		stringstream ss;
 		ss << verts[i];
 		string coord = ss.str();
-		//coord = coord.substr(1, coord.size()-2);
-		//cout << "Coord: " << coord << endl;
 		file << v_id << " [pos = \"" << coord << "!\"];" << endl;
 	}
 
 	file << endl;
 
+	//gen_pts
+	for (size_t i = 0; i < gen_pts.size(); i++) {
+		string gp_id = rev_gen_pt_map[gen_pts[i]];
+		stringstream ss;
+		ss << gen_pts[i];
+		string coord = ss.str();
+		file << gp_id << " [pos = \"" << coord << "!\" ";
+		
+		//TODO abstract to function
+		Property* p = graph.get_data(gp_id)->get_property(B_STATE);
+//		cout << "Gen pt: " << gp_id << endl;
+		if(p != NULL){
+//			cout << "Property: " << p->to_string() << endl;
+			if(p->b){
+				file << "fillcolor=\"black\"";
+			}
+		}
+
+		file << "];" << endl;
+	}
+
+	file << endl;
+
+	//edges
 	for (int i = 0; i < edges.size(); i++){
 		file << rev_vert_map[edges[i].p] << " -- " << rev_vert_map[edges[i].q] << ";" << endl;
 	}

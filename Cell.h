@@ -29,7 +29,7 @@ public:
 	std::string get_id();
 	Point       get_point();
 
-	Property get_property(std::string label);
+	Property* get_property(std::string label);
 	void add_property(Property& p);
 
 	std::map<std::string, Property>* get_prop_map();
