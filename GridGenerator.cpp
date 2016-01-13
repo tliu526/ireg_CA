@@ -345,12 +345,11 @@ void GridGenerator::grid_to_dot(string name){
 		string coord = ss.str();
 		file << gp_id << " [pos = \"" << coord << "!\" ";
 		
+		map<string, Property>* prop_map = graph.get_data(gp_id)->get_prop_map();
 		//TODO abstract to function
-		Property* p = graph.get_data(gp_id)->get_property(B_STATE);
-//		cout << "Gen pt: " << gp_id << endl;
-		if(p != NULL){
-//			cout << "Property: " << p->to_string() << endl;
-			if(p->b){
+		if(prop_map->count(B_STATE) > 0) {
+			Property p = graph.get_data(gp_id)->get_property(B_STATE);
+			if(p.b){
 				file << "fillcolor=\"black\"";
 			}
 		}

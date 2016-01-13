@@ -8,6 +8,7 @@ Implementation of the Simulator class.
 
 #include "SimpleMajorityRule.h"
 #include "DelaunayGridGenerator.h"
+#include "SimpleLifeRule.h"
 
 #include <fstream>
 
@@ -20,7 +21,7 @@ using namespace std;
 const string Simulator::STATS_EXTENSION = ".csv";
 const string Simulator::STATS_DELIM = " ";
 
-Simulator::Simulator(GridGenerator* g, RuleTable* r, int max, string f) :
+Simulator::Simulator(GridGenerator* g, RuleTable* r, int max, string f, int snapshot) :
     generator(g),
     rule_table(r)
 {
@@ -31,11 +32,14 @@ Simulator::Simulator(GridGenerator* g, RuleTable* r, int max, string f) :
     //TODO abstract to options
     max_steps = max;
     out_file = f;
+    snapshot_freq = snapshot;
+
     rule_table->initialize();
 }
 
 void Simulator::simulate() {
 
+    event_queue.push(GRID_SNAPSHOT);
     event_queue.push(UPDATE_GRAPH);
     running = true;
     //metric_headers();
@@ -87,18 +91,25 @@ void Simulator::process_triggers(int flags) {
 
     //STOP_SIMULATION needs to be first
     if (flags & STOP_SIMULATION) event_queue.push(STOP_SIMULATION);    
-    if (running && flags & UPDATE_GRAPH) event_queue.push(UPDATE_GRAPH);
     if (flags & CALC_METRICS) event_queue.push(CALC_METRICS);
     if (flags & STATS_TO_FILE) event_queue.push(STATS_TO_FILE);
     if (flags & GRID_SNAPSHOT) event_queue.push(GRID_SNAPSHOT);
+
+    //UPDATE_GRAPH needs to be last
+    if (running && flags & UPDATE_GRAPH) event_queue.push(UPDATE_GRAPH);
 }
 
 void Simulator::update_graph(int &flags){
     rule_table->transition();
     dout << "Current time step: " << cur_time << endl;
     cur_time++;
-    
     size_t chksum = rule_table->get_grid_state();
+
+    if(snapshot_freq){
+        if((cur_time % snapshot_freq) == 0){
+            flags |= GRID_SNAPSHOT;
+        }
+    }
 
     //TODO other things here, such as check period length (can be done with cur_time)
     if(chksum_map.count(chksum) > 0){
@@ -178,11 +189,10 @@ int main() {
     vector<Point> pts = generate_poisson_disk(15, 15, 30, 0.75, 120);
     //vector<Point> pts = generate_uniform_rand(250, 8, 8, 9);
     DelaunayGridGenerator gen(pts, 0, 15, 0, 15);
-    gen.grid_to_file("sim_test.txt");
-    gen.grid_to_dot("sim_test");
-    SimpleMajorityRule rule(gen.get_graph(), 0.45, 34);
+    SimpleLifeRule rule(gen.get_graph(), 0.45, 34);
 
-    Simulator s(&gen, &rule, 250, "stat_test.txt");
+    Simulator s(&gen, &rule, 250, "sim_test");
+    s.metric_headers();
     s.simulate();
 }
 */

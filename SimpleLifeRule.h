@@ -16,8 +16,8 @@ GoL Rules:
 
 class SimpleLifeRule : public BinaryRuleTable {
     public:
-        SimpleLifeRule(Graph<std::string,Cell>* graph, float init_percent, float seed);  
-        SimpleLifeRule(Graph<std::string,Cell>* graph, float init_percent, float seed, Stencil& s);  
+        SimpleLifeRule(Graph<std::string,Cell>* graph, int init_percent, float seed);  
+        SimpleLifeRule(Graph<std::string,Cell>* graph, int init_percent, float seed, Stencil& s);  
 
         void transition();
         void initialize();

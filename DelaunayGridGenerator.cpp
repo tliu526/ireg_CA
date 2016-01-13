@@ -268,19 +268,16 @@ void DelaunayGridGenerator::delaunay_triangulation() {
         }
     }
 }
-
 /*
 // for debugging
 int main() {
-    //vector<Point> pts = generate_uniform_rand(2000, 70, 70);
-    //DelaunayGridGenerator gen(pts, 70, 70);
     
-    //gen.grid_to_file("fast.txt");
-    //gen.grid_to_dot("fast");
-
-    //DelaunayGridGenerator gen("test.txt");
-    //gen.grid_to_file("test_from_file.txt");
-    //gen.grid_to_dot("test_from_file");
+    for (size_t i = 1; i < 34; i++){
+        string name = "old_ash_"+to_string(i);
+        DelaunayGridGenerator gen(name+".txt");
+        gen.grid_to_dot(name);
+    }
+    return 0;
 
     vector<Point> pts = generate_poisson_disk(10, 10, 30, 0.75, 1);
     DelaunayGridGenerator gen(pts, 0, 10, 0, 10);

@@ -39,7 +39,6 @@ map<string, Property>* RuleTable::get_metrics() {
 }
 
 void RuleTable::update_graph(){
-
     typename map<string, Property>::iterator map_it;
     for(map_it = state_map.begin(); map_it != state_map.end(); map_it++){
         Cell* cell_ptr = graph->get_data(map_it->first);

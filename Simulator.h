@@ -29,7 +29,7 @@ class Simulator {
         } Event;
 
         //TODO a struct of options to pass
-        Simulator(GridGenerator* g, RuleTable* r, int max, std::string file);
+        Simulator(GridGenerator* g, RuleTable* r, int max, std::string file, int snapshot = 0);
         Simulator() {};
 
         /**
@@ -66,9 +66,11 @@ class Simulator {
 
         //whether or not the simulation is running
         bool running;
-
         //output file name
         std::string out_file;
+        //how often to take a snapshot
+        int snapshot_freq;
+
 
         /**
         checks all triggers and appropriately pushes events to queue

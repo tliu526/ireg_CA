@@ -8,10 +8,10 @@ An implementation of directly translated GoL rules.
 
 using namespace std;
 
-SimpleLifeRule::SimpleLifeRule(Graph<string, Cell>* graph, float percent_on, float s) 
+SimpleLifeRule::SimpleLifeRule(Graph<string, Cell>* graph, int percent_on, float s) 
     : BinaryRuleTable(graph, percent_on, s) {}
 
-SimpleLifeRule::SimpleLifeRule(Graph<std::string,Cell>* graph, float init_percent, float seed, Stencil& stencil) 
+SimpleLifeRule::SimpleLifeRule(Graph<std::string,Cell>* graph, int init_percent, float seed, Stencil& stencil) 
   : BinaryRuleTable(graph, init_percent, seed, stencil) {}
 
 void SimpleLifeRule::initialize() {
@@ -30,11 +30,11 @@ void SimpleLifeRule::transition() {
 
 void SimpleLifeRule::apply_rule(string &label) {
     int count = get_on_count(label);
-    Property* p = graph->get_data(label)->get_property(GridGenerator::B_STATE);
+    Property p = graph->get_data(label)->get_property(GridGenerator::B_STATE);
     bool cell_state;
     
-    if(p->get_type() == Property::BOOL){
-        cell_state = p->b;
+    if(p.get_type() == Property::BOOL){
+        cell_state = p.b;
     }
     else {
         cout << "Invalid State type" << endl;
@@ -43,12 +43,12 @@ void SimpleLifeRule::apply_rule(string &label) {
 
     if(cell_state) {
         if(count < 2 || count > 3){
-            p->set_bool(false);
-            state_map[label] = *p;
+            p.set_bool(false);
+            state_map[label] = p;
         }
     }
     else if(count == 3){
-        p->set_bool(true);
-        state_map[label] = *p;
+        p.set_bool(true);
+        state_map[label] = p;
     }
 }  

@@ -21,11 +21,11 @@ Relevant Parameters:
 using namespace std;
 
 static const int NUM_STEPS = 250;
-static const int NUM_GRID_CONFIGS = 10;
-static const int NUM_STATE_CONFIGS = 10;
+static const int NUM_GRID_CONFIGS = 1;
+static const int NUM_STATE_CONFIGS = 1;
 
 int main(void){
-    string f = "LM_test";
+    string f = "LM_vis";
     bool headers = true;
 /*    
     //TODO no hardcoding

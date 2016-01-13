@@ -18,36 +18,50 @@ Relevant Parameters:
 using namespace std;
 
 static const int NUM_STEPS = 500;
-static const int NUM_GRID_CONFIGS = 5;
-static const int NUM_STATE_CONFIGS = 10;
+static const int NUM_GRID_CONFIGS = 1;
+static const int NUM_STATE_CONFIGS = 1;
 static const int SMALL = 25;
 static const int MED = 45;
 static const int LARGE = 70;
 
 int main(void){
-    string f = "life_test_m.csv";
+    string f = "life_vis";
+    bool header = true;
 
+    vector<Point> pts = generate_poisson_disk(SMALL, SMALL, 30, 0.75, 1);
+    DelaunayGridGenerator gen(pts, 0, SMALL, 0, SMALL);
+    SimpleLifeRule rule(gen.get_graph(), 35, 1);
+    Simulator s(&gen, &rule, NUM_STEPS, f, 1);
+    s.metric_headers();
+    s.simulate();
+    return 0;
+
+    /*
     fstream file;
     file.open(f, fstream::in | fstream::out | fstream::app);
     file << "Initial_Percent" << " " << "Percent_On" << " " << "Time" << endl;
     file.close();
-
+    */
     //iterate through different grid configurations, i is seed
     for(int i = 0; i < NUM_GRID_CONFIGS; i++){
-        vector<Point> pts = generate_poisson_disk(MED, MED, 30, 0.75, i);
-        DelaunayGridGenerator gen(pts, 0, MED, 0, MED);
+        vector<Point> pts = generate_poisson_disk(SMALL, SMALL, 30, 0.75, i);
+        DelaunayGridGenerator gen(pts, 0, SMALL, 0, SMALL);
 
         //iterate through starting ratios 1:99 to 99:1
         for(int j = 1; j < 100; j++){
-
-            //iterate through different initial state configurations, k is seed
-	    for(int k = 0; k < NUM_STATE_CONFIGS; k++){
-	      SimpleLifeRule rule(gen.get_graph(), int(j), k);
+        //iterate through different initial state configurations, k is seed
+            for(int k = 0; k < NUM_STATE_CONFIGS; k++){
+                SimpleLifeRule rule(gen.get_graph(), j, k);
                 Simulator s(&gen, &rule, NUM_STEPS, f);
+                
+                if(header){
+                    s.metric_headers();
+                    header = false;
+                }
                 s.simulate();
             }
         }
     }
 
-    return 0;
+   return 0;
 }
