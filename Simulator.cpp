@@ -17,6 +17,9 @@ static bool debug = false;
 
 using namespace std;
 
+const string Simulator::STATS_EXTENSION = ".csv";
+const string Simulator::STATS_DELIM = " ";
+
 Simulator::Simulator(GridGenerator* g, RuleTable* r, int max, string f) :
     generator(g),
     rule_table(r)
@@ -27,14 +30,15 @@ Simulator::Simulator(GridGenerator* g, RuleTable* r, int max, string f) :
 
     //TODO abstract to options
     max_steps = max;
-    stats_file = f;
+    out_file = f;
+    rule_table->initialize();
 }
 
 void Simulator::simulate() {
 
-    rule_table->initialize();
     event_queue.push(UPDATE_GRAPH);
     running = true;
+    //metric_headers();
 
     while(!event_queue.empty()){
         Event e = event_queue.front();
@@ -42,12 +46,12 @@ void Simulator::simulate() {
         process_event(e);
     }
 
-//    dout << "Finished simulation" << endl;
+    dout << "Finished simulation" << endl;
 }
 
 void Simulator::process_event(Event e){
 
-    //set trigger flags after processing each event, will be a bit mask
+    //set trigger flags after processing each event
     int trigger_flags = 0;
 
     switch (e) {
@@ -59,12 +63,16 @@ void Simulator::process_event(Event e){
         calc_metrics(trigger_flags);
         break;
 
-        case WRITE_TO_FILE:
+        case STATS_TO_FILE:
         stats_to_file();
         break;
 
         case STOP_SIMULATION:
         stop_simulation(trigger_flags);
+        break;
+
+        case GRID_SNAPSHOT:
+        grid_snapshot(trigger_flags);
         break;
 
         default:
@@ -76,41 +84,43 @@ void Simulator::process_event(Event e){
 
 //only processes more triggers if the simulation is running
 void Simulator::process_triggers(int flags) {
-    if(running){
-        //STOP_SIMULATION needs to be first
-        if (flags & STOP_SIMULATION) event_queue.push(STOP_SIMULATION);
-        if (flags & UPDATE_GRAPH) event_queue.push(UPDATE_GRAPH);
-        if (flags & CALC_METRICS) event_queue.push(CALC_METRICS);
-        if (flags & WRITE_TO_FILE) event_queue.push(WRITE_TO_FILE);
-    }
+
+    //STOP_SIMULATION needs to be first
+    if (flags & STOP_SIMULATION) event_queue.push(STOP_SIMULATION);    
+    if (running && flags & UPDATE_GRAPH) event_queue.push(UPDATE_GRAPH);
+    if (flags & CALC_METRICS) event_queue.push(CALC_METRICS);
+    if (flags & STATS_TO_FILE) event_queue.push(STATS_TO_FILE);
+    if (flags & GRID_SNAPSHOT) event_queue.push(GRID_SNAPSHOT);
 }
 
 void Simulator::update_graph(int &flags){
     rule_table->transition();
-  //  dout << "Current time step: " << cur_time << endl;
+    dout << "Current time step: " << cur_time << endl;
     cur_time++;
     
     size_t chksum = rule_table->get_grid_state();
 
     //TODO other things here, such as check period length (can be done with cur_time)
     if(chksum_map.count(chksum) > 0){
-        flags |= (STOP_SIMULATION | CALC_METRICS | WRITE_TO_FILE);
+        flags |= STOP_SIMULATION;
+        dout << "Repeated state" << endl;
     }
     else {
         chksum_map[chksum] = cur_time;
-    }
 
-    if(cur_time < max_steps){
-        flags |= UPDATE_GRAPH;   
-    } 
-    else {
-        flags |= (CALC_METRICS | WRITE_TO_FILE);
+        if(cur_time < max_steps){
+            flags |= UPDATE_GRAPH;   
+        } 
+        else {
+            flags |= STOP_SIMULATION;
+        }
     }
 }
 
+//TODO other flags that need to be set here
 void Simulator::stop_simulation(int &flags){
     running = false;
-    flags = 0;
+    flags |= (CALC_METRICS | STATS_TO_FILE | GRID_SNAPSHOT);
 }
 
 void Simulator::calc_metrics(int &flags) {
@@ -119,22 +129,49 @@ void Simulator::calc_metrics(int &flags) {
 
 void Simulator::stats_to_file(){
     fstream file;
-    string delim = " ";
 
-    file.open(stats_file, fstream::in | fstream::out | fstream::app);
+    file.open(out_file+STATS_EXTENSION, fstream::in | fstream::out | fstream::app);
 
+    //RuleTable metrics
     map<string, Property>* metrics = rule_table->get_metrics();
     typename map<string, Property>::iterator map_it;
 
     for(map_it = metrics->begin(); map_it != metrics->end(); map_it++){
-        file << map_it->second.to_string() << delim;
+        file << map_it->second.to_string() << STATS_DELIM;
     }
 
+    //Simulator state variables
     file << cur_time << endl;
 
     file.close();
 }
 
+//TODO how to make unique for each run of the simulator?
+//snapshot_id member variable?
+void Simulator::grid_snapshot(int &flags) {
+    string filename = out_file+"_"+to_string(cur_time);
+    generator->grid_to_dot(filename);
+}
+
+void Simulator::metric_headers() {
+    fstream file;
+
+    file.open(out_file+STATS_EXTENSION, fstream::in | fstream::out | fstream::trunc);
+
+    //RuleTable stat headers
+    map<string, Property>* metrics = rule_table->get_metrics();
+    typename map<string, Property>::iterator map_it;
+
+    for(map_it = metrics->begin(); map_it != metrics->end(); map_it++){
+        file << map_it->first << STATS_DELIM;
+    }
+
+    //Simulator stat headers
+    //TODO a table of Simulator state variables
+    file << "Time" << endl;
+
+    file.close();
+}
 
 /*
 int main() {

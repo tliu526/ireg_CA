@@ -21,18 +21,19 @@ Relevant Parameters:
 using namespace std;
 
 static const int NUM_STEPS = 250;
-static const int NUM_GRID_CONFIGS = 50;
-static const int NUM_STATE_CONFIGS = 20;
+static const int NUM_GRID_CONFIGS = 10;
+static const int NUM_STATE_CONFIGS = 10;
 
 int main(void){
-    //string f = "LM_reg.csv";
-
+    string f = "LM_test";
+    bool headers = true;
+/*    
     //TODO no hardcoding
     fstream file;
     file.open(f, fstream::in | fstream::out | fstream::app);
     file << "Correct_Class" << " " << "Initial_Percent" << " " << "Percent_On" << " " << "Time" << endl;
     file.close();
-
+*/
     //iterate through different grid configurations, i is seed
     for(int i = 0; i < NUM_GRID_CONFIGS; i++){
         vector<Point> pts = generate_poisson_disk(15, 15, 30, 0.75, i);
@@ -43,8 +44,14 @@ int main(void){
 
             //iterate through different initial state configurations, k is seed
             for(int k = 0; k < NUM_STATE_CONFIGS; k++){
-                SimpleMajorityRule rule(gen.get_graph(), float(j)/float(100), k);
+                SimpleMajorityRule rule(gen.get_graph(), j, k);
                 Simulator s(&gen, &rule, NUM_STEPS, f);
+
+                //hacky, TODO better way
+                if(headers){
+                    s.metric_headers();
+                    headers = false;
+                }
                 s.simulate();
             }
         }

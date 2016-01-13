@@ -1,11 +1,8 @@
 /*
-Simulates the computation. Holds a grid generator for fast reading and writing to file.
+Simulates the computation. Holds a grid generator for reading and writing to file.
 
 Things to think about:
 - Scripting capability
-
-TODOs:
-- Detecting repeated/periodic states
 
 (c) 2015 Tony Liu.
 */
@@ -23,11 +20,12 @@ TODOs:
 class Simulator {
     public:
         typedef enum Event {
-            UPDATE_GRAPH = 1,
-            CALC_METRICS = 2,
-            STOP_SIMULATION = 4,
-            UPDATE_DISPLAY = 8,
-            WRITE_TO_FILE = 16,
+            UPDATE_GRAPH = 1, //increments the simulation by one timestep
+            CALC_METRICS = 2, //updates all available metrics 
+            STOP_SIMULATION = 4, //stops the simulation and pushes flags for writing to file
+            UPDATE_DISPLAY = 8, //updates the display, TODO
+            STATS_TO_FILE = 16, //writes metrics to given file
+            GRID_SNAPSHOT = 32, //generates a neato graphviz snapshot of grid state
         } Event;
 
         //TODO a struct of options to pass
@@ -52,7 +50,14 @@ class Simulator {
         */
         void stats_to_file();
 
+        /**
+        Writes the metric headers to the output file
+        */
+        void metric_headers();
+
     protected:
+        static const std::string STATS_EXTENSION; //Metrics file extension
+        static const std::string STATS_DELIM; //Metrics delimiter
         GridGenerator* generator;
         Graph<std::string, Cell>* grid;
         RuleTable* rule_table;
@@ -62,8 +67,8 @@ class Simulator {
         //whether or not the simulation is running
         bool running;
 
-        //output file for metrics
-        std::string stats_file;
+        //output file name
+        std::string out_file;
 
         /**
         checks all triggers and appropriately pushes events to queue
@@ -86,18 +91,20 @@ class Simulator {
         void stop_simulation(int &flags);
 
         /**
+        writes a graphviz snapshot of the grid state to file
+        */
+        void grid_snapshot(int &flags);
+
+        /**
         Computes and updates metrics in the given RuleTable
         */
         void calc_metrics(int &flags);
 
+
         /**** STATE VARIABLES ****/
         int cur_time;
         int max_steps;
-        //TODO module for keeping track of all statistics
-        //float lambda;
-
-        //TODO md5
-        std::map<size_t, int> chksum_map;
+        std::map<size_t, int> chksum_map; //(hash, time_step) map, for preserving state
 };
 
 #endif 

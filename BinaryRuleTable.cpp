@@ -34,11 +34,11 @@ BinaryRuleTable::BinaryRuleTable(Graph<string,Cell>* graph, int percent_on, floa
     radius = -1;
 }
 
-BinaryRuleTable::BinaryRuleTable(Graph<string,Cell>* graph, float init_percent, float s, Stencil& stencil) : 
+BinaryRuleTable::BinaryRuleTable(Graph<string,Cell>* graph, int init_percent, float s, Stencil& stencil) : 
   RuleTable(graph, stencil) 
 {
-    init_percent_int = int(init_percent*100.0);
-    init_percent_on = init_percent;
+    init_percent_int = init_percent;
+    init_percent_on = float(init_percent) / float(100);
     seed = s;
     type = OTHER;
     radius = -1;

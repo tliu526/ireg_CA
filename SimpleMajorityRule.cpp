@@ -10,7 +10,7 @@ using namespace std;
 
 const string SimpleMajorityRule::CORRECT_CLASS = "CorrectClass";
 
-SimpleMajorityRule::SimpleMajorityRule(Graph<string, Cell>* graph, float percent_on, float s) 
+SimpleMajorityRule::SimpleMajorityRule(Graph<string, Cell>* graph, int percent_on, float s) 
     : BinaryRuleTable(graph, percent_on, s) {}
 
 void SimpleMajorityRule::initialize() {
@@ -64,21 +64,7 @@ void SimpleMajorityRule::apply_rule(std::string& vert_label){
         cout << "Invalid State type" << endl;
         return;
     }
-/*
-    for(size_t i = 0; i < neighbors->size(); i++){
-        p = graph->get_data((*neighbors)[i])->get_property(B_STATE);
-        
-        if(p.get_type() == Property::BOOL){
-            if(p.b){
-                count++;
-            }            
-        }
-        else {
-            cout << "Invalid State type" << endl;
-            return;
-        }
-    }
-*/
+
     //change to majority value of its neighbors. If no majority, keep the same state
     if (float(count) > (float(neighborhood_size)/float(2))) {
         p->set_bool(true);
