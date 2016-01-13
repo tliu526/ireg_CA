@@ -3,14 +3,21 @@ __More recent entries are at the top.__
 
 ##1/13/2016
 
-Morning:
-- added capability to show state in graphviz graphs
+Morning: Added capability to show state in graphviz graphs.
 
 ###Stable State Graph Visualizations
 
-![](LM_10.jpg)
+![](LM_vis_6.jpg)
 
-The stable graph state for a local majority simulation with a 43% initial ON percentage. Stabilization occurred after 10 timesteps.
+The stable graph state for a local majority simulation with a 72% initial ON percentage ~(15x15). Stabilization occurs after 6 timesteps, with the graph failing to converge to the majority state (88.9% ON).
+
+![](life_vis_32.jpg)
+
+The "stable" graph state for a GoL simulation with a 35% initial ON percentage ~(25x25). Oscillation occurs after 32 timesteps, with a period 3 oscillator. Final ash density is 10.5%.
+
+![](old_ash_animated.gif)
+
+The previous configuration (all timesteps), animated.
 
 ##1/12/2016
 Morning Goals:
@@ -22,7 +29,7 @@ For examining ash in GoL:
 Relevant Parameters:
 - Grid sizes: Small (~25x25), Med (~44x44), Large (~72x72), XLarge (118x118)
 - Mean lifetime to Stability experiment: Plot Initial Density (1% to 100%) against Mean Lifetime
-- Liftetime to stability against ash density, for initial densities D = 20%, 40%, 60%.
+- Lifetime to stability against ash density, for initial densities D = 20%, 40%, 60%.
 
 ###Results of Ash Life Experiment
 

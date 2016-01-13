@@ -1,6 +1,9 @@
 /*
 Implementation of the Simulator class.
 
+TODO:
+- add period to state variables.
+
 (c) 2016 Tony Liu.
 */
 
