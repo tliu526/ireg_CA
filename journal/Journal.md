@@ -6,6 +6,12 @@ __More recent entries are at the top.__
 Morning:
 - added capability to show state in graphviz graphs
 
+###Stable State Graph Visualizations
+
+![](LM_10.jpg)
+
+The stable graph state for a local majority simulation with a 43% initial ON percentage. Stabilization occurred after 10 timesteps.
+
 ##1/12/2016
 Morning Goals:
 - Run some Life ash experiments
