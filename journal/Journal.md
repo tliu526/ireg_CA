@@ -12,17 +12,17 @@ Morning: Ran Penrose Ash Life tests
 
 ###Penrose Ash Life Experiment
 
-![](penrose.jpg =400x500)
+<img src="penrose.jpg" style="width: 500px;height: 600px"/>
 
 A visualization of the Penrose tiling used (kites and darts).
 
-![](penrose_graph.jpg =400x500)
+<img src="penrose_graph.jpg" style="width: 500px;height: 600px"/>
 
 The same Penrose tiling, with only graph connectivity shown.
 
 ####Lifetime and Ash Density Analysis
 
-![]Lifetime_Penrose.jpg)
+![](Lifetime_Penrose.jpg)
 
 ![](Penrose_Ash_Density.jpg)
 
@@ -33,15 +33,15 @@ Morning: Added capability to show state in graphviz graphs.
 Afternoon: Debugged BinaryRuleTable and built stable graph visualizations
 ###Stable State Graph Visualizations
 
-![](LM_vis_6.jpg)
+<img src="LM_vis_6.jpg" style="width: 500px;height: 500px"/>
 
 The stable graph state for a local majority simulation with a 72% initial ON percentage ~(15x15). Stabilization occurs after 6 timesteps, with the graph failing to converge to the majority state (88.9% ON).
 
-![](life_vis_32.jpg)
+<img src="life_vis_32.jpg" style="width: 500px;height: 500px"/>
 
 The "stable" graph state for a GoL simulation with a 35% initial ON percentage ~(25x25). Oscillation occurs after 32 timesteps, with a period 3 oscillator. Final ash density is 10.5%.
 
-![](old_ash_animated.gif)
+<img src="old_ash_animated.gif" style="width: 500px;height: 500px"/>
 
 The previous configuration (all timesteps), animated.
 
