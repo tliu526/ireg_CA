@@ -4,11 +4,29 @@ __More recent entries are at the top.__
 ##1/15/2016
 Morning: Ran Penrose Ash Life tests
 
-###To-Do List
+####To-Do List
 - Voronoi-Weighted neighborhood mapping
 - Plant cell grid orientation
 - GoL Rule Table mapping
 - Periodicity Analysis
+
+###Penrose Ash Life Experiment
+
+![](penrose.jpg =400x500)
+
+A visualization of the Penrose tiling used (kites and darts).
+
+![](penrose_graph.jpg =400x500)
+
+The same Penrose tiling, with only graph connectivity shown.
+
+####Lifetime and Ash Density Analysis
+
+![]Lifetime_Penrose.jpg)
+
+![](Penrose_Ash_Density.jpg)
+
+The lifetime graph shows an asymmetry in the mean lifetimes to stability in relation to the initial density. Interestingly, the asymmetry is left-skewed whereas the data shown in Hill et al. is right-skewed. There also appears to be a relationship between ash density as well as lifetime to stability. OLS yields an adjusted R^2 value of 0.914. These differences may be due to the particular shape of the Penrose tiling.
 
 ##1/13/2016
 Morning: Added capability to show state in graphviz graphs.
