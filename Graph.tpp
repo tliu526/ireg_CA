@@ -106,12 +106,16 @@ D* Graph<T,D>::Vertex::get_data() {
 
 template<class T, class D>
 void Graph<T,D>::Vertex::add_neighbor(T label) {
-  neighbors.push_back(label);
+  if(count(neighbors.begin(), neighbors.end(), label) == 0) {
+    neighbors.push_back(label);
+  }
 }
 
 template<class T, class D>
 void Graph<T,D>::Vertex::remove_neighbor(T label) {
-  neighbors.remove(label);
+  if(count(neighbors.begin(), neighbors.end(), label) > 0) {
+    neighbors.remove(label);
+  }
 }
 
 template<class T, class D>

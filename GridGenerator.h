@@ -34,7 +34,7 @@ public:
 	virtual void generate_graph(); 
 	void grid_to_file(std::string f);
 	void grid_to_dot(std::string out_name); //converts the grid to a (neato) graphviz file
-	
+	void graph_to_dot(std::string out_name); //converts the graph to a neato graphviz file	
 	std::vector<Poly> get_faces();
 	Graph<std::string, Cell> *get_graph();
 

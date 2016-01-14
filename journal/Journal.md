@@ -1,10 +1,18 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##1/15/2016
+Morning: Ran Penrose Ash Life tests
+
+###To-Do List
+- Voronoi-Weighted neighborhood mapping
+- Plant cell grid orientation
+- GoL Rule Table mapping
+- Periodicity Analysis
+
 ##1/13/2016
-
 Morning: Added capability to show state in graphviz graphs.
-
+Afternoon: Debugged BinaryRuleTable and built stable graph visualizations
 ###Stable State Graph Visualizations
 
 ![](LM_vis_6.jpg)

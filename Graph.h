@@ -10,6 +10,7 @@ graph is undirected.
 #include <map>
 #include <string>
 #include <list>
+#include <algorithm>
 
 template<class T, class D>
 class Graph {

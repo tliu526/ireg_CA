@@ -19,12 +19,33 @@ using namespace std;
 
 static const int NUM_STEPS = 500;
 static const int NUM_GRID_CONFIGS = 1;
-static const int NUM_STATE_CONFIGS = 1;
+static const int NUM_STATE_CONFIGS = 100;
 static const int SMALL = 25;
 static const int MED = 45;
 static const int LARGE = 70;
 
 int main(void){
+    string f = "penrose_life";
+    bool header = true;
+
+    GridGenerator gen("rhomb8.txt");
+    //iterate through starting ratios 1:99 to 99:1
+    for(int j = 1; j < 100; j++){
+    //iterate through different initial state configurations, k is seed
+        for(int k = 0; k < NUM_STATE_CONFIGS; k++){
+            SimpleLifeRule rule(gen.get_graph(), j, k);
+            Simulator s(&gen, &rule, NUM_STEPS, f);
+
+            if(header){
+                s.metric_headers();
+                header = false;
+            }
+            s.simulate();
+        }
+    }
+    return 0;
+
+/*
     string f = "life_vis";
     bool header = true;
 
@@ -35,7 +56,7 @@ int main(void){
     s.metric_headers();
     s.simulate();
     return 0;
-
+*/
     /*
     fstream file;
     file.open(f, fstream::in | fstream::out | fstream::app);

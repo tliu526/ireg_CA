@@ -268,10 +268,15 @@ void DelaunayGridGenerator::delaunay_triangulation() {
         }
     }
 }
-/*
+
 // for debugging
 int main() {
-    
+    GridGenerator gen("rhomb8-2.txt");
+    gen.grid_to_file("penrose");
+    gen.grid_to_dot("penrose");
+    gen.graph_to_dot("penrose_graph");
+    return 0;
+    /*
     for (size_t i = 1; i < 34; i++){
         string name = "old_ash_"+to_string(i);
         DelaunayGridGenerator gen(name+".txt");
@@ -286,5 +291,5 @@ int main() {
     gen.grid_to_dot("sim_test");
 
     return 0;   
+ */ 
 }
-*/

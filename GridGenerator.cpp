@@ -1,6 +1,5 @@
 /*
-Filling out GridGenerator abstract class. Currently the only function that is implemented here is 
-graph_to_file.
+Implementation of the GridGenerator class.
 
 (c) Tony Liu 2015.
 */
@@ -34,13 +33,15 @@ void GridGenerator::init_from_file(string file){
 	bool isAlive;
 	istringstream iss;
 	ifstream in(file);
+	map<string, vector<string>> neighbor_map;
 	
 	/**** BOUNDARY ****/
 	getline(in, line);
 	iss.str(line);
 	iss.clear();
-	iss >> name;
 
+	//store into member variables
+	iss >> grid_type;
 	iss >> min_x >> max_x >> min_y >> max_y;	
 
 	/**** GEN POINTS ****/
@@ -90,16 +91,25 @@ void GridGenerator::init_from_file(string file){
 		//graph.add_vertex(name, Cell(p, name, isAlive));
 		graph.add_vertex(name, Cell(p, name, properties));
 
-	    /*
+	    //Collect neighbors of each gen_pt
 		while(!iss.eof()){
 			iss >> neighbor;
-			//cout << neighbor << " ";
+			neighbor_map[name].push_back(neighbor);
 		}
-        */
+        
 	}
 
 	getline(in, line);
 	
+	/**** GRAPH ****/
+	typename map<string, vector<string>>::iterator map_it;
+	for(map_it = neighbor_map.begin(); map_it != neighbor_map.end(); map_it++){
+		vector<string>* v = &map_it->second;
+		for(size_t i = 0; i < v->size(); i++){
+			graph.add_edge(map_it->first, (*v)[i]);
+		}
+	}
+
 	/**** VERTS ****/
 	getline(in, line);
 	iss.str(line);
@@ -327,7 +337,7 @@ void GridGenerator::grid_to_dot(string name){
 	file << "node [shape=circle, style=filled, width=0.25, height=0.25, fixedsize=true, label=\"\"];" << endl;
 
 	//verts
-	for (int i = 0; i < verts.size(); i++){
+	for (size_t i = 0; i < verts.size(); i++){
 		string v_id = rev_vert_map[verts[i]];
 		stringstream ss;
 		ss << verts[i];
@@ -369,6 +379,52 @@ void GridGenerator::grid_to_dot(string name){
 	file.close();
 }
 
+void GridGenerator::graph_to_dot(string name){
+	ofstream file;
+	file.open(name+".dot");
+	file << "Graph G {" << endl;
+	file << "node [shape=circle, style=filled, width=0.25, height=0.25, fixedsize=true, label=\"\"];" << endl;
+
+	//gen_pts
+	for (size_t i = 0; i < gen_pts.size(); i++) {
+		string gp_id = rev_gen_pt_map[gen_pts[i]];
+		stringstream ss;
+		ss << gen_pts[i];
+		string coord = ss.str();
+		file << gp_id << " [pos = \"" << coord << "!\" ";
+		
+		map<string, Property>* prop_map = graph.get_data(gp_id)->get_prop_map();
+		//TODO abstract to function
+		if(prop_map->count(B_STATE) > 0) {
+			Property p = graph.get_data(gp_id)->get_property(B_STATE);
+			if(p.b){
+				file << "fillcolor=\"black\"";
+			}
+		}
+
+		file << "];" << endl;
+	}
+
+	file << endl;
+
+	//edges
+	vector<string> labels = graph.get_vert_labels();
+	for(size_t i = 0; i < labels.size(); i++){
+		list<string>* neighbors = graph.get_neighbors(labels[i]);
+
+		typename list<string>::iterator list_it;
+		for(list_it = neighbors->begin(); list_it != neighbors->end(); list_it++){
+			if(count(labels.begin(), labels.begin()+i, *list_it) == 0) {
+				file << labels[i] << " -- " << *list_it << ";" << endl;
+			}
+		}
+	}
+
+	file << "}" << endl;
+
+	file.close();
+}
+
 bool GridGenerator::pt_in_grid(Point p) {
 	return (p.x < max_x) && (p.x > min_x) && (p.y < max_y) && (p.y > min_y);
 }
@@ -391,11 +447,7 @@ Property GridGenerator::build_property(std::string& name, std::string& value) {
 
 	tag = name.at(0);
 	label = name.substr(2);
-/*
-	cout << "Tag: " << tag << endl;
-	cout << "Label: " << label << endl;
-	cout << "Value: " << value << endl;
-*/
+
 	switch(tag){
 		case Property::INT:
 		return Property(label, stoi(value));
