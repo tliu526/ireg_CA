@@ -19,12 +19,13 @@ using namespace std;
 
 static const int NUM_STEPS = 500;
 static const int NUM_GRID_CONFIGS = 1;
-static const int NUM_STATE_CONFIGS = 100;
+static const int NUM_STATE_CONFIGS = 1;
 static const int SMALL = 25;
 static const int MED = 45;
 static const int LARGE = 70;
 
 int main(void){
+/*
     string f = "penrose_life";
     bool header = true;
 
@@ -44,25 +45,19 @@ int main(void){
         }
     }
     return 0;
+*/
 
-/*
-    string f = "life_vis";
+    string f = "life_oscillator";
     bool header = true;
 
     vector<Point> pts = generate_poisson_disk(SMALL, SMALL, 30, 0.75, 1);
     DelaunayGridGenerator gen(pts, 0, SMALL, 0, SMALL);
-    SimpleLifeRule rule(gen.get_graph(), 35, 1);
+    SimpleLifeRule rule(gen.get_graph(), 54, 1);
     Simulator s(&gen, &rule, NUM_STEPS, f, 1);
     s.metric_headers();
     s.simulate();
     return 0;
-*/
-    /*
-    fstream file;
-    file.open(f, fstream::in | fstream::out | fstream::app);
-    file << "Initial_Percent" << " " << "Percent_On" << " " << "Time" << endl;
-    file.close();
-    */
+
     //iterate through different grid configurations, i is seed
     for(int i = 0; i < NUM_GRID_CONFIGS; i++){
         vector<Point> pts = generate_poisson_disk(SMALL, SMALL, 30, 0.75, i);

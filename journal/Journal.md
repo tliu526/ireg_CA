@@ -26,7 +26,15 @@ The same Penrose tiling, with only graph connectivity shown.
 
 ![](Penrose_Ash_Density.jpg)
 
-The lifetime graph shows an asymmetry in the mean lifetimes to stability in relation to the initial density. Interestingly, the asymmetry is left-skewed whereas the data shown in Hill et al. is right-skewed. There also appears to be a relationship between ash density as well as lifetime to stability. OLS yields an adjusted R^2 value of 0.914. These differences may be due to the particular shape of the Penrose tiling.
+The lifetime graph shows an asymmetry in the mean lifetimes to stability in relation to the initial density. Interestingly, the asymmetry is left-skewed whereas the data shown in Hill et al. is right-skewed. There also appears to be a relationship between ash density as well as lifetime to stability. Ordinary least squares yields a fit with an adjusted R^2 value of 0.914. These differences may be due to the particular shape of the Penrose tiling.
+
+###Period 7 Voronoi Oscillator
+
+![](life_54_no_loop.gif)
+
+An animation of a GoL simulator with a 54% initial ON percentage ~(25x25). Oscillation occurs after 39 timesteps with a period 7 oscillator. The final ash density is 5.7%. The oscillator is shown below.
+
+![](period7_oscillator.gif)
 
 ##1/13/2016
 Morning: Added capability to show state in graphviz graphs.

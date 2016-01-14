@@ -268,7 +268,7 @@ void DelaunayGridGenerator::delaunay_triangulation() {
         }
     }
 }
-
+/*
 // for debugging
 int main() {
     GridGenerator gen("rhomb8-2.txt");
@@ -291,5 +291,6 @@ int main() {
     gen.grid_to_dot("sim_test");
 
     return 0;   
- */ 
+  
 }
+*/

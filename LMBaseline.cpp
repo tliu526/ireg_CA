@@ -25,7 +25,7 @@ static const int NUM_GRID_CONFIGS = 1;
 static const int NUM_STATE_CONFIGS = 1;
 
 int main(void){
-    string f = "LM_vis";
+    string f = "stats_test";
     bool headers = true;
 /*    
     //TODO no hardcoding

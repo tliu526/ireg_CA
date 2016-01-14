@@ -58,6 +58,11 @@ class Simulator {
     protected:
         static const std::string STATS_EXTENSION; //Metrics file extension
         static const std::string STATS_DELIM; //Metrics delimiter
+
+        /*** Simulator State Variables***/
+        static const std::string TIME;
+        static const std::string PERIOD;
+
         GridGenerator* generator;
         Graph<std::string, Cell>* grid;
         RuleTable* rule_table;
@@ -70,7 +75,6 @@ class Simulator {
         std::string out_file;
         //how often to take a snapshot
         int snapshot_freq;
-
 
         /**
         checks all triggers and appropriately pushes events to queue
@@ -102,11 +106,11 @@ class Simulator {
         */
         void calc_metrics(int &flags);
 
-
         /**** STATE VARIABLES ****/
         int cur_time;
         int max_steps;
         std::map<size_t, int> chksum_map; //(hash, time_step) map, for preserving state
+        std::map<std::string, Property> sim_metrics; //map for tracking Simulator metrics
 };
 
 #endif 

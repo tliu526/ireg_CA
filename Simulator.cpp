@@ -23,6 +23,8 @@ using namespace std;
 
 const string Simulator::STATS_EXTENSION = ".csv";
 const string Simulator::STATS_DELIM = " ";
+const string Simulator::TIME = "Time";
+const string Simulator::PERIOD = "Period";
 
 Simulator::Simulator(GridGenerator* g, RuleTable* r, int max, string f, int snapshot) :
     generator(g),
@@ -36,6 +38,13 @@ Simulator::Simulator(GridGenerator* g, RuleTable* r, int max, string f, int snap
     max_steps = max;
     out_file = f;
     snapshot_freq = snapshot;
+
+    //initialize sim_metrics
+    Property timestep(TIME, cur_time);
+    Property period(PERIOD, int(0));
+
+    sim_metrics[TIME] = timestep;
+    sim_metrics[PERIOD] = period;
 
     rule_table->initialize();
 }
@@ -114,9 +123,10 @@ void Simulator::update_graph(int &flags){
         }
     }
 
-    //TODO other things here, such as check period length (can be done with cur_time)
     if(chksum_map.count(chksum) > 0){
         flags |= STOP_SIMULATION;
+        int period = cur_time - chksum_map[chksum];
+        sim_metrics[PERIOD].set_int(period);
         dout << "Repeated state" << endl;
     }
     else {
@@ -138,6 +148,8 @@ void Simulator::stop_simulation(int &flags){
 }
 
 void Simulator::calc_metrics(int &flags) {
+    sim_metrics[TIME].set_int(cur_time);
+
     rule_table->compute_metrics();
 }
 
@@ -155,7 +167,11 @@ void Simulator::stats_to_file(){
     }
 
     //Simulator state variables
-    file << cur_time << endl;
+    for(map_it = sim_metrics.begin(); map_it != sim_metrics.end(); map_it++){
+        file << map_it->second.to_string() << STATS_DELIM;
+    }
+
+    file << endl;
 
     file.close();
 }
@@ -181,8 +197,10 @@ void Simulator::metric_headers() {
     }
 
     //Simulator stat headers
-    //TODO a table of Simulator state variables
-    file << "Time" << endl;
+    for(map_it = sim_metrics.begin(); map_it != sim_metrics.end(); map_it++){
+        file << map_it->first << STATS_DELIM;
+    }
+    file << endl;
 
     file.close();
 }
