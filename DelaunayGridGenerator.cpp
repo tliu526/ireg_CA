@@ -268,29 +268,29 @@ void DelaunayGridGenerator::delaunay_triangulation() {
         }
     }
 }
-/*
+
 // for debugging
 int main() {
-    GridGenerator gen("rhomb8-2.txt");
-    gen.grid_to_file("penrose");
-    gen.grid_to_dot("penrose");
-    gen.graph_to_dot("penrose_graph");
+    GridGenerator gen("penrose_bat.txt");
+    //gen.grid_to_file("penrose");
+//    gen.grid_to_dot("penrose_bat_grid");
+  //  gen.graph_to_dot("penrose_bat_graph");
+    gen.map_faces();
     return 0;
-    /*
+
     for (size_t i = 1; i < 34; i++){
         string name = "old_ash_"+to_string(i);
-        DelaunayGridGenerator gen(name+".txt");
-        gen.grid_to_dot(name);
+        DelaunayGridGenerator gen2(name+".txt");
+        gen2.grid_to_dot(name);
     }
     return 0;
 
     vector<Point> pts = generate_poisson_disk(10, 10, 30, 0.75, 1);
-    DelaunayGridGenerator gen(pts, 0, 10, 0, 10);
+    DelaunayGridGenerator gen3(pts, 0, 10, 0, 10);
 
-    gen.grid_to_file("sim_test");
-    gen.grid_to_dot("sim_test");
+    gen3.grid_to_file("sim_test");
+    gen3.grid_to_dot("sim_test");
 
     return 0;   
-  
 }
-*/
+

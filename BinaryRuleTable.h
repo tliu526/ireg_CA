@@ -11,8 +11,9 @@ A derived rule table class for only binary rules.
 
 class BinaryRuleTable : public RuleTable {
     public:
-        BinaryRuleTable(Graph<std::string,Cell>* graph, int init_percent_on, float seed, Stencil& stencil);
-        BinaryRuleTable(Graph<std::string,Cell>* graph, int init_percent_on, float seed);
+        //if a seed is not provided (greater than 0), then the rule table will not initialize any state on the graph
+        BinaryRuleTable(Graph<std::string,Cell>* graph, Stencil& stencil, int init_percent_on, float seed = -1);
+        BinaryRuleTable(Graph<std::string,Cell>* graph, int init_percent_on, float seed = -1);
 
         /**
         Applies the transition rule to the entire graph.

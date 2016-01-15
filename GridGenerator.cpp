@@ -394,6 +394,7 @@ void GridGenerator::graph_to_dot(string name){
 		file << gp_id << " [pos = \"" << coord << "!\" ";
 		
 		map<string, Property>* prop_map = graph.get_data(gp_id)->get_prop_map();
+
 		//TODO abstract to function
 		if(prop_map->count(B_STATE) > 0) {
 			Property p = graph.get_data(gp_id)->get_property(B_STATE);
@@ -463,4 +464,45 @@ Property GridGenerator::build_property(std::string& name, std::string& value) {
 	}
 
 	return Property();
+}
+
+//assigns a gen_pt to the face that is closest to it (by avg vertex distance)
+void GridGenerator::map_faces() {
+	//init vector of faces
+	vector<string> face_labels;
+	typename map<string, Poly>::iterator face_it;
+
+	for(face_it = face_map.begin(); face_it != face_map.end(); face_it++){
+		face_labels.push_back(face_it->first);
+	}
+
+	//build gen_pt_face_map
+	for(size_t i = 0; i < gen_pts.size(); i++){
+		
+		float min_dist = HUGE_VALF;
+		string closest_face;
+		for(size_t j = 0; j < face_labels.size(); j++){
+			float avg = 0;
+			Poly face = face_map[face_labels[j]];
+			vector<Point>* verts = &face.verts;
+
+			for (size_t k = 0; k < verts->size(); k++) {
+				avg += distance(gen_pts[i], (*verts)[k]);
+			}
+			avg /= verts->size();
+
+			if (avg < min_dist) {
+				min_dist = avg;
+				closest_face = face_labels[j];
+			}
+		}
+
+		gen_pt_face_map[rev_gen_pt_map[gen_pts[i]]] = closest_face;
+	}
+
+	//debugging
+	typename map<string, string>::iterator map_it;
+	for(map_it = gen_pt_face_map.begin(); map_it != gen_pt_face_map.end(); map_it++){
+		cout << "(" << map_it->first << ", " << map_it->second << ")" << endl;
+	}
 }

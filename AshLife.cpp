@@ -25,11 +25,16 @@ static const int MED = 45;
 static const int LARGE = 70;
 
 int main(void){
-/*
-    string f = "penrose_life";
+
+    string f = "penrose_bat";
     bool header = true;
 
-    GridGenerator gen("rhomb8.txt");
+    GridGenerator gen("penrose_bat.txt");
+    SimpleLifeRule rule(gen.get_graph(), 0);
+    Simulator s(&gen, &rule, NUM_STEPS, f, 1);
+    s.metric_headers();
+    s.simulate();
+    /*
     //iterate through starting ratios 1:99 to 99:1
     for(int j = 1; j < 100; j++){
     //iterate through different initial state configurations, k is seed
@@ -45,8 +50,8 @@ int main(void){
         }
     }
     return 0;
-*/
-
+    */
+/*
     string f = "life_oscillator";
     bool header = true;
 
@@ -80,4 +85,5 @@ int main(void){
     }
 
    return 0;
+*/
 }

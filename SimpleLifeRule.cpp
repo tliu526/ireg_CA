@@ -11,8 +11,8 @@ using namespace std;
 SimpleLifeRule::SimpleLifeRule(Graph<string, Cell>* graph, int percent_on, float s) 
     : BinaryRuleTable(graph, percent_on, s) {}
 
-SimpleLifeRule::SimpleLifeRule(Graph<std::string,Cell>* graph, int init_percent, float seed, Stencil& stencil) 
-  : BinaryRuleTable(graph, init_percent, seed, stencil) {}
+SimpleLifeRule::SimpleLifeRule(Graph<std::string,Cell>* graph, Stencil& stencil, int init_percent, float seed) 
+  : BinaryRuleTable(graph, stencil, init_percent, seed) {}
 
 void SimpleLifeRule::initialize() {
     BinaryRuleTable::initialize();

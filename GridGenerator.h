@@ -30,14 +30,15 @@ public:
 	GridGenerator(std::string file); //reads from data file
 	GridGenerator() {};
 
-	//TODO add capability for different property additions and starting configurations
 	virtual void generate_graph(); 
+	virtual void map_faces(); //populates the gen_pt_face_map
+
 	void grid_to_file(std::string f);
 	void grid_to_dot(std::string out_name); //converts the grid to a (neato) graphviz file
 	void graph_to_dot(std::string out_name); //converts the graph to a neato graphviz file	
+
 	std::vector<Poly> get_faces();
 	Graph<std::string, Cell> *get_graph();
-
 	bool pt_in_grid(Point p); //checks whether p lies within the bounds of the grid, border points return false
 
 	//Builds property according to the labels
@@ -67,6 +68,7 @@ protected:
 	std::map <std::string, Point> pt_map;
 	std::map <std::string, Edge> edge_map;
 	std::map <std::string, Poly> face_map;
+	std::map <std::string, std::string> gen_pt_face_map; //(gen_pt label, face label) map
 	
 	std::map<Point, std::string> rev_vert_map; //for polygonal representation
 	std::map<Point, std::string> rev_gen_pt_map; //for graph representation

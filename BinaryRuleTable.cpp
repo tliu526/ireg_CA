@@ -34,7 +34,7 @@ BinaryRuleTable::BinaryRuleTable(Graph<string,Cell>* graph, int percent_on, floa
     radius = -1;
 }
 
-BinaryRuleTable::BinaryRuleTable(Graph<string,Cell>* graph, int init_percent, float s, Stencil& stencil) : 
+BinaryRuleTable::BinaryRuleTable(Graph<string,Cell>* graph, Stencil& stencil, int init_percent, float s) : 
   RuleTable(graph, stencil) 
 {
     init_percent_int = init_percent;
@@ -114,27 +114,29 @@ void BinaryRuleTable::initialize() {
     metrics[BinaryRuleTable::INIT_PERCENT] = init_percent;
     metrics[BinaryRuleTable::PERCENT_ON] = percent_on;
 
-    //initialize cell state
-    default_random_engine gen;
-    gen.seed(seed);
+    //initialize cell state, only if seed has been provided
+    if(seed > 0){
+        default_random_engine gen;
+        gen.seed(seed);
 
-    vector<string> vert_labels = graph->get_vert_labels();
+        vector<string> vert_labels = graph->get_vert_labels();
 
-    int num_on = int(init_percent_on * vert_labels.size());
+        int num_on = int(init_percent_on * vert_labels.size());
 
-    //randomize vector with seeded random number generator
-    shuffle(vert_labels.begin(), vert_labels.end(), gen);
+        //randomize vector with seeded random number generator
+        shuffle(vert_labels.begin(), vert_labels.end(), gen);
 
-    for(size_t i = 0; i < vert_labels.size(); i++) {
-        bool state = i < num_on;
+        for(size_t i = 0; i < vert_labels.size(); i++) {
+            bool state = i < num_on;
 
-        Property p("State", state);
+            Property p("State", state);
 
-        Cell *c = graph->get_data(vert_labels[i]);
-        c->add_property(p);
+            Cell *c = graph->get_data(vert_labels[i]);
+            c->add_property(p);
+        }
+
+        num_cells = vert_labels.size();
     }
-
-    num_cells = vert_labels.size();
 }
 
 void BinaryRuleTable::transition() {
