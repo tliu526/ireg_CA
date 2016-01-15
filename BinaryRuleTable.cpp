@@ -12,29 +12,8 @@ const string BinaryRuleTable::PERCENT_ON = "PercentOn";
 const string BinaryRuleTable::INIT_PERCENT = "InitPercent";
 
 using namespace std;
-/*
-BinaryRuleTable::BinaryRuleTable(Graph<string,Cell>* graph, float percent_on, float s) : 
-    RuleTable(graph)
-{
-    init_percent_int = int(percent_on*100.0);
-    init_percent_on = percent_on;
-    seed = s;
-    type = OTHER;
-    radius = -1;
-}
-*/
 
-BinaryRuleTable::BinaryRuleTable(Graph<string,Cell>* graph, int percent_on, float s) : 
-    RuleTable(graph)
-{
-    init_percent_int = percent_on;
-    init_percent_on = float(percent_on) / float(100);
-    seed = s;
-    type = OTHER;
-    radius = -1;
-}
-
-BinaryRuleTable::BinaryRuleTable(Graph<string,Cell>* graph, Stencil& stencil, int init_percent, float s) : 
+BinaryRuleTable::BinaryRuleTable(Graph<string,Cell>* graph, Stencil* stencil, int init_percent, float s) : 
   RuleTable(graph, stencil) 
 {
     init_percent_int = init_percent;
@@ -65,7 +44,7 @@ int BinaryRuleTable::get_on_count() {
 }
 
 int BinaryRuleTable::get_on_count(string& s){
-    vector<string>* neighbors = stencil.get_neighbors(s);
+    vector<string>* neighbors = stencil->get_neighbors(s);
     int count;
     Property p;
 

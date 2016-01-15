@@ -37,8 +37,7 @@ rule transitions.
 class RuleTable {
 	public:
 		RuleTable() {};
-		RuleTable(Graph<std::string, Cell> *graph);
-		RuleTable(Graph<std::string, Cell> *graph, Stencil& s);
+		RuleTable(Graph<std::string, Cell> *graph, Stencil* s);
 
 		/**
 		Transitions the entire grid to the next timestep. Calls apply_rule and update_graph.
@@ -81,7 +80,7 @@ class RuleTable {
 		//The rule type, must match with Stencil type
 		RuleType type;
 		//The mapping between the rule table and irregular neighborhoods
-		Stencil stencil;
+		Stencil* stencil;
 		//pointer to the graph to be updated
         Graph<std::string, Cell>* graph;
         //map containing all the states that need to be updated

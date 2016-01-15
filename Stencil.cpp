@@ -16,6 +16,8 @@ Stencil::Stencil(Graph<std::string, Cell>* g) :
 
 //defaults to mapping cells to adjacent neighbors
 void Stencil::initialize() {
+    cout << "Stencil init" << endl;
+
     vector<string> labels = graph->get_vert_labels();
 
     for(size_t i = 0; i < labels.size(); i++){

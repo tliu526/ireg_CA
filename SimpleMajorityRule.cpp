@@ -10,8 +10,8 @@ using namespace std;
 
 const string SimpleMajorityRule::CORRECT_CLASS = "CorrectClass";
 
-SimpleMajorityRule::SimpleMajorityRule(Graph<string, Cell>* graph, int percent_on, float s) 
-    : BinaryRuleTable(graph, percent_on, s) {}
+SimpleMajorityRule::SimpleMajorityRule(Graph<string, Cell>* graph, Stencil* stencil, int percent_on, float s) 
+    : BinaryRuleTable(graph, stencil, percent_on, s) {}
 
 void SimpleMajorityRule::initialize() {
     BinaryRuleTable::initialize();
@@ -50,7 +50,7 @@ void SimpleMajorityRule::transition(){
 
 //only looks for B_STATE
 void SimpleMajorityRule::apply_rule(std::string& vert_label){
-    vector<string>* neighbors = stencil.get_neighbors(vert_label);
+    vector<string>* neighbors = stencil->get_neighbors(vert_label);
     Property p = graph->get_data(vert_label)->get_property(GridGenerator::B_STATE);
     int count = get_on_count(vert_label);
     int neighborhood_size = neighbors->size() + 1;

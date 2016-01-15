@@ -15,7 +15,7 @@ neighbors.
 
 class SimpleMajorityRule : public BinaryRuleTable {
 	public: 
-		SimpleMajorityRule(Graph<std::string,Cell>* graph, int init_percent, float seed);
+		SimpleMajorityRule(Graph<std::string,Cell>* graph, Stencil* s,int init_percent, float seed);
 	
 		/**
 		Applies the transition rule to the entire graph.

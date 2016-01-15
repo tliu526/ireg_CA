@@ -43,6 +43,15 @@ public:
 
 	//Builds property according to the labels
 	Property build_property(std::string& label, std::string& value); 
+
+	std::map <std::string, Point> pt_map;
+	std::map <std::string, Edge> edge_map;
+	std::map <std::string, Poly> face_map;
+	std::map <std::string, std::string> gen_pt_face_map; //(gen_pt label, face label) map
+	
+	std::map<Point, std::string> rev_vert_map; //for polygonal representation
+	std::map<Point, std::string> rev_gen_pt_map; //for graph representation
+	std::map<Edge, std::string> rev_edge_map; //associated with verts
 protected:
 	/**
 	initializes pt, edge, face maps
@@ -64,15 +73,6 @@ protected:
 	std::vector<Poly>  faces;
 	
 	Graph<std::string, Cell> graph;
-
-	std::map <std::string, Point> pt_map;
-	std::map <std::string, Edge> edge_map;
-	std::map <std::string, Poly> face_map;
-	std::map <std::string, std::string> gen_pt_face_map; //(gen_pt label, face label) map
-	
-	std::map<Point, std::string> rev_vert_map; //for polygonal representation
-	std::map<Point, std::string> rev_gen_pt_map; //for graph representation
-	std::map<Edge, std::string> rev_edge_map; //associated with verts
 };
 
 #endif

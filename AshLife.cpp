@@ -12,6 +12,7 @@ Relevant Parameters:
 #include "Simulator.h"
 #include "SimpleLifeRule.h"
 #include "DelaunayGridGenerator.h"
+#include "VertStencil.h"
 
 #include <fstream>
 
@@ -30,10 +31,12 @@ int main(void){
     bool header = true;
 
     GridGenerator gen("penrose_bat.txt");
-    SimpleLifeRule rule(gen.get_graph(), 0);
+    VertStencil vs(gen.get_graph(), &gen);
+    SimpleLifeRule rule(gen.get_graph(), &vs, 0);
     Simulator s(&gen, &rule, NUM_STEPS, f, 1);
     s.metric_headers();
     s.simulate();
+    gen.graph_to_dot("test");
     /*
     //iterate through starting ratios 1:99 to 99:1
     for(int j = 1; j < 100; j++){

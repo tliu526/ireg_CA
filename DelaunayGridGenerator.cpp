@@ -268,7 +268,7 @@ void DelaunayGridGenerator::delaunay_triangulation() {
         }
     }
 }
-
+/*
 // for debugging
 int main() {
     GridGenerator gen("penrose_bat.txt");
@@ -293,4 +293,4 @@ int main() {
 
     return 0;   
 }
-
+*/

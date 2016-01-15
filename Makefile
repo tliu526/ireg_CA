@@ -23,4 +23,4 @@ LMReg: LMReg.cpp
 	g++ -g -o LMReg.out -std=c++11 RegularGridGenerator.cpp Cell.cpp GridGenerator.cpp util.cpp Tri.cpp Poly.cpp Edge.cpp Point.cpp RuleTable.cpp Simulator.cpp SimpleMajorityRule.cpp Stencil.cpp Property.cpp LMReg.cpp BinaryRuleTable.cpp
 
 AshLife: AshLife.cpp
-	g++ -g -o AshLife.out -std=c++11 DelaunayGridGenerator.cpp Cell.cpp GridGenerator.cpp util.cpp Tri.cpp Poly.cpp Edge.cpp Point.cpp RuleTable.cpp Simulator.cpp Stencil.cpp Property.cpp BinaryRuleTable.cpp SimpleLifeRule.cpp AshLife.cpp
+	g++ -g -o AshLife.out -std=c++11 DelaunayGridGenerator.cpp Cell.cpp GridGenerator.cpp util.cpp Tri.cpp Poly.cpp Edge.cpp Point.cpp RuleTable.cpp Simulator.cpp Stencil.cpp Property.cpp BinaryRuleTable.cpp SimpleLifeRule.cpp AshLife.cpp VertStencil.cpp

@@ -31,6 +31,7 @@ class Poly {
 		bool operator< (const Poly &p) const;
 
 		bool shares_edge(Poly &p);
+		bool shares_vert(Poly &p);
 
 		friend std::ostream & operator<<(std::ostream &_stream, Poly const &p){
 			_stream << "Verts: "; 

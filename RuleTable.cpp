@@ -10,16 +10,11 @@ Implementation of the Rule Table class.
 
 using namespace std;
 
-RuleTable::RuleTable(Graph<string, Cell>* g, Stencil& s) :
+RuleTable::RuleTable(Graph<string, Cell>* g, Stencil* s) :
     graph(g),
     stencil(s)
 {
 
-}
-
-RuleTable::RuleTable(Graph<string, Cell>* g){
-    graph = g;
-    stencil = Stencil(g);
 }
 
 void RuleTable::transition() {
@@ -50,7 +45,7 @@ void RuleTable::update_graph(){
 }
 
 void RuleTable::initialize() {
-    stencil.initialize();
+    stencil->initialize();
 }
 
 size_t RuleTable::get_grid_state(){

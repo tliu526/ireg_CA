@@ -501,8 +501,10 @@ void GridGenerator::map_faces() {
 	}
 
 	//debugging
+/*
 	typename map<string, string>::iterator map_it;
 	for(map_it = gen_pt_face_map.begin(); map_it != gen_pt_face_map.end(); map_it++){
 		cout << "(" << map_it->first << ", " << map_it->second << ")" << endl;
 	}
+*/
 }
