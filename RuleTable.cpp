@@ -45,7 +45,7 @@ void RuleTable::update_graph(){
 }
 
 void RuleTable::initialize() {
-    stencil->initialize();
+    //stencil->initialize();
 }
 
 size_t RuleTable::get_grid_state(){

@@ -12,6 +12,7 @@ Stencil::Stencil(Graph<std::string, Cell>* g) :
     graph(g)
 {
     type = OTHER;
+    initialize();
 }
 
 //defaults to mapping cells to adjacent neighbors

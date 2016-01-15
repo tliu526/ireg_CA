@@ -6,10 +6,12 @@ Implementation of VertStencil class.
 
 #include "VertStencil.h"
 
-VertStencil::VertStencil(Graph<string, Cell>* graph, GridGenerator* gen) :
-    Stencil(graph)
-{
+VertStencil::VertStencil(Graph<string, Cell>* g, GridGenerator* gen) {
+    graph = g;
     generator = gen;
+    type = OTHER;
+
+    initialize();
 }
 
 //checks neighbors of neighbors for all vertices

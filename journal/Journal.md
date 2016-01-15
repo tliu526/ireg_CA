@@ -1,6 +1,13 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##1/16/2016
+Today, implemented a vertex stencil. A rough approximation of Moore neighborhood (disregarding orientation) would be determining a cell's neighborhood by shared edges. Thus, an equivalent approximation of the von Neumann neighborhood would be determining a cell's neighborhood by shared vertices.
+
+A "bat" oscillator in Kite-Dart Penrose Life with a vertex stencil:
+
+![](penrose_bat_low_qual.gif)
+
 ##1/15/2016
 Morning: Ran Penrose Ash Life tests
 
