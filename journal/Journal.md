@@ -7,15 +7,14 @@ __More recent entries are at the top.__
 - Voronoi-Weighted neighborhood mapping
 - Moore neighborhood mapping for quads -> lambda experiments
 
-Morning: Implemented Experiment framework for queuing simulations, ran Penrose long lifetime simulations. Also planned out a replication of Wootters and Langton's work on $\lambda$. 
+Morning: Implemented Experiment framework for queuing simulations, ran Penrose long lifetime simulations. Also planned out a replication of Wootters and Langton's work on lambda. 
 
 Important parameters:
 - Moore neighborhood with 8 states (N = 5, K = 8)
-- The bitstring representation will require $2^{(3 \cdot 5)} \cdot 3 = 98304$, 96k bits.
+- The bitstring representation will require 2^(3*5) * 3 = 98304, 96k bits.
 - The state
 - 64x64 grid with __periodic__ boundary conditions
 - entropy is $H = - \sum_{s=0}^7 p_s \log p_s$, where $p_i$ is the frequency of a particular state
-
 
 ###Results from a Long Penrose Life Run
 
@@ -23,7 +22,7 @@ After utilizing a Vertex Stencil (giving a degree of either 8 or 9) for the Penr
 
 ![](Density_Over_Lifetime_Long.jpg)
 
-As seen in this lifetime graph, the ON-density of the Penrose tiling quickly falls to near typical ash density levels and stays close to constant over a majority of its lifetime. We hypothesize that this behavior would be indicative of ash stabilizing relatively quickly with a small glider-like structure being primarily responsible for the long lifetime. Looking at the actual simulation, this seems to be the case, with a roughly amorphous moving structure in the upper left corner for majority of the simulation (seen below). Otherwise, the ash settles quite quickly, with a "plinker" (coined by Hill et al.) oscillator present on the right side of the tiling.
+As seen in this lifetime graph, the ON-density of the Penrose tiling quickly falls to near typical ash density levels and stays close to constant over a majority of its lifetime. We hypothesize that this behavior would be indicative of ash stabilizing relatively quickly with a small glider-like structure being primarily responsible for the long lifetime. Looking at the actual simulation, this seems to be the case, with a roughly amorphous moving structure in the upper left corner for majority of the simulation (seen below). Otherwise, the ash settles relatively quickly, with a "plinker" (coined by Hill et al.) oscillator present on the right side of the tiling.
 
 ![](penrose22_low_qual.gif)
 
