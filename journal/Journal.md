@@ -1,14 +1,25 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
-##1/16/2016
-Today, implemented a vertex stencil. A rough approximation of Moore neighborhood (disregarding orientation) would be determining a cell's neighborhood by shared edges. Thus, an equivalent approximation of the von Neumann neighborhood would be determining a cell's neighborhood by shared vertices.
+##1/17/2016
+Results from vertex stencil ash life:
+
+###Penrose (Vertex) Ash Life Experiment 
+
+![](Lifetime_Penrose_Vert.jpg)
+
+![](Penrose_Ash_Density_Vert.jpg)
+
+When considering neighborhoods with shared vertices as in Hill et al., we see remarkably similar behavior on both graphs as shown in the Hill paper, with a right skewed Lifetime to Stability graph and little correlation between lifetime and ash density.
+
+##1/15/2016
+Today, implemented a vertex stencil. A rough approximation of Moore neighborhood (disregarding orientation) would be determining a cell's neighborhood by shared edges. Thus, an equivalent approximation of the von Neumann neighborhood would be determining a cell's neighborhood by shared vertices. Ran extensive Ash Life Also fixed bugs in GridGenerator and RuleTable.
 
 A "bat" oscillator in Kite-Dart Penrose Life with a vertex stencil:
 
 ![](penrose_bat_low_qual.gif)
 
-##1/15/2016
+##1/14/2016
 Morning: Ran Penrose Ash Life tests
 
 ####To-Do List
