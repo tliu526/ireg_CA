@@ -1,6 +1,21 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##1/18/2016 
+Morning: Implemented Experiment framework for queueing simulations, ran Penrose long lifetime simulations. Also planned out a replication of Wootters and Langton's work on $\lambda$. 
+
+Important parameters:
+- Moore neighborhood with 8 states (N = 5, K = 8)
+- The bitstring representation will require $2^{(3 \cdot 5)} \cdot 3 = 98304$, 96k.
+- The state
+- 64x64 __periodic__ boundary conditions
+- entropy is $H = - \sum_{s=0}^7 p_s \log p_s$, where $p_i$ is the frequency of a particular state
+
+
+###To-Do List
+- Voronoi-Weighted neighborhood mapping
+- Moore neighborhood mapping for quads -> lambda experiments
+
 ##1/17/2016
 Results from vertex stencil ash life:
 
@@ -13,7 +28,7 @@ Results from vertex stencil ash life:
 When considering neighborhoods with shared vertices as in Hill et al., we see remarkably similar behavior on both graphs as shown in the Hill paper, with a right skewed Lifetime to Stability graph and little correlation between lifetime and ash density.
 
 ##1/15/2016
-Today, implemented a vertex stencil. A rough approximation of Moore neighborhood (disregarding orientation) would be determining a cell's neighborhood by shared edges. Thus, an equivalent approximation of the von Neumann neighborhood would be determining a cell's neighborhood by shared vertices. Ran extensive Ash Life Also fixed bugs in GridGenerator and RuleTable.
+Today, implemented a vertex stencil. A rough approximation of Moore neighborhood (disregarding orientation) would be determining a cell's neighborhood by shared edges. Thus, an equivalent approximation of the von Neumann neighborhood would be determining a cell's neighborhood by shared vertices. Ran extensive Ash Life tests with the new stencils. Also fixed bugs in GridGenerator and RuleTable.
 
 A "bat" oscillator in Kite-Dart Penrose Life with a vertex stencil:
 

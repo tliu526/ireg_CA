@@ -26,7 +26,7 @@ const string Simulator::STATS_DELIM = " ";
 const string Simulator::TIME = "Time";
 const string Simulator::PERIOD = "Period";
 
-Simulator::Simulator(GridGenerator* g, RuleTable* r, int max, string f, int snapshot) :
+Simulator::Simulator(GridGenerator* g, RuleTable* r, int max, string f, int snapshot, int stats) :
     generator(g),
     rule_table(r)
 {
@@ -38,6 +38,7 @@ Simulator::Simulator(GridGenerator* g, RuleTable* r, int max, string f, int snap
     max_steps = max;
     out_file = f;
     snapshot_freq = snapshot;
+    stats_freq = stats;
 
     //initialize sim_metrics
     Property timestep(TIME, cur_time);
@@ -116,6 +117,12 @@ void Simulator::update_graph(int &flags){
     dout << "Current time step: " << cur_time << endl;
     cur_time++;
     size_t chksum = rule_table->get_grid_state();
+
+    if(stats_freq){
+        if((cur_time % stats_freq) == 0){
+            flags |= (STATS_TO_FILE | CALC_METRICS);
+        }
+    }
 
     if(snapshot_freq){
         if((cur_time % snapshot_freq) == 0){
