@@ -2,19 +2,30 @@
 __More recent entries are at the top.__
 
 ##1/18/2016 
-Morning: Implemented Experiment framework for queueing simulations, ran Penrose long lifetime simulations. Also planned out a replication of Wootters and Langton's work on $\lambda$. 
+
+####To-Do List
+- Voronoi-Weighted neighborhood mapping
+- Moore neighborhood mapping for quads -> lambda experiments
+
+Morning: Implemented Experiment framework for queuing simulations, ran Penrose long lifetime simulations. Also planned out a replication of Wootters and Langton's work on $\lambda$. 
 
 Important parameters:
 - Moore neighborhood with 8 states (N = 5, K = 8)
-- The bitstring representation will require $2^{(3 \cdot 5)} \cdot 3 = 98304$, 96k.
+- The bitstring representation will require $2^{(3 \cdot 5)} \cdot 3 = 98304$, 96k bits.
 - The state
-- 64x64 __periodic__ boundary conditions
+- 64x64 grid with __periodic__ boundary conditions
 - entropy is $H = - \sum_{s=0}^7 p_s \log p_s$, where $p_i$ is the frequency of a particular state
 
 
-###To-Do List
-- Voronoi-Weighted neighborhood mapping
-- Moore neighborhood mapping for quads -> lambda experiments
+###Results from a Long Penrose Life Run
+
+After utilizing a Vertex Stencil (giving a degree of either 8 or 9) for the Penrose tilings, we see much longer average lifetime stability. The longest run from the simulation results presented yesterday had an active lifetime of 173 timesteps before periodic behavior set in. 
+
+![](Density_Over_Lifetime_Long.jpg)
+
+As seen in this lifetime graph, the ON-density of the Penrose tiling quickly falls to near typical ash density levels and stays close to constant over a majority of its lifetime. We hypothesize that this behavior would be indicative of ash stabilizing relatively quickly with a small glider-like structure being primarily responsible for the long lifetime. Looking at the actual simulation, this seems to be the case, with a roughly amorphous moving structure in the upper left corner for majority of the simulation (seen below). Otherwise, the ash settles quite quickly, with a "plinker" (coined by Hill et al.) oscillator present on the right side of the tiling.
+
+![](penrose22_low_qual.gif)
 
 ##1/17/2016
 Results from vertex stencil ash life:
