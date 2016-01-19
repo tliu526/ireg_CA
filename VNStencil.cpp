@@ -1,25 +1,27 @@
 /**
-An implementation of the Moore Stencil.
+An implementation of the von Neumann Stencil.
+
+TODO how to deal with periodicity?
 
 (c) 2016 Tony Liu.
 */
 
-#include "MooreStencil.h"
+#include "VNStencil.h"
 #include "ClockwiseComp.h"
 
 #include <algorithm>
 
 using namespace std;
 
-MooreStencil::MooreStencil(Graph<string, Cell>* g, GridGenerator* gen){
+VNStencil::VNStencil(Graph<string, Cell>* g, GridGenerator* gen){
    graph = g;
    generator = gen;
-   type = MOORE;
+   //type = MOORE;
 
    initialize();   
 }
 
-void MooreStencil::initialize() {
+void VNStencil::initialize() {
     vector<string> labels = graph->get_vert_labels();
 
     for(size_t i = 0; i < labels.size(); i++){
@@ -37,9 +39,12 @@ void MooreStencil::initialize() {
         ClockwiseComp comp(center_pt);
         sort(pts.begin(), pts.end(), comp);
 
+	cout << "Anchor pt: " << center_pt << endl;
         for(size_t pt_i = 0; pt_i < pts.size(); pt_i++){
+  	    cout << pts[pt_i] << " ";
             neighborhood.push_back(generator->rev_gen_pt_map[pts[pt_i]]);
         }
+	cout << endl;
 
         neighbor_map[cur_label] = neighborhood;
     }

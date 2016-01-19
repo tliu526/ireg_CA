@@ -45,7 +45,7 @@ class RuleTable {
 		virtual void transition();
 		
 		/**
-		Initializes both the RuleTable and its corresponding stencil. All hard computation
+		Initializes the RuleTable. All hard computation
 		should go here.
 		*/
 		virtual void initialize();

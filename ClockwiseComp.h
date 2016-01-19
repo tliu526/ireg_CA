@@ -12,6 +12,11 @@ A functor that implements a clockwise point comparator around an anchor point.
 class ClockwiseComp {
     public:
         ClockwiseComp(Point p) : pt(p) {};
+
+        /**
+        sorts points clockwise, with 'this' as the anchor point.
+        From: http://stackoverflow.com/questions/6989100/sort-points-in-clockwise-order
+        */
         bool operator()(const Point &p1, const Point &p2) {
             if (p1.x - pt.x >= 0 && p2.x - pt.x < 0)
                 return true;
