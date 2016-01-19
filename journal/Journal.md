@@ -11,9 +11,13 @@ __More recent entries are at the top.__
 
 Both the lifetime to stability and ash density graphs yield similar results as the rhombus kite-dart grid, with a right skewed lifetime-to-stability and no correlation in the ash density. However, there is a slight uptick in average lifetime, which is surprising since the circular grid actually contains less cells than the rhombus grid.
 
-The longest period run has a "period" of 60 (shown below); closer examination shows that there are three oscillators: a p2 plinker, a p4 bat, and a p15 "wheel." The least common multiple of the three periods is 60, giving the detected period of 60.
+The longest period run has a "period" of 60 (initial ON percentage 42%); closer examination shows that there are three oscillators: a p2 plinker, a p4 bat, and a p15 "wheel." The least common multiple of the three periods is 60, giving the detected period of 60, shown below.
 
-The longest period oscillator detected in this configuration is a p16 oscillator shown below:
+![](ckd_long_42_low_qual.gif)
+
+The longest period oscillator detected in this configuration is a p16 oscillator shown below (initial ON percentage of 39%) :
+
+![](ckd_long_39_low_qual.gif)
 
 ##1/18/2016 
 
