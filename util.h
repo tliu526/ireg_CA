@@ -113,9 +113,4 @@ Returns the number of digits in n, useful for pretty printing.
 */
 int num_digits(int n);
 
-/**
-Returns a hash of the given bitset using the c++ library hash. A stopgap until md5 is 
-implemented.
-*/
-//size_t hash_bitset(std::bitset& b);
 #endif

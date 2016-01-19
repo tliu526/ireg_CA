@@ -17,12 +17,12 @@ TODO mapping neighborhoods of >4 to a Moore neighborhood.
 
 class MooreStencil : public Stencil {
     public: 
-        MooreStencil(Graph<std::string, Cell>* graph, GridGenerator* generator);
+        MooreStencil(Graph<std::string, Cell>* graph, GridGenerator* gen);
 
         void initialize();
 
     protected:
-        GridGenerator* generator; // is this necessary?
+        GridGenerator* generator;
 };
 
 #endif

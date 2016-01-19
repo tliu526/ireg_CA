@@ -24,16 +24,16 @@ static const int NUM_STEPS = 250;
 static const int NUM_GRID_CONFIGS = 1;
 static const int NUM_STATE_CONFIGS = 1;
 
+/*
 int main(void){
     string f = "stats_test";
     bool headers = true;
-/*    
+
     //TODO no hardcoding
     fstream file;
     file.open(f, fstream::in | fstream::out | fstream::app);
     file << "Correct_Class" << " " << "Initial_Percent" << " " << "Percent_On" << " " << "Time" << endl;
     file.close();
-*/
     //iterate through different grid configurations, i is seed
     for(int i = 0; i < NUM_GRID_CONFIGS; i++){
         vector<Point> pts = generate_poisson_disk(15, 15, 30, 0.75, i);
@@ -60,3 +60,4 @@ int main(void){
 
     return 0;
 }
+*/

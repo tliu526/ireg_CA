@@ -25,6 +25,12 @@ public:
     	_stream << p.x << "," << p.y;
         return _stream;
     }
+
+    /**
+    sorts points clockwise, with 'this' as the anchor point.
+    From: http://stackoverflow.com/questions/6989100/sort-points-in-clockwise-order
+    */
+    bool clockwise_comp(const Point& p1, const Point& p2);
 };
 
 #endif

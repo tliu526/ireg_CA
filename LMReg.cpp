@@ -13,7 +13,7 @@ using namespace std;
 
 static const int NUM_STEPS = 250;
 static const int NUM_STATE_CONFIGS = 50;
-
+/*
 int main(void){
     string f = "test.csv";
 
@@ -36,3 +36,4 @@ int main(void){
     }
     return 0;
 }
+*/

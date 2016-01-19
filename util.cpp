@@ -243,13 +243,6 @@ int digit_diff(int n, int m){
 }
 
 /*
-size_t hash_bitset(bitset& b) {
-    hash<bitset<b.size()>> hash_fn;
-
-    return hash_fn(b);    
-}
-*/
-/*
 //For debugging my incompetence in C++
 int main() {
     bitset<8> b1(1);

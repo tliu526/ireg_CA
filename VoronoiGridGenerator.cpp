@@ -255,7 +255,7 @@ Edge VoronoiGridGenerator::closest_border(Edge e){
 }
 
 void VoronoiGridGenerator::generate_graph(){}
-
+/*
 int main(){
 	//VoronoiGridGenerator v("test.txt");
 	//v.grid_to_file("vtest2.txt");
@@ -267,3 +267,4 @@ int main(){
 
 	return 0;
 }
+*/

@@ -1,5 +1,5 @@
 /*
-Implementation of the point class.
+Implementp1tion of the point class.
 
 (c) 2015 Tony Liu.
 */
@@ -28,4 +28,3 @@ bool Point::operator!=(Point &p){
 bool Point::operator==(const Point& p) const{
     return (x == p.x) && (y == p.y);
 }
-

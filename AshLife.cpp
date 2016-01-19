@@ -25,6 +25,7 @@ static const int SMALL = 25;
 static const int MED = 45;
 static const int LARGE = 70;
 
+/*
 int main(void){
 
     string f = "penrose_life_vert";
@@ -93,5 +94,6 @@ int main(void){
     }
 
    return 0;
-*/
+
 }
+*/

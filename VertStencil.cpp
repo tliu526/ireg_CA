@@ -43,6 +43,8 @@ void VertStencil::initialize() {
         Poly face = generator->face_map[generator->gen_pt_face_map[labels[i]]]; 
         for(size_t cell_i = 0; cell_i < close_cells.size(); cell_i++) {
             string cur_cell = close_cells[cell_i];
+
+            //not including the center cell we're considering
             if(cur_cell.compare(cur_label) != 0){
                 if(face.shares_vert(generator->face_map[(generator->gen_pt_face_map)[cur_cell]])){ 
                     adjacent_cells.push_back(cur_cell);
