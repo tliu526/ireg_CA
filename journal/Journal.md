@@ -13,11 +13,11 @@ Both the lifetime to stability and ash density graphs yield similar results as t
 
 The longest period run has a "period" of 60 (initial ON percentage 42%); closer examination shows that there are three oscillators: a p2 plinker, a p4 bat, and a p15 "wheel." The least common multiple of the three periods is 60, giving the detected period of 60, shown below.
 
-![](ckd_long_42_low_qual.gif)
+![](ckd_42_low_qual.gif)
 
 The longest period oscillator detected in this configuration is a p16 oscillator shown below (initial ON percentage of 39%) :
 
-![](ckd_long_39_low_qual.gif)
+![](ckd_39_low_qual.gif)
 
 ##1/18/2016 
 
