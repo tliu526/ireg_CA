@@ -39,12 +39,12 @@ void VNStencil::initialize() {
         ClockwiseComp comp(center_pt);
         sort(pts.begin(), pts.end(), comp);
 
-	cout << "Anchor pt: " << center_pt << endl;
+        cout << "Anchor pt: " << center_pt << endl;
         for(size_t pt_i = 0; pt_i < pts.size(); pt_i++){
-  	    cout << pts[pt_i] << " ";
+        cout << pts[pt_i] << " ";
             neighborhood.push_back(generator->rev_gen_pt_map[pts[pt_i]]);
         }
-	cout << endl;
+        cout << endl;
 
         neighbor_map[cur_label] = neighborhood;
     }
