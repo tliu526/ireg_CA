@@ -41,7 +41,7 @@ void VNStencil::initialize() {
 
         cout << "Anchor pt: " << center_pt << endl;
         for(size_t pt_i = 0; pt_i < pts.size(); pt_i++){
-        cout << pts[pt_i] << " ";
+            cout << pts[pt_i] << " ";
             neighborhood.push_back(generator->rev_gen_pt_map[pts[pt_i]]);
         }
         cout << endl;
