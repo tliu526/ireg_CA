@@ -1,6 +1,20 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##1/19/2016
+
+###Circular Penrose (Kites and Darts)
+
+![](ckd_lifetime.jpg)
+
+![](ckd_ash_density.jpg)
+
+Both the lifetime to stability and ash density graphs yield similar results as the rhombus kite-dart grid, with a right skewed lifetime-to-stability and no correlation in the ash density. However, there is a slight uptick in average lifetime, which is surprising since the circular grid actually contains less cells than the rhombus grid.
+
+The longest period run has a "period" of 60 (shown below); closer examination shows that there are three oscillators: a p2 plinker, a p4 bat, and a p15 "wheel." The least common multiple of the three periods is 60, giving the detected period of 60.
+
+The longest period oscillator detected in this configuration is a p16 oscillator shown below:
+
 ##1/18/2016 
 
 ####To-Do List
