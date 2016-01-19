@@ -19,6 +19,14 @@ The longest period oscillator detected in this configuration is a p16 oscillator
 
 ![](ckd_39_low_qual.gif)
 
+###Circular Penrose (Thin and Thick Rhombuses)
+
+![](crh_ash_density.jpg)
+
+![](crh_lifetime.jpg)
+
+Again, the graphs have roughly the same shape, and have the same distribution range of ash densities. However, with the thin and thick rhombuses, the average lifetime is much higher, with many runs taking as long as 600 timesteps to stabilize (longest seen is 666 timesteps).
+
 ##1/18/2016 
 
 ####To-Do List
