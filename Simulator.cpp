@@ -52,7 +52,7 @@ Simulator::Simulator(GridGenerator* g, RuleTable* r, int max, string f, int snap
 
 void Simulator::simulate() {
 
-    event_queue.push(GRID_SNAPSHOT);
+    if(snapshot_freq) event_queue.push(GRID_SNAPSHOT);
     event_queue.push(UPDATE_GRAPH);
     running = true;
     //metric_headers();
@@ -151,7 +151,12 @@ void Simulator::update_graph(int &flags){
 //TODO other flags that need to be set here
 void Simulator::stop_simulation(int &flags){
     running = false;
-    flags |= (CALC_METRICS | STATS_TO_FILE | GRID_SNAPSHOT);
+    flags |= (CALC_METRICS | STATS_TO_FILE);
+    
+    //can get rid of this for end of simulation snapshot
+    if(snapshot_freq){
+        flags |= GRID_SNAPSHOT;
+    }
 }
 
 void Simulator::calc_metrics(int &flags) {
