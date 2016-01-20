@@ -9,6 +9,10 @@ __More recent entries are at the top.__
 
 The Lifetime to Stability graph shown above highlights the large difference in average lifetimes between the rhomb Penrose grids and the kite/dart Penrose grids.
 
+![](both_neighborhood_size.jpg)
+
+In the neighborhood size frequency chart shown above, the most frequent neighborhood size for kites/darts is 9, whereas the most frequent neighborhood size for thin/thick rhobms is 10. The average neighborhood size for kites/darts is __8.360__, and the average neighborhood size for thin/thick rhombs is __8.824__. It makes sense that increased connectivity would allow for longer lifetimes, as there would be more opportunities for birth. Whether there are other properties (geometric, perhaps?) that influence the lifetime of the simulation is unclear and needs to be investigated further.
+
 ####Thin/Thick Rhomb Oscillators
 The following is a thin/thick rhombus run with three oscillators: a p2 plinker in the lower left, a p5 oscillator on the left boundary, and a p4 "crown" in the center (detected period of 20). Initial starting density is 39%.
 
