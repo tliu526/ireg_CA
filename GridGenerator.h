@@ -25,6 +25,7 @@ public:
 	static const std::string B_STATE;
 	static const std::string I_STATE;
 	static const std::string F_STATE;
+	static const int FONT_SIZE;
 
 	GridGenerator(std::vector<Point>& p, float min_x, float max_x, float min_y, float max_y); // defines starting grid of size 2x by 2y
 	GridGenerator(std::string file); //reads from data file
@@ -34,8 +35,18 @@ public:
 	virtual void map_faces(); //populates the gen_pt_face_map
 
 	void grid_to_file(std::string f);
-	void grid_to_dot(std::string out_name); //converts the grid to a (neato) graphviz file
-	void graph_to_dot(std::string out_name); //converts the graph to a neato graphviz file	
+
+	/**
+	converts the grid to a (neato) graphviz file. label is an optional parameter
+	for a graph label.
+	*/
+	void grid_to_dot(std::string out_name, std::string label="");
+
+    /**
+    converts the graph to a neato graphviz file. label is an optional parameter
+	for a graph label. 
+    */
+	void graph_to_dot(std::string out_name, std::string label="");
 
 	std::vector<Poly> get_faces();
 	Graph<std::string, Cell> *get_graph();

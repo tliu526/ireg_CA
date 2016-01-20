@@ -192,7 +192,8 @@ void Simulator::stats_to_file(){
 //snapshot_id member variable?
 void Simulator::grid_snapshot(int &flags) {
     string filename = out_file+"_"+to_string(cur_time);
-    generator->grid_to_dot(filename);
+    string label = "Timestep "+to_string(cur_time);
+    generator->grid_to_dot(filename, label);
 }
 
 void Simulator::metric_headers() {

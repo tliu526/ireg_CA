@@ -15,7 +15,7 @@ TODO scripting capability through input files or command line args.
 using namespace std;
 
 int main(int argc, char *argv[]){
-    PenroseSingle expr("crh.txt", "crh_long", 39, 76, 1000);
+    PenroseSingle expr("crh.txt", "crh_long_59", 59, 19, 1000);
     expr.run();
 
     return 0;

@@ -14,7 +14,7 @@ using namespace std;
 const string GridGenerator::B_STATE = "B:State";
 const string GridGenerator::I_STATE = "I:State";
 const string GridGenerator::F_STATE = "F:State";
-
+const int GridGenerator::FONT_SIZE = 90;
 GridGenerator::GridGenerator(vector<Point>& p, float min_x, float max_x, float min_y, float max_y) :
 	gen_pts(p), 
 	max_x(max_x),
@@ -330,11 +330,15 @@ void GridGenerator::grid_to_file(string f){
 	file.close();
 }
 
-void GridGenerator::grid_to_dot(string name){
+void GridGenerator::grid_to_dot(string name, string label/* = "" */){
 	ofstream file;
 	file.open(name+".dot");
 	file << "Graph G {" << endl;
+	file << "labelloc = b;" << endl;
+	file << "fontsize = " + to_string(FONT_SIZE) << ";" << endl;
+	file << "label = \"" << label << "\";" << endl;
 	file << "node [shape=circle, style=filled, width=0.25, height=0.25, fixedsize=true, label=\"\"];" << endl;
+
 
 	//verts
 	for (size_t i = 0; i < verts.size(); i++){
@@ -379,10 +383,13 @@ void GridGenerator::grid_to_dot(string name){
 	file.close();
 }
 
-void GridGenerator::graph_to_dot(string name){
+void GridGenerator::graph_to_dot(string name, string label){
 	ofstream file;
 	file.open(name+".dot");
 	file << "Graph G {" << endl;
+	file << "labelloc = b;" << endl;
+	file << "fontsize = " + to_string(FONT_SIZE) << ";" << endl;
+	file << "label = \"" << label << "\";" << endl;
 	file << "node [shape=circle, style=filled, width=0.25, height=0.25, fixedsize=true, label=\"\"];" << endl;
 
 	//gen_pts

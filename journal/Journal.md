@@ -9,6 +9,17 @@ __More recent entries are at the top.__
 
 The Lifetime to Stability graph shown above highlights the large difference in average lifetimes between the rhomb Penrose grids and the kite/dart Penrose grids.
 
+####Thin/Thick Rhomb Oscillators
+The following is a thin/thick rhombus run with three oscillators: a p2 plinker in the lower left, a p5 oscillator on the left boundary, and a p4 "crown" in the center (detected period of 20). Initial starting density is 39%.
+
+![](crh_39_low_qual.gif)
+
+The longest detected oscillator in the this particular thin/thick rhombus grid is the following p18 oscillator, appearing in a configuration with a starting density of 59%. Both the entire run and the oscillator itself is shown.
+
+![](crh_59_low_qual.gif)
+
+![](crh_59_oscillator_low_qual.gif)
+
 ##1/19/2016
 
 ###Circular Penrose (Kites and Darts)
