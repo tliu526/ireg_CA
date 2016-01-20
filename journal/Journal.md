@@ -1,6 +1,14 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##1/20/2016
+
+###Circular Penrose Analysis Continued
+
+![](both_lifetime.jpg)
+
+The Lifetime to Stability graph shown above highlights the large difference in average lifetimes between the rhomb Penrose grids and the kite/dart Penrose grids.
+
 ##1/19/2016
 
 ###Circular Penrose (Kites and Darts)
