@@ -30,6 +30,10 @@ The longest detected oscillator in the this particular thin/thick rhombus grid i
 
 ![](crh_59_oscillator_low_qual.gif)
 
+A p9 oscillator is shown below. Many oscillators appear to live on or near the boundaries of the grid.
+
+![](crh_61_9oscillator_low_qual.gif)
+
 ##1/19/2016
 
 ###Circular Penrose (Kites and Darts)

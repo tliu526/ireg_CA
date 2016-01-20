@@ -10,13 +10,15 @@ TODO scripting capability through input files or command line args.
 #include "RegularGridGenerator.h"
 #include "PenroseAsh.h"
 #include "PenroseSingle.h"
+#include "ConnectivityExpr.h"
+
 #include <string>
 
 using namespace std;
 
 int main(int argc, char *argv[]){
-    PenroseSingle expr("crh.txt", "crh_long_59", 59, 19, 1000);
-    expr.run();
 
+    PenroseSingle expr("crh.txt", "crh_61", 61, 26, 1000);
+    expr.run();
     return 0;
 }
