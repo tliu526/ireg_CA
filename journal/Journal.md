@@ -1,7 +1,25 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##1/22/2016
+
+Implemented subregion initialization, learned about C++ lambda functions in the process.
+
+####To-Do List
+- Optimize cell updates by only checking cells that had neighbors change the previous time step
+- Test this by reproducing some earlier work with the same seeds, initial configurations, etc.
+- Implement the invariant rotation rules for reproducing Wootters experiments
+- Run the same Penrose life experiments on the larger grids, with the subregion technique discussed
+
 ##1/21/2016
+
+###Neighborhood On Frequency
+
+Found two papers by Owen and Stepney with detailed ash and oscillator analysis of both kite/darts and thin/thick rhombs. Our data collected thus far passes the eye test in terms of agreeing with their data. However, Owen and Stepney utilize a lazily growing Penrose tiling while we use set boundaries, and so we may get some differing behavior at our boundaries. To investigate this, we recorded the ON frequency of different neighborhood sizes throughout the lifetime of a long Rhomb run. The results are shown below:
+
+![](crh_666_neighbor_on_percent.jpg)
+
+Neighborhood sizes of 6 or less only occur at the boundaries, and are not "true" rhomb neighborhoods. We do see some activity throughout the lifetime of the simulation at these border cells. Thus, we need to minimize border effects if we want to compare with Owen and Stepney's results. One option we will be exploring is to place an initial starting configuration within a subregion of a larger graph.
 
 ###Meeting with Duane
 - Need ability to initialize based on soup sizes
