@@ -3,13 +3,14 @@ __More recent entries are at the top.__
 
 ##1/22/2016
 
-Implemented subregion initialization, learned about C++ lambda functions in the process.
+Implemented subregion initialization, learned about C++ lambda functions in the process. Kicked off AshLife computation on subregioned Penrose tilings.
 
 ####To-Do List
 - Optimize cell updates by only checking cells that had neighbors change the previous time step
 - Test this by reproducing some earlier work with the same seeds, initial configurations, etc.
 - Implement the invariant rotation rules for reproducing Wootters experiments
 - Run the same Penrose life experiments on the larger grids, with the subregion technique discussed
+- Modularize/scriptify main
 
 ##1/21/2016
 

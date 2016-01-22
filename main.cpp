@@ -18,12 +18,15 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 
-    GridGenerator gen("crh.txt");
+/*
+    GridGenerator gen("crhx.txt");
     VertStencil stencil(gen.get_graph(), &gen);
-    SimpleLifeRule rule(gen.get_graph(), &stencil, 100, 2, 60);
+    SimpleLifeRule rule(gen.get_graph(), &stencil, 100, 2, 38);
     rule.initialize();
-    gen.grid_to_dot("soup_test");
-//    PenroseSingle expr("crh.txt", "crh_26_nbd", 26, 100, 1000);
-//    expr.run();
+    gen.grid_to_dot("big_soup_test");
+*/
+    PenroseAsh expr("crhx.txt", "crhx", 100, 1000, 38);
+    //PenroseSingle expr("crhx.txt", "crhx_9", 9, 1, 1000, 38);
+    expr.run();
     return 0;
 }

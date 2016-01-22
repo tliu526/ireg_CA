@@ -112,22 +112,18 @@ void BinaryRuleTable::initialize() {
                     Point orig(0,0);
                     DistComp comp(orig);
 
-//                    cout << "test" << endl;
                     Point p1 =  graph->get_data(s1)->get_point();           
                     Point p2 =  graph->get_data(s2)->get_point();           
-
-//                    cout << "Point 1: " << p1 << endl;
-//                    cout << "Point 2: " << p2 << endl;
                     return comp(p1, p2);
             });
-            
+
             int index = 0;
             Point p;
 
             do { p = graph->get_data(vert_labels[index++])->get_point(); }
-            while(pt_in_circle(origin, p, init_radius));
+            while((index < vert_labels.size()) && pt_in_circle(origin, p, init_radius));
 
-            cout << "Index length " << index << endl;
+//            cout << "Index length " << index << endl;
             vert_labels.erase(vert_labels.begin() + index, vert_labels.end());
         }
 

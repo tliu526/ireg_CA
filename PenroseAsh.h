@@ -15,8 +15,8 @@ using namespace std;
 
 class PenroseAsh : public Experiment {
     public:
-        PenroseAsh(string in, string out, int configs, int steps) 
-        : grid_file(in), output(out), num_configs(configs), num_steps(steps) {};
+        PenroseAsh(string in, string out, int configs, int steps, float r = 0) 
+        : grid_file(in), output(out), num_configs(configs), num_steps(steps), init_radius(r) {};
 
         void run() {
             bool header = true;
@@ -27,7 +27,7 @@ class PenroseAsh : public Experiment {
             //iterate through starting ratios
             for(int init_percent = 1; init_percent < 100; init_percent++){
                 for(int seed = 1; seed <= num_configs; seed++){
-                    SimpleLifeRule rule(gen.get_graph(), &vs, init_percent, seed);
+                    SimpleLifeRule rule(gen.get_graph(), &vs, init_percent, seed, init_radius);
                     Simulator s(&gen, &rule, num_steps, output);
 
                     if(header){
@@ -50,6 +50,8 @@ class PenroseAsh : public Experiment {
 
         //the maximum number of timesteps to run for
         int num_steps;
+
+        float init_radius;
 };
 
 #endif
