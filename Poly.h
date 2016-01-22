@@ -35,7 +35,7 @@ class Poly {
 
 		friend std::ostream & operator<<(std::ostream &_stream, Poly const &p){
 			_stream << "Verts: "; 
-			for(int i = 0; i < p.verts.size(); i++){
+			for(size_t i = 0; i < p.verts.size(); i++){
 				_stream << p.verts[i] << " ";
 			}
 

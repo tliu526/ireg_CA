@@ -7,6 +7,7 @@ An experiment template for investigating a particular Penrose Life configuration
 #define PENROSESINGLE_H
 
 #include "Experiment.h"
+#include "NeighborhoodLifeRule.h"
 
 class PenroseSingle : public Experiment {
     public:
@@ -18,7 +19,8 @@ class PenroseSingle : public Experiment {
 
         GridGenerator gen(grid_file);
         VertStencil vs(gen.get_graph(), &gen);
-        SimpleLifeRule rule(gen.get_graph(), &vs, init_percent, seed);
+        //SimpleLifeRule rule(gen.get_graph(), &vs, init_percent, seed);
+        NeighborhoodLifeRule rule(gen.get_graph(), &vs, init_percent, seed);
         Simulator s(&gen, &rule, num_steps, output, snapshot_freq, snapshot_freq);
         s.metric_headers();
         s.simulate();

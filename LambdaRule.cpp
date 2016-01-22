@@ -10,6 +10,12 @@ Implementation of the LambdaRule.
 
 using namespace std;
 
+void LambdaRule::initialize() {
+    RuleTable::initialize();
+
+
+}
+
 size_t LambdaRule::get_grid_state() {
     //TODO optimize get_vert_labels() and ensure consistency
     vector<string> vert_labels = graph->get_vert_labels();
@@ -27,3 +33,4 @@ size_t LambdaRule::get_grid_state() {
 
     return hash_fn(state);
 }
+

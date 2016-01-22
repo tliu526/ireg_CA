@@ -56,7 +56,7 @@ bool check_neighborhood(Point p, std::vector<std::vector<int> >&grid, float min_
 /*
 Gives the distance between two points
 */
-float distance(Point p1, Point p2);
+float distance(const Point &p1, const Point &p2);
 
 /*
 Determines the orientation of the two points.
@@ -86,6 +86,11 @@ checks whether Point p is in the circumcircle defined by t.
 TODO: what about points lying directly on the circumcircle?
 */
 bool pt_in_circumcircle(Point p, Tri& t);
+
+/**
+Checks whether Point p is in the circle defined by center and radius.
+*/
+bool pt_in_circle(Point &center, Point& p, float radius);
 
 /*
 Gets the circumcenter of a tri. The circumcenter of a tri in a Delaunay triangulation

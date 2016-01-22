@@ -8,8 +8,8 @@ An implementation of directly translated GoL rules.
 
 using namespace std;
 
-SimpleLifeRule::SimpleLifeRule(Graph<std::string,Cell>* graph, Stencil* stencil, int init_percent, float seed) 
-  : BinaryRuleTable(graph, stencil, init_percent, seed) {}
+SimpleLifeRule::SimpleLifeRule(Graph<std::string,Cell>* graph, Stencil* stencil, int init_percent, float seed, float r) 
+  : BinaryRuleTable(graph, stencil, init_percent, seed, r) {}
 
 void SimpleLifeRule::initialize() {
     BinaryRuleTable::initialize();

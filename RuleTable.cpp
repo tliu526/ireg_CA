@@ -7,6 +7,7 @@ Implementation of the Rule Table class.
 #include <iostream>
 
 #include "RuleTable.h"
+#include "DistComp.h"
 
 using namespace std;
 

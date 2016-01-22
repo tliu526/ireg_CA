@@ -1,6 +1,14 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##1/21/2016
+
+###Meeting with Duane
+- Need ability to initialize based on soup sizes
+- working towards optimized rule table updates
+- two stage rule table for invariant rotation rules
+- thinking about presentations, greyscale coloring of grids?
+
 ##1/20/2016
 
 ###Circular Penrose Analysis Continued

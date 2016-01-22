@@ -18,7 +18,12 @@ using namespace std;
 
 int main(int argc, char *argv[]){
 
-    PenroseSingle expr("crh.txt", "crh_61", 61, 26, 1000);
-    expr.run();
+    GridGenerator gen("crh.txt");
+    VertStencil stencil(gen.get_graph(), &gen);
+    SimpleLifeRule rule(gen.get_graph(), &stencil, 100, 2, 60);
+    rule.initialize();
+    gen.grid_to_dot("soup_test");
+//    PenroseSingle expr("crh.txt", "crh_26_nbd", 26, 100, 1000);
+//    expr.run();
     return 0;
 }

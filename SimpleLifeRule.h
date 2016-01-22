@@ -16,11 +16,11 @@ GoL Rules:
 
 class SimpleLifeRule : public BinaryRuleTable {
     public:
-        SimpleLifeRule(Graph<std::string,Cell>* graph, Stencil* s, int init_percent, float seed = -1);
+        SimpleLifeRule(Graph<std::string,Cell>* graph, Stencil* s, int init_percent, float seed = -1, float init_radius = 0);
 
         void transition();
-        void initialize();
-        void compute_metrics();
+        virtual void initialize();
+        virtual void compute_metrics();
     protected:
 
         void apply_rule(std::string& label);

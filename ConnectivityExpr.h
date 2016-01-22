@@ -33,6 +33,7 @@ class ConnectivityExpr : public Experiment {
             for(size_t i = 0; i < labels.size(); i++) {
                 vector<string> *neighborhood = vs.get_neighbors(labels[i]);
                 int n_size = neighborhood->size();
+
                 if(neighbor_counts.count(n_size) == 0){
                     neighbor_counts[n_size] = 0;
                 }

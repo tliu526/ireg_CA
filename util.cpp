@@ -154,7 +154,7 @@ Point generate_annulus_pt(Point p, float min_dist){
     return Point(x,y);
 }
 
-float distance(Point p1, Point p2){
+float distance(const Point &p1, const Point &p2){
     float x = p2.x - p1.x;
     float y = p2.y - p1.y;
 
@@ -242,6 +242,11 @@ int digit_diff(int n, int m){
     return num_digits(m) - num_digits(n);
 }
 
+bool pt_in_circle(Point &center, Point &p, float radius) {
+    float diff = ((p.x - center.x) * (p.x - center.x)) + ((p.y - center.y) * (p.y - center.y));
+    return diff <= radius * radius;
+}
+
 /*
 //For debugging my incompetence in C++
 int main() {
@@ -256,4 +261,3 @@ int main() {
 	return 0;
 }
 */
-
