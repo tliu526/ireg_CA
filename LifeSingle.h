@@ -1,17 +1,18 @@
 /**
-An experiment template for investigating a particular Penrose Life configuration.
+An experiment template for investigating a particular Life configuration.
 
 (c) 2016 Tony Liu.
 */
-#ifndef PENROSESINGLE_H
-#define PENROSESINGLE_H
+#ifndef LIFESINGLE_H
+#define LIFESINGLE_H
 
 #include "Experiment.h"
+#include "VertStencil.h"
 #include "NeighborhoodLifeRule.h"
 
-class PenroseSingle : public Experiment {
+class LifeSingle : public Experiment {
     public:
-        PenroseSingle(string in, string out, int init_percent, int seed, int steps, float r = 0) 
+        LifeSingle(string in, string out, int init_percent, int seed, int steps, float r = 0) 
         : grid_file(in), output(out), init_percent(init_percent), seed(seed), num_steps(steps), init_radius(r) {};
 
     void run() {

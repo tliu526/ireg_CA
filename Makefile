@@ -26,4 +26,4 @@ AshLife: AshLife.cpp
 	g++ -g -o AshLife.out -std=c++11 DelaunayGridGenerator.cpp Cell.cpp GridGenerator.cpp util.cpp Tri.cpp Poly.cpp Edge.cpp Point.cpp RuleTable.cpp Simulator.cpp Stencil.cpp Property.cpp BinaryRuleTable.cpp SimpleLifeRule.cpp AshLife.cpp VertStencil.cpp
 
 Main: main.cpp
-	g++ -g -o Main.out -std=c++11 *.cpp Experiment.h PenroseLifeVert22.h ClockwiseComp.h DistComp.h PenroseAsh.h
+	g++ -g -o Main.out -std=c++11 *.cpp Experiment.h PenroseLifeVert22.h ClockwiseComp.h DistComp.h PenroseAsh.h LifeSingle.h
