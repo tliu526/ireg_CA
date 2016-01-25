@@ -10,7 +10,7 @@ Things TODO
 
 #include "PenroseLifeVert22.h"
 #include "RegularGridGenerator.h"
-#include "PenroseAsh.h"
+#include "LifeAsh.h"
 #include "LifeSingle.h"
 #include "ConnectivityExpr.h"
 
@@ -24,6 +24,16 @@ typedef enum Expmt {
 	L_MAJORITY = 2 //local majority
 } Expmt;
 
+typedef enum ArgFlag {
+    IN = 1,
+    OUT = 2,
+    EXPMT = 4,
+    TIME = 8,
+    CONFIGS = 16,
+    PERCENT = 32,
+    SEED = 64,
+    SINGLE = 128,
+} ArgFlag;
 
 /** Experiment parameters **/
 string infile;
@@ -32,18 +42,22 @@ Expmt expmt_type;
 int max_time;
 int num_configs;
 int subregion_rad = 0; //optional
+int flags = 0;
 
 /** Single Run Experiment parameters **/
-bool single_expmt = false;
 int init_percent;
 int seed;
+
+/** Experiment check flags **/
+int FULL_EXPMT = (IN | OUT | EXPMT | TIME | CONFIGS);
+int SINGLE_EXPMT = (IN | OUT | EXPMT | TIME | SEED | PERCENT | SINGLE);
 
 /**
 Prints out the experiment types and options.
 */
 void print_experiment_opt(){
     cout << "Full experiments need -t -c set" << endl;
-    cout << "Single experiments (-S) need -t -c -p -s set" << endl;
+    cout << "Single experiments (-S) need -t -p -s set" << endl;
     cout << "The following are valid experiments:" << endl;
     cout << "\tgol\tGame of Life (simple)" << endl;
     cout << "\tlm\tLocal Majority" << endl;
@@ -65,7 +79,7 @@ void help() {
     cout << "\t-p\tInitial ON percentage for single runs" << endl;
     cout << "\t-r\tSize of subregion for initial configuration" << endl;
     cout << "\t-s\tA particular seed for the RNG" << endl;
-	cout << "Example: " << endl; //TODO
+	cout << endl;
     print_experiment_opt();
 	exit(1);
 }
@@ -96,27 +110,34 @@ void parse_args(int argc, char **argv) {
   	    switch (c) {
             case 'i':
                 infile = string(optarg);
+                flags |= IN;
                 break;
             case 'o':
                 outname = string(optarg);
+                flags |= OUT;
                 break;
             case 't':
                 max_time = atoi(optarg);
+                flags |= TIME;
                 break;
             case 'c':
                 num_configs = atoi(optarg);
+                flags |= CONFIGS;
                 break;
             case 'e':
                 set_experiment(string(optarg));
+                flags |= EXPMT;
                 break;
             case 'p':
                 init_percent = atoi(optarg);
+                flags |= PERCENT;
                 break;
             case 's':
                 seed = atoi(optarg);
+                flags |= SEED;
                 break;
             case 'S':
-                single_expmt = true;
+                flags |= SINGLE;
                 break;
             case '?':
 		        //TODO
@@ -134,33 +155,30 @@ Initializes experiments and runs them.
 void run() {
     switch(expmt_type){
         case S_LIFE:
-            if(single_expmt) { //TODO flag checks
+            if((flags & SINGLE_EXPMT) == SINGLE_EXPMT) { //TODO flag checks
+                cout << "Running LifeSingle" << endl;
                 LifeSingle expmt(infile, outname, init_percent, seed, max_time, subregion_rad);
                 expmt.run();
             } 
-            else if (!single_expmt /*TODO flag checks*/) {
-                cout << "Running penroseAsh" << endl;
-                PenroseAsh expmt(infile, outname, num_configs, max_time, subregion_rad);
+            else if ((flags & FULL_EXPMT) == FULL_EXPMT) {
+                cout << "Running LifeAsh" << endl;
+                LifeAsh expmt(infile, outname, num_configs, max_time, subregion_rad);
                 expmt.run();
             }
+            else {
+                print_experiment_opt();
+                exit(1);
+            }
             break;
+        default:
+            print_experiment_opt();
+            exit(1);
+
     }    
 }
 
 int main(int argc, char **argv){
     parse_args(argc, argv);
     run();
-/*
-    GridGenerator gen("crhx.txt");
-    VertStencil stencil(gen.get_graph(), &gen);
-    SimpleLifeRule rule(gen.get_graph(), &stencil, 100, 2, 38);
-    rule.initialize();
-    gen.grid_to_dot("big_soup_test");
-*/
-    /*
-    PenroseAsh expr("ckdx.txt", "ckdx", 100, 1000, 38);
-    //PenroseSingle expr("crhx.txt", "crhx_9", 9, 1, 1000, 38);
-    expr.run();
-    */
     return 0;
 }

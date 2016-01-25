@@ -1,11 +1,11 @@
 /**
-An experiment template for running penrose ash experiments. This template only takes metrics
+An experiment template for running life ash experiments. This template only takes metrics
 and grid snapshots at the end of a simulation run.
 
 (c) 2016 Tony Liu.
 */
-#ifndef PENROSEASH_H
-#define PENROSEASH_H
+#ifndef LIFEASH_H
+#define LIFEASH_H
 
 #include "Experiment.h"
 #include "VertStencil.h"
@@ -13,9 +13,9 @@ and grid snapshots at the end of a simulation run.
 
 using namespace std;
 
-class PenroseAsh : public Experiment {
+class LifeAsh : public Experiment {
     public:
-        PenroseAsh(string in, string out, int configs, int steps, float r = 0) 
+        LifeAsh(string in, string out, int configs, int steps, float r = 0) 
         : grid_file(in), output(out), num_configs(configs), num_steps(steps), init_radius(r) {};
 
         void run() {
