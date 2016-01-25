@@ -13,6 +13,7 @@ Things TODO
 #include "LifeAsh.h"
 #include "LifeSingle.h"
 #include "ConnectivityExpr.h"
+#include "LocalMajority.h"
 
 #include <unistd.h>
 #include <string>
@@ -56,20 +57,24 @@ int SINGLE_EXPMT = (IN | OUT | EXPMT | TIME | SEED | PERCENT | SINGLE);
 Prints out the experiment types and options.
 */
 void print_experiment_opt(){
-    cout << "Full experiments need -t -c set" << endl;
-    cout << "Single experiments (-S) need -t -p -s set" << endl;
-    cout << "The following are valid experiments:" << endl;
+    cout << "EXPERIMENTS" << endl;
     cout << "\tgol\tGame of Life (simple)" << endl;
     cout << "\tlm\tLocal Majority" << endl;
+    cout << endl;
+    cout << "Full experiments need -t -c set" << endl;
+    cout << "Single experiments (-S) need -t -p -s set" << endl;
 }
 
 /**
 Prints the help listing for this program.
 */
 void help() {
-    cout << "Usage: ca -i infile -o outname -e experiment [-S] [-t time]" << endl; 
-    cout << "[-c configs] [-p ON percentage] [-r subregion \%]" << endl;
-    cout << "[-s seed]" << endl;
+    cout << "USAGE" << endl;
+    cout << "\t-i infile -o outname -e experiment [-S] [-t time]" << endl; 
+    cout << "\t[-c configs] [-p ON percentage] [-r subregion \%]" << endl;
+    cout << "\t[-s seed]" << endl;
+    cout << endl;
+    cout << "DETAILS" << endl;
 	cout << "\t-i\tThe input graph file" << endl;
 	cout << "\t-o\tThe output metrics/dot name" << endl;
 	cout << "\t-e\tThe experiment type" << endl; //TODO
@@ -163,6 +168,23 @@ void run() {
             else if ((flags & FULL_EXPMT) == FULL_EXPMT) {
                 cout << "Running LifeAsh" << endl;
                 LifeAsh expmt(infile, outname, num_configs, max_time, subregion_rad);
+                expmt.run();
+            }
+            else {
+                print_experiment_opt();
+                exit(1);
+            }
+            break;
+
+        case L_MAJORITY:
+            if((flags & SINGLE_EXPMT) == SINGLE_EXPMT) { //TODO flag checks
+                cout << "Running LMSingle TODO" << endl;
+    //                LifeSingle expmt(infile, outname, init_percent, seed, max_time, subregion_rad);
+    //                expmt.run();
+            } 
+            else if ((flags & FULL_EXPMT) == FULL_EXPMT) {
+                cout << "Running LocalMajority" << endl;
+                LocalMajority expmt(infile, outname, num_configs, max_time);
                 expmt.run();
             }
             else {

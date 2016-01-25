@@ -51,6 +51,12 @@ Helper for poisson disk. Checks if a point p has
 */
 bool check_neighborhood(Point p, std::vector<std::vector<int> >&grid, float min_dist, std::vector<Point> &pts, float cell_size);
 
+/**
+Reads from a input file to populate vector.
+The input file will be in the following format: x y 
+*/
+std::vector<Point> generate_from_file(std::string file);
+
 /**** GEOMETRY FUNCTIONS ****/
 
 /*

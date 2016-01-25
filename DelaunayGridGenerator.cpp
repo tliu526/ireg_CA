@@ -271,25 +271,12 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 /*
 // for debugging
 int main() {
-    GridGenerator gen("penrose_bat.txt");
-    //gen.grid_to_file("penrose");
-//    gen.grid_to_dot("penrose_bat_grid");
-  //  gen.graph_to_dot("penrose_bat_graph");
-    gen.map_faces();
-    return 0;
 
-    for (size_t i = 1; i < 34; i++){
-        string name = "old_ash_"+to_string(i);
-        DelaunayGridGenerator gen2(name+".txt");
-        gen2.grid_to_dot(name);
-    }
-    return 0;
+    vector<Point> pts = generate_from_file("stomanet.dat");
+    DelaunayGridGenerator gen(pts, -100, 100, -100, 100);
 
-    vector<Point> pts = generate_poisson_disk(10, 10, 30, 0.75, 1);
-    DelaunayGridGenerator gen3(pts, 0, 10, 0, 10);
-
-    gen3.grid_to_file("sim_test");
-    gen3.grid_to_dot("sim_test");
+    gen.grid_to_file("stoma");
+    gen.grid_to_dot("stoma");
 
     return 0;   
 }

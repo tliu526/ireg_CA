@@ -6,6 +6,9 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
+#include <fstream>
+#include <sstream>
+
 
 using namespace std;
 	
@@ -247,16 +250,31 @@ bool pt_in_circle(Point &center, Point &p, float radius) {
     return diff <= radius * radius;
 }
 
+vector<Point> generate_from_file(string f){
+    istringstream iss;
+    vector<Point> pts;
+    string line;
+    float x,y;
+    ifstream in(f);
+    
+    while(getline(in, line)){
+        iss.str(line);
+        iss.clear();
+        iss >> x >> y;
+    
+        Point p(x,y);
+        pts.push_back(p);
+    }
+
+    return pts;
+}
+
 /*
 //For debugging my incompetence in C++
 int main() {
-    bitset<8> b1(1);
-    bitset<8> b2(1); 
-    bitset<8> b3(4); 
+    vector<Point> pts;
+    pts = generate_from_file("stomanet.dat");
 
-    cout << hash_bitset(b1) << endl;
-    cout << hash_bitset(b2) << endl;
-    cout << hash_bitset(b3) << endl;
 
 	return 0;
 }
