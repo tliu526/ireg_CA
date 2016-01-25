@@ -1,6 +1,21 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##1/23/2016
+
+###Sub-Regioned Penrose Tilings
+
+In order to see both the potential border effects as well as size effects on the lifetime of both types of Penrose tilings, we ran a lifetime experiment on a much larger grid, with a subregion of initialization that was chosen to match the smaller grid as close as possible. The idea is to replicate the original starting configurations of our first set of lifetime experiments but providing more grid-space. 100 different initial configurations for each starting ON-density (1 to 99) were simulated, for 9900 data points. The average lifetime graphs, as compared to the corresponding smaller grid lifetimes, are shown below:
+
+![](ckd_small_large_lifetime.jpg)
+
+For the kites/darts grids, there is not a significant increase in lifetime at the peak initial densities on the larger grid, though the larger grid appears to have less of a fall-off of average lifetime at the higher initial densities.
+
+![](crh_small_large_lifetime.jpg)
+
+For the thin/thick rhomb grids, there is a large increase in lifetimes across all densities. These results seem to be reasonable, as more grid space would allow structures to propagate longer distances without collisions with a boundary. Further analysis is needed to see the potential effects of the border cells on the larger grid.
+
+
 ##1/22/2016
 
 Implemented subregion initialization, learned about C++ lambda functions in the process. Kicked off AshLife computation on subregioned Penrose tilings.
