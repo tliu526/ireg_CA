@@ -11,7 +11,7 @@ __More recent entries are at the top.__
 
 With a stitched image of plant stomata, provided by David Peak (Utah State), we built corresponding Delaunay Triangulations and Voronoi Diagrams. We ran the same local majority experiments on the stoma grid as before, with similar results:
 
-![](LM_Stoma_1000.jpg)
+![](lm_stoma_1000.jpg)
 
 Again, we see remarkably similar behavior as the results presented in Messinger et al. with regular grids, with performance degrading in a symmetric band between 20-80 percent initial starting density.
 
