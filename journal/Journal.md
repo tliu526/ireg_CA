@@ -5,9 +5,9 @@ __More recent entries are at the top.__
 
 ###Stoma Local Majority Experiments
 
-<img src="stoma_colored.jpg" style="width: 1024px;height: 768px"/>
+![](stoma_colored_low_qual.jpg)
 
-<img src="stoma_low_qual.jpg" style="width: 1024px;height: 768px"/>
+![](stoma_red_low_qual.jpg)
 
 With a stitched image of plant stomata, provided by David Peak (Utah State), we built corresponding Delaunay Triangulations and Voronoi Diagrams. We ran the same local majority experiments on the stoma grid as before, with similar results:
 
