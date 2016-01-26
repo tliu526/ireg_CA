@@ -1,9 +1,16 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##1/25/2016
+
+####To-Do List
+-Scriptify Grid Generator functions
+
 ##1/23/2016
 
 ###Sub-Regioned Penrose Tilings
+
+![](crhx_9_0_low_qual.jpg)
 
 In order to see both the potential border effects as well as size effects on the lifetime of both types of Penrose tilings, we ran a lifetime experiment on a much larger grid, with a subregion of initialization that was chosen to match the smaller grid as close as possible. The idea is to replicate the original starting configurations of our first set of lifetime experiments but providing more grid-space. 100 different initial configurations for each starting ON-density (1 to 99) were simulated, for 9900 data points. The average lifetime graphs, as compared to the corresponding smaller grid lifetimes, are shown below:
 
