@@ -15,6 +15,16 @@ With a stitched image of plant stomata, provided by David Peak (Utah State), we 
 
 Again, we see remarkably similar behavior as the results presented in Messinger et al. with regular grids, with performance degrading in a symmetric band between 20-80 percent initial starting density.
 
+####Meeting with Duane
+- Presentation is a month out, keep this in mind/continue foundation of presentation
+- Outline due at some point?
+- Continue momentum with experiments
+- Meetings during the semester Tues at 4pm, Friday at 11am
+####Experiments
+- Look at density within the 'petri dish,' as well as examine ash outside of the petri dish
+- additional metrics we need to look at: power laws, revisit Peak's work, Calculi of Emergence (cr94)
+- finish implementation of Wootter's work
+
 ##1/25/2016
 
 Added additional scripting capabilities to main, created stoma graphs and ran local majority experiments on the stoma graph. Results coming.

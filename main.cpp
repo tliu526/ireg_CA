@@ -34,6 +34,7 @@ typedef enum ArgFlag {
     PERCENT = 32,
     SEED = 64,
     SINGLE = 128,
+    NBR_METRICS = 256
 } ArgFlag;
 
 /** Experiment parameters **/
@@ -70,7 +71,7 @@ Prints the help listing for this program.
 */
 void help() {
     cout << "USAGE" << endl;
-    cout << "\t-i infile -o outname -e experiment [-S] [-t time]" << endl; 
+    cout << "\t-i infile -o outname -e experiment [-SN] [-t time]" << endl; 
     cout << "\t[-c configs] [-p ON percentage] [-r subregion \%]" << endl;
     cout << "\t[-s seed]" << endl;
     cout << endl;
@@ -79,6 +80,7 @@ void help() {
 	cout << "\t-o\tThe output metrics/dot name" << endl;
 	cout << "\t-e\tThe experiment type" << endl; //TODO
     cout << "\t-S\tSpecifies a single run experiment" << endl;
+    cout << "\t-N\tRecords additional metrics about neighborhood frequency" << endl;
 	cout << "\t-t\tMaximum number of timesteps" << endl;
 	cout << "\t-c\tNumber of different starting configurations (trials)" << endl;
     cout << "\t-p\tInitial ON percentage for single runs" << endl;
@@ -111,7 +113,7 @@ void parse_args(int argc, char **argv) {
 
     if(argc < 2) help();
 
-    while((c = getopt(argc, argv, "i:o:e:t:c:p:Ss:h")) != -1) {
+    while((c = getopt(argc, argv, "SNhi:o:e:t:c:p:s:r:")) != -1) {
   	    switch (c) {
             case 'i':
                 infile = string(optarg);
@@ -141,8 +143,15 @@ void parse_args(int argc, char **argv) {
                 seed = atoi(optarg);
                 flags |= SEED;
                 break;
+            case 'r':
+                subregion_rad = atoi(optarg);
+                //TODO flags?
+                break;
             case 'S':
                 flags |= SINGLE;
+                break;
+            case 'N':
+                flags |= NBR_METRICS;
                 break;
             case '?':
 		        //TODO
@@ -161,8 +170,10 @@ void run() {
     switch(expmt_type){
         case S_LIFE:
             if((flags & SINGLE_EXPMT) == SINGLE_EXPMT) { //TODO flag checks
+                //TODO neighborhood flag
                 cout << "Running LifeSingle" << endl;
-                LifeSingle expmt(infile, outname, init_percent, seed, max_time, subregion_rad);
+                bool nbr_metrics = flags & NBR_METRICS;
+                LifeSingle expmt(infile, outname, init_percent, seed, max_time, subregion_rad, nbr_metrics);
                 expmt.run();
             } 
             else if ((flags & FULL_EXPMT) == FULL_EXPMT) {

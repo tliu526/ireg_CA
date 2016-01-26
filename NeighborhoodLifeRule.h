@@ -13,8 +13,8 @@ using namespace std;
 
 class NeighborhoodLifeRule : public SimpleLifeRule {
     public:
-        NeighborhoodLifeRule(Graph<std::string,Cell>* graph, Stencil* s, int init_percent, float seed = -1) :
-        SimpleLifeRule(graph, s, init_percent, seed) {};
+        NeighborhoodLifeRule(Graph<std::string,Cell>* graph, Stencil* s, int init_percent, float seed = -1, float init_radius = 0) :
+        SimpleLifeRule(graph, s, init_percent, seed, init_radius) {};
 
         void initialize();
 
