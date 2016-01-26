@@ -1,9 +1,27 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##1/26/2016
+
+###Stoma Local Majority Experiments
+
+<img src="stoma_colored.jpg" style="width: 1024px;height: 768px"/>
+
+<img src="stoma_low_qual.jpg" style="width: 1024px;height: 768px"/>
+
+With a stitched image of plant stomata, provided by David Peak (Utah State), we built corresponding Delaunay Triangulations and Voronoi Diagrams. We ran the same local majority experiments on the stoma grid as before, with similar results:
+
+![](LM_Stoma_1000.jpg)
+
+Again, we see remarkably similar behavior as the results presented in Messinger et al. with regular grids, with performance degrading in a symmetric band between 20-80 percent initial starting density.
+
 ##1/25/2016
 
+Added additional scripting capabilities to main, created stoma graphs and ran local majority experiments on the stoma graph. Results coming.
+
 ####To-Do List
+-Optimization of RuleTable cell updates
+-Reproduction of rotation rules for Wootters experiments
 -Scriptify Grid Generator functions
 
 ##1/23/2016
@@ -22,6 +40,11 @@ For the kites/darts grids, there is not a significant increase in lifetime at th
 
 For the thin/thick rhomb grids, there is a large increase in lifetimes across all densities. These results seem to be reasonable, as more grid space would allow structures to propagate longer distances without collisions with a boundary. Further analysis is needed to see the potential effects of the border cells on the larger grid.
 
+![](ckdx_ash_density.jpg)
+
+![](crhx_ash_density.jpg)
+
+The ash density graphs again show no correlation between ash density and starting configuration, although on average the larger grids have higher ash densities than the smaller graphs. This is not surprising, as there is more "real estate" for static structures and oscillators to populate the area without being disturbed.
 
 ##1/22/2016
 
