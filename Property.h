@@ -33,13 +33,16 @@ class Property {
             //std::string s;
         };
 
-        std::string get_label();
-        Tag         get_type();
-        std::string to_string();
+        std::string get_label() const;
+        Tag         get_type() const;
+        std::string to_string() const;
 
         void set_bool(bool b);
         void set_int(int i);
         void set_float(float f);
+
+        bool operator==(const Property &p) const;
+        bool operator!=(const Property &p) const;
 
     protected:
         //The property type

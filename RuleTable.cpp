@@ -19,11 +19,19 @@ RuleTable::RuleTable(Graph<string, Cell>* g, Stencil* s) :
 }
 
 void RuleTable::transition() {
-    cout << "calling base class transition (which does nothing)" << endl;
+    //vector<string> labels = graph->get_vert_labels();
+
+    for(size_t i = 0; i < cells_to_update.size(); i++){
+        apply_rule(cells_to_update[i]);
+    }
+
+    //cout << "Number of on cells:" << " " << get_on_count() << endl;
+
+    update_graph();
 }
 
 void RuleTable::apply_rule(std::string& label) {
-
+    cout << "calling base class apply_rule (which does nothing)" << endl;
 }
 
 void RuleTable::compute_metrics(){
@@ -35,17 +43,29 @@ map<string, Property>* RuleTable::get_metrics() {
 }
 
 void RuleTable::update_graph(){
+    cells_to_update.clear();
+
     typename map<string, Property>::iterator map_it;
     for(map_it = state_map.begin(); map_it != state_map.end(); map_it++){
-        Cell* cell_ptr = graph->get_data(map_it->first);
+        string cell_label = map_it->first;
+        Cell* cell_ptr = graph->get_data(cell_label);
         Property p = map_it->second;
-        cell_ptr->add_property(p);
+
+        //only update if the state is different
+        if(cell_ptr->get_property(p.get_label()) != p){
+            cell_ptr->add_property(p);
+            cells_to_update.push_back(cell_label);
+            list<string>* neighbors = graph->get_neighbors(cell_label);
+            cells_to_update.insert(cells_to_update.end(), neighbors->begin(), neighbors->end());
+        }
+
     }
 
     state_map.clear();
 }
 
 void RuleTable::initialize() {
+    cells_to_update = graph->get_vert_labels();
     //stencil->initialize();
 }
 

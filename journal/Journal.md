@@ -19,7 +19,9 @@ Again, we see remarkably similar behavior as the results presented in Messinger 
 - Presentation is a month out, keep this in mind/continue foundation of presentation
 - Outline due at some point?
 - Continue momentum with experiments
+- Write README file for the system
 - Meetings during the semester Tues at 4pm, Friday at 11am
+
 ####Experiments
 - Look at density within the 'petri dish,' as well as examine ash outside of the petri dish
 - additional metrics we need to look at: power laws, revisit Peak's work, Calculi of Emergence (cr94)

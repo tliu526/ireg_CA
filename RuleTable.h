@@ -83,6 +83,11 @@ class RuleTable {
 		Stencil* stencil;
 		//pointer to the graph to be updated
         Graph<std::string, Cell>* graph;
+
+        //vector of labels that need to be checked for possible updates
+        //For spreading activation implementation of rule table
+        std::vector<std::string> cells_to_update;
+
         //map containing all the states that need to be updated
         std::map<std::string, Property> state_map;
 		

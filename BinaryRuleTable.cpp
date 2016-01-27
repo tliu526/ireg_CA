@@ -145,6 +145,9 @@ void BinaryRuleTable::initialize() {
 }
 
 void BinaryRuleTable::transition() {
+
+    RuleTable::transition();
+    /*
     vector<string> labels = graph->get_vert_labels();
 
     for(size_t i = 0; i < labels.size(); i++){
@@ -154,6 +157,7 @@ void BinaryRuleTable::transition() {
     //cout << "Number of on cells:" << " " << get_on_count() << endl;
 
     update_graph();
+    */
 }
 
 

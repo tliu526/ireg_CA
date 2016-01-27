@@ -36,11 +36,11 @@ Property::Property(string l, string in){
 }
 */
 
-string Property::get_label(){
+string Property::get_label() const{
     return label;
 }
 
-Property::Tag Property::get_type() {
+Property::Tag Property::get_type() const {
     return type;
 }
 
@@ -59,7 +59,7 @@ void Property::set_float(float in){
     type = FLOAT;
 }
 
-string Property::to_string() {
+string Property::to_string() const{
     switch(type) {
         case INT:
         return std::to_string(i);
@@ -82,6 +82,33 @@ string Property::to_string() {
     }
 
     return "";
+}
+
+bool Property::operator==(const Property &p) const {
+    if(type == p.get_type()) {
+        switch(type) {
+        case INT:
+        return i == p.i;
+        break;
+
+        case FLOAT:
+        return f == p.f;
+        break;
+
+        case BOOL:
+        return b == p.b;
+        break;
+
+        default:
+        break;
+        }
+
+    }
+    return false;
+}
+
+bool Property::operator!=(const Property &p) const {
+    return !(*this == p);
 }
 
 //for debugging
