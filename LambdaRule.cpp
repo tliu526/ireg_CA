@@ -13,6 +13,20 @@ using namespace std;
 void LambdaRule::initialize() {
     RuleTable::initialize();
 
+    int num_bits = count_bits(num_states-1);
+
+    bit_rule.resize((2<<(num_neighbors * num_bits) * num_bits), false);
+}
+
+void LambdaRule::transition() {
+    RuleTable::transition();
+}
+
+void LambdaRule::compute_metrics() {
+    
+}
+
+void LambdaRule::apply_rule() {
 
 }
 

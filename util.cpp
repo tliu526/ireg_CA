@@ -269,13 +269,21 @@ vector<Point> generate_from_file(string f){
     return pts;
 }
 
+int count_bits(int n){
+    int count = 0;
+    while(n > 0){
+        n >>= 1;
+        count++;
+    }
+
+    return count;
+}
+
 /*
 //For debugging my incompetence in C++
 int main() {
-    vector<Point> pts;
-    pts = generate_from_file("stomanet.dat");
-
-
+    cout << count_bits(8) << endl;
+    cout << count_bits(15) << endl;
 	return 0;
 }
 */

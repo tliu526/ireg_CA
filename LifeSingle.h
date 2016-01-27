@@ -12,8 +12,8 @@ An experiment template for investigating a particular Life configuration.
 
 class LifeSingle : public Experiment {
     public:
-        LifeSingle(string in, string out, int init_percent, int seed, int steps, float r = 0, bool n_metrics = false) 
-        : grid_file(in), output(out), init_percent(init_percent), seed(seed), num_steps(steps), init_radius(r), nbr_metrics(n_metrics) {};
+        LifeSingle(string in, string out, int i_percent, int s, int steps, float r = 0, bool n_metrics = false) 
+        : grid_file(in), output(out), init_percent(i_percent), seed(s), num_steps(steps), init_radius(r), nbr_metrics(n_metrics) {};
 
     void run() {
         int snapshot_freq = 1;

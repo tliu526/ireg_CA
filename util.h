@@ -124,4 +124,9 @@ Returns the number of digits in n, useful for pretty printing.
 */
 int num_digits(int n);
 
+/**
+Counts the number of bits in integer n
+*/
+int count_bits(int n);
+
 #endif

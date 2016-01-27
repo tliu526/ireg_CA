@@ -43,7 +43,7 @@ map<string, Property>* RuleTable::get_metrics() {
 }
 
 void RuleTable::update_graph(){
-    //cells_to_update.clear();
+    cells_to_update.clear();
 
     typename map<string, Property>::iterator map_it;
     for(map_it = state_map.begin(); map_it != state_map.end(); map_it++){
@@ -54,11 +54,19 @@ void RuleTable::update_graph(){
         //only update if the state is different
         if(cell_ptr->get_property(p.get_label()) != p){
             cell_ptr->add_property(p);
-            /*
-            cells_to_update.push_back(cell_label);
+            
+            if(count(cells_to_update.begin(),cells_to_update.end(), cell_label) == 0){
+                cells_to_update.push_back(cell_label);                
+            }
+
+            //add unique labels to cells_to_update
             list<string>* neighbors = graph->get_neighbors(cell_label);
-            cells_to_update.insert(cells_to_update.end(), neighbors->begin(), neighbors->end());
-            */
+            typename list<string>::iterator list_it;
+            for(list_it = neighbors->begin(); list_it != neighbors->end(); list_it++) {
+                if(count(cells_to_update.begin(),cells_to_update.end(), *list_it) == 0){
+                    cells_to_update.push_back(*list_it);
+                }
+            }
         }
 
     }

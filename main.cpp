@@ -8,7 +8,6 @@ Things TODO
 (c) 2016 Tony Liu.
 */
 
-#include "PenroseLifeVert22.h"
 #include "RegularGridGenerator.h"
 #include "LifeAsh.h"
 #include "LifeSingle.h"
@@ -155,6 +154,10 @@ void parse_args(int argc, char **argv) {
                 flags |= NBR_METRICS;
                 break;
             case '?':
+                if(optopt == 'i') cout << "An input file is required" << endl;
+                else if(optopt == 'o') cout << "An output name is required" << endl;
+                else if(optopt == 't') cout << "An " << endl;
+                break;
 		        //TODO
             case 'h':
             default:
