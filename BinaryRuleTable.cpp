@@ -123,6 +123,7 @@ void BinaryRuleTable::initialize() {
             do { p = graph->get_data(vert_labels[index++])->get_point(); }
             while((index < vert_labels.size()) && pt_in_circle(origin, p, init_radius));
 
+            //clear the labels that don't sit within the radius
             vert_labels.erase(vert_labels.begin() + index, vert_labels.end());
         }
 

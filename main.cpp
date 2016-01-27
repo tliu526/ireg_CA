@@ -145,6 +145,7 @@ void parse_args(int argc, char **argv) {
                 break;
             case 'r':
                 subregion_rad = atoi(optarg);
+                cout << "subregion: " << subregion_rad << endl;
                 //TODO flags?
                 break;
             case 'S':
