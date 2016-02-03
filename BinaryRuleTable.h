@@ -27,6 +27,7 @@ class BinaryRuleTable : public RuleTable {
         //metric names
         static const std::string PERCENT_ON;
         static const std::string INIT_PERCENT;
+        static const std::string SUBREGION_ON;
 
         /**
         Makes a single rule application.
@@ -43,10 +44,20 @@ class BinaryRuleTable : public RuleTable {
         */
         int get_on_count(std::string& s);
         
+        /**
+        Returns the count of on cells in the vector
+        */
+        int get_on_count(std::vector<std::string>& v);
+        
+
+
         //the initial percentage of ON  
         float init_percent_on;
         int   init_percent_int;
         float init_radius;
+
+        //for keeping track of the subregion labels
+        std::vector<string> subregion_labels;
 };
 
 #endif

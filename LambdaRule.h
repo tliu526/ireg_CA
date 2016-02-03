@@ -19,14 +19,18 @@ class LambdaRule : public RuleTable {
         virtual void initialize();
         virtual void compute_metrics();
 
-        virtual void apply_rule();
+
         size_t get_grid_state();
 
     protected:
+        virtual void apply_rule(std::string &label);
+
         int num_neighbors;
         int num_states;
         int init_percent;
 
+        //the number of bits to represent a single state
+        int num_bits;
         /**
         holds the transition rules of the specified rule table. Without rotational invariants
         there needs to be 2^(N*log(K)) * log(K) bits, where N = num_neighbors and

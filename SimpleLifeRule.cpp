@@ -16,8 +16,7 @@ void SimpleLifeRule::initialize() {
 }
 
 void SimpleLifeRule::compute_metrics() {
-    float percentage = float(get_on_count()) / float(num_cells);
-    metrics[PERCENT_ON].set_float(percentage);
+    BinaryRuleTable::compute_metrics();
 }
 
 

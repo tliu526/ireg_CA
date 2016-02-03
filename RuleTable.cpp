@@ -43,6 +43,7 @@ map<string, Property>* RuleTable::get_metrics() {
 }
 
 void RuleTable::update_graph(){
+
     cells_to_update.clear();
 
     typename map<string, Property>::iterator map_it;
@@ -54,24 +55,39 @@ void RuleTable::update_graph(){
         //only update if the state is different
         if(cell_ptr->get_property(p.get_label()) != p){
             cell_ptr->add_property(p);
-            
-            if(count(cells_to_update.begin(),cells_to_update.end(), cell_label) == 0){
-                cells_to_update.push_back(cell_label);                
-            }
-
-            //add unique labels to cells_to_update
-            list<string>* neighbors = graph->get_neighbors(cell_label);
-            typename list<string>::iterator list_it;
-            for(list_it = neighbors->begin(); list_it != neighbors->end(); list_it++) {
-                if(count(cells_to_update.begin(),cells_to_update.end(), *list_it) == 0){
-                    cells_to_update.push_back(*list_it);
-                }
-            }
+            add_cells(cell_label);
         }
-
     }
 
     state_map.clear();
+}
+
+void RuleTable::add_cells(string &label){
+    vector<string> potential_cells;
+
+    potential_cells.push_back(label);                
+
+
+    /*
+    //grab neighbors and neighbor's neighbors
+    list<string>* neighbors = graph->get_neighbors(label);
+    typename list<string>::iterator list_it;
+    for(list_it = neighbors->begin(); list_it != neighbors->end(); list_it++) {
+        potential_cells.push_back(*list_it);
+        list<string>* n_neighbors = graph->get_neighbors(*list_it);
+        potential_cells.insert(potential_cells.end(), n_neighbors->begin(), n_neighbors->end());
+    }
+    */
+
+    list<string>* neighbors = graph->get_neighbors(label);
+    potential_cells.insert(potential_cells.end(), neighbors->begin(), neighbors->end());
+
+    //add unique labels to cells_to_update
+    for(size_t i = 0; i < potential_cells.size(); i++){
+        if(count(cells_to_update.begin(),cells_to_update.end(), potential_cells[i]) == 0){
+            cells_to_update.push_back(potential_cells[i]);
+        }
+    }
 }
 
 void RuleTable::initialize() {

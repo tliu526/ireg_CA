@@ -77,6 +77,10 @@ class RuleTable {
 		*/
 		virtual void update_graph();
 
+		/**
+		Adds all labels needed (neighbor's neighbors) to cells_to_update
+ 	    */
+		void add_cells(std::string &label);
 		//The rule type, must match with Stencil type
 		RuleType type;
 		//The mapping between the rule table and irregular neighborhoods

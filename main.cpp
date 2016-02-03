@@ -21,7 +21,7 @@ using namespace std;
 
 typedef enum Expmt {
     S_LIFE = 1, //simple Life
-	L_MAJORITY = 2 //local majority
+    L_MAJORITY = 2 //local majority
 } Expmt;
 
 typedef enum ArgFlag {

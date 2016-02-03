@@ -11,6 +11,7 @@ Implementation of BinaryRuleTable.
 
 const string BinaryRuleTable::PERCENT_ON = "PercentOn";
 const string BinaryRuleTable::INIT_PERCENT = "InitPercent";
+const string BinaryRuleTable::SUBREGION_ON = "SubregionPercentOn";
 
 using namespace std;
 
@@ -27,6 +28,25 @@ BinaryRuleTable::BinaryRuleTable(Graph<string,Cell>* graph, Stencil* stencil, in
 
 int BinaryRuleTable::get_on_count() {
     vector<string> labels = graph->get_vert_labels();
+    int on_cells = 0;
+    for(size_t i = 0; i < labels.size(); i++){
+        Property p = graph->get_data(labels[i])->get_property(GridGenerator::B_STATE);
+        
+        if(p.get_type() == Property::BOOL) {
+            if (p.b){
+                on_cells++;
+            }
+        }
+        else {
+            cout << "Invalid State type" << endl;
+            return -1;
+        }
+    }
+
+    return on_cells;
+}
+
+int BinaryRuleTable::get_on_count(vector<string>& labels) {
     int on_cells = 0;
     for(size_t i = 0; i < labels.size(); i++){
         Property p = graph->get_data(labels[i])->get_property(GridGenerator::B_STATE);
@@ -91,9 +111,11 @@ void BinaryRuleTable::initialize() {
     //initialize metrics 
     Property percent_on(BinaryRuleTable::PERCENT_ON, float(0.0));
     Property init_percent(BinaryRuleTable::INIT_PERCENT, init_percent_int);
+    Property subregion_on(BinaryRuleTable::SUBREGION_ON, float(0.0));
 
     metrics[BinaryRuleTable::INIT_PERCENT] = init_percent;
     metrics[BinaryRuleTable::PERCENT_ON] = percent_on;
+    metrics[BinaryRuleTable::SUBREGION_ON] = subregion_on;
 
     //initialize cell state, only if seed has been provided
     if(seed > 0){
@@ -102,6 +124,7 @@ void BinaryRuleTable::initialize() {
 
 
         vector<string> vert_labels = graph->get_vert_labels();
+        num_cells = vert_labels.size();
 
         //if an initialization radius is provided, find valid points
         if (init_radius > 0){
@@ -125,6 +148,7 @@ void BinaryRuleTable::initialize() {
 
             //clear the labels that don't sit within the radius
             vert_labels.erase(vert_labels.begin() + index, vert_labels.end());
+            subregion_labels = vert_labels;
         }
 
         int num_on = int(init_percent_on * vert_labels.size());
@@ -141,7 +165,6 @@ void BinaryRuleTable::initialize() {
             c->add_property(p);
         }
 
-        num_cells = vert_labels.size();
     }
 }
 
@@ -150,5 +173,11 @@ void BinaryRuleTable::transition() {
 }
 
 
-void BinaryRuleTable::compute_metrics() {}
+void BinaryRuleTable::compute_metrics() {
+    float percentage = float(get_on_count()) / float(num_cells);
+    metrics[PERCENT_ON].set_float(percentage);
+
+    float sub_percentage = float(get_on_count(subregion_labels)) / float(subregion_labels.size());
+    metrics[SUBREGION_ON].set_float(sub_percentage);
+}
 void BinaryRuleTable::apply_rule(string& l) {}

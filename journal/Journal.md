@@ -1,6 +1,10 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##1/27/2016
+
+Implemented "spreading activation" of rule table updates, results in slight speed up of computation.
+
 ##1/26/2016
 
 ###Stoma Local Majority Experiments
