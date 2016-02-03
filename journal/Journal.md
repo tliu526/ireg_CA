@@ -1,7 +1,9 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
-##2/1/2016
+##2-3-2016
+
+##2-1-2016
 
 ###Penrose Life Subregion Analysis 
 

@@ -129,4 +129,10 @@ Counts the number of bits in integer n
 */
 int count_bits(int n);
 
+
+/**
+Returns the bitstring representation of n
+*/
+std::string get_bit_str(int n);
+
 #endif

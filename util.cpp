@@ -279,11 +279,22 @@ int count_bits(int n){
     return count;
 }
 
-/*
+string get_bit_str(int n) {
+    string bit_str = "";
+
+    while(n > 0){
+        bit_str = to_string((n & 1)) + bit_str;
+        n >>= 1;
+    }
+
+    return bit_str;
+}
+
+/**
 //For debugging my incompetence in C++
 int main() {
-    cout << count_bits(8) << endl;
-    cout << count_bits(15) << endl;
+    cout << get_bit_str(8) << endl;
+    cout << get_bit_str(15) << endl;
 	return 0;
 }
 */
