@@ -1,6 +1,32 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##2/1/2016
+
+###Penrose Life Subregion Analysis 
+
+The larger Penrose grids were created with the intention of emulating a smaller grid with 'lazily' expanding boundaries. Thus, the ash density within the initialized subregion should be measured as well as the overall ash density. Below are the results from subregion ash density analysis:
+
+####Subregion Kites and Darts
+
+![](ckdx_sub_ash.jpg)
+
+A graph of the final subregion ash density against starting initial configuration. Unsurprisingly, there is a steep fall off in final ash density when the starting configuration is more dense, as the overcrowding life criteria would cause many structures to disintegrate.
+
+![](ckdx_sub_ash_life.jpg)
+
+The distribution of subregion densities is remarkably similar to the density graph for Kites/Darts shown in [journal entry 1-19](#1-19-2016).
+
+####Subregion Rhombs
+
+![](crhx_sub_ash.jpg)
+
+Like the kites/darts graph, there is a steep fall off in final ash density at higher density initial starting configurations. There appear to be significant fluctuations in the final ash density for starting configurations between 20% and 60% ON, which will be investigated.
+
+![](crhx_sub_ash_life.jpg)
+
+Again, in comparison to the density graph for Rhombs on a smaller grid. the final ash density distribution is quite similar. There are however, a larger amount configurations that yield no ash whatsoever, perhaps indicating that due to the lazily expanding boundaries as well as the higher average lifetime of RhombLife, the ash may have settled outside the initial subregion. Further investigation of runs that contain ash in the boundary area but not the initial starting subregion must be conducted.
+
 ##1/26/2016
 
 ###Stoma Local Majority Experiments
@@ -56,7 +82,9 @@ For the thin/thick rhomb grids, there is a large increase in lifetimes across al
 
 ![](crhx_ash_density.jpg)
 
-The ash density graphs again show no correlation between ash density and starting configuration, although on average the larger grids have higher ash densities than the smaller graphs. This is not surprising, as there is more "real estate" for static structures and oscillators to populate the area without being disturbed.
+<s>The ash density graphs again show no correlation between ash density and starting configuration, although on average the larger grids have higher ash densities than the smaller graphs. This is not surprising, as there is more "real estate" for static structures and oscillators to populate the area without being disturbed.</s>
+
+__EDIT:__ The above ash density graphs are incorrect, as the ash density numbers have been inflated due to a calculation error. See the journal entry on 2/1 for correct ash analysis.
 
 ##1/22/2016
 
@@ -118,7 +146,7 @@ A p9 oscillator is shown below. Many oscillators appear to live on or near the b
 
 ![](crh_61_9oscillator_low_qual.gif)
 
-##1/19/2016
+##1-19-2016
 
 ###Circular Penrose (Kites and Darts)
 
