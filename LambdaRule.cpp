@@ -6,6 +6,10 @@ Implementation of the LambdaRule.
 
 #include "LambdaRule.h"
 
+//for debugging
+#include "VNStencil.h"
+#include "RegularGridGenerator.h"
+
 #include <string>
 
 using namespace std;
@@ -13,11 +17,20 @@ using namespace std;
 const string LambdaRule::LAMBDA = "Lambda";
 const string LambdaRule::FREQUENCY = "Freq";
 
+
+LambdaRule::LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int n_neighbors, int n_states, int s) : RuleTable(graph, stencil) {
+  num_neighbors = n_neighbors;
+  num_states = n_states;
+  seed = s;
+}
+
 void LambdaRule::initialize() {
     RuleTable::initialize();
 
     num_bits = count_bits(num_states-1);
-    bit_rule.resize((2<<(num_neighbors * num_bits) * num_bits), false);
+
+    bit_rule.resize( ( (1 << ((num_neighbors+1)* num_bits)) * num_bits), false);
+
     q_state = 0; //quiescent state is 0 unless otherwise noted in derived classes
     lambda = 0; //start out with everything mapped to the quiescent state
 
@@ -31,6 +44,25 @@ void LambdaRule::initialize() {
         Property freq_count(f_label, 0); //TODO is frequency a float or int?
 
         metrics[f_label] = freq_count;
+    }
+
+    //random initial configuration
+    if(seed > 0){
+        default_random_engine gen;
+        gen.seed(seed);
+        
+        //range from 0 to num_states-1
+        uniform_int_distribution<int> s_distr(0, num_states-1);
+
+        vector<string> vert_labels = graph->get_vert_labels();
+        for (size_t i = 0; i < vert_labels.size(); i++){
+            int state = s_distr(gen);
+
+            Property p("State", state);
+
+            Cell *c = graph->get_data(vert_labels[i]);
+            c->add_property(p);
+        }
     }
 }
 
@@ -46,10 +78,17 @@ void LambdaRule::compute_metrics() {
 }
 
 void LambdaRule::apply_rule(string &label) {
-    int state_i = get_bit_rule_index(label);
+    int s_index = get_bit_rule_index(label);
+
+    cout << "State index: " << s_index << endl;
+
     Property p = graph->get_data(label)->get_property(GridGenerator::I_STATE);
 
-    p.set_int(get_bit_rule_state(state_i));
+    int state = get_bit_rule_state(s_index);
+
+    cout << "Next state: " << state << endl;    
+
+    p.set_int(state);
     state_map[label] = p;
 }
 
@@ -113,3 +152,13 @@ int LambdaRule::increment_lambda() {
     //TODO
 }
 
+int main() {
+    RegularGridGenerator gen(0, 64, 0, 64, true);
+    Stencil stencil(gen.get_graph());
+
+    LambdaRule rule(gen.get_graph(), &stencil, 4, 8, 5);
+
+    cout << "rule bit size: " << ((1 << (5 * 3)) * 3) << endl;
+    rule.initialize();
+    rule.transition();
+}

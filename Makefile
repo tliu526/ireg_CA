@@ -18,3 +18,7 @@ RGG: RegularGridGenerator.cpp
 
 Main: main.cpp
 	g++ -g -o Main.out -std=c++11 *.cpp 
+
+
+Lambda: LambdaRule.cpp
+	g++ -g -o Lambda.out -std=c++11 *.cpp 

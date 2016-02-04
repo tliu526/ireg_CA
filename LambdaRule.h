@@ -13,7 +13,7 @@ A derived rule table class for investigating lambda values.
 
 class LambdaRule : public RuleTable {
     public:   
-        LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int num_neighbors, int num_states);
+  LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int num_neighbors, int num_states, int seed = -1);
 
         virtual void transition();
         virtual void initialize();
@@ -58,6 +58,7 @@ class LambdaRule : public RuleTable {
         int num_neighbors;
         int num_states;
         int init_percent;
+        int seed;
 
         //the number of bits to represent a single state
         int num_bits;

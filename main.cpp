@@ -214,8 +214,11 @@ void run() {
     }    
 }
 
+
+/*
 int main(int argc, char **argv){
     parse_args(argc, argv);
     run();
     return 0;
 }
+*/
