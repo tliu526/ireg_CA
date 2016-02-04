@@ -33,6 +33,8 @@ class LambdaRule : public RuleTable {
 
         size_t get_grid_state();
 
+
+
     protected:
         //metric names 
         static const std::string LAMBDA; //lambda value for a particular configuration
@@ -52,8 +54,15 @@ class LambdaRule : public RuleTable {
         */
         int get_bit_rule_state(int index);
 
+
+        /**
+        Sets the state in the bit rule table at the specified index.
+        */
+        void set_bit_rule_state(int index, int state);
+
         int q_state; //the quiescent state
         int lambda; //the current value for lamda, integer from 1 to 100 for ease of indexing
+        int nonq_count; //tracks the number of states not mapped to the quiescent state
 
         int num_neighbors;
         int num_states;
