@@ -11,6 +11,7 @@ Things TODO
 #include "RegularGridGenerator.h"
 #include "LifeAsh.h"
 #include "LifeSingle.h"
+//#include "LambdaExpr.h"
 #include "ConnectivityExpr.h"
 #include "LocalMajority.h"
 
@@ -21,7 +22,8 @@ using namespace std;
 
 typedef enum Expmt {
     S_LIFE = 1, //simple Life
-    L_MAJORITY = 2 //local majority
+    L_MAJORITY = 2, //local majority
+    LAMBDA = 3 //lambda experiments
 } Expmt;
 
 typedef enum ArgFlag {
@@ -35,6 +37,11 @@ typedef enum ArgFlag {
     SINGLE = 128,
     NBR_METRICS = 256
 } ArgFlag;
+
+/** Experiment types **/
+const string LAMBDA_STR = "lambda";
+const string GOL_STR = "gol";
+const string LM_STR = "lm";
 
 /** Experiment parameters **/
 string infile;
@@ -53,6 +60,8 @@ int seed;
 int FULL_EXPMT = (IN | OUT | EXPMT | TIME | CONFIGS);
 int SINGLE_EXPMT = (IN | OUT | EXPMT | TIME | SEED | PERCENT | SINGLE);
 
+int LAMBDA_EXPMT = (IN | OUT | EXPMT | TIME | SEED );
+
 /**
 Prints out the experiment types and options.
 */
@@ -60,9 +69,11 @@ void print_experiment_opt(){
     cout << "EXPERIMENTS" << endl;
     cout << "\tgol\tGame of Life (simple)" << endl;
     cout << "\tlm\tLocal Majority" << endl;
+    cout << "\tlambda\tLambda" << endl;
     cout << endl;
     cout << "Full experiments need -t -c set" << endl;
     cout << "Single experiments (-S) need -t -p -s set" << endl;
+    cout << "Lambda experiments need -i OR -g and -t -s -o set" << endl;
 }
 
 /**
@@ -72,7 +83,7 @@ void help() {
     cout << "USAGE" << endl;
     cout << "\t-i infile -o outname -e experiment [-SN] [-t time]" << endl; 
     cout << "\t[-c configs] [-p ON percentage] [-r subregion \%]" << endl;
-    cout << "\t[-s seed]" << endl;
+    cout << "\t[-s seed] [-g graph_type]" << endl;
     cout << endl;
     cout << "DETAILS" << endl;
 	cout << "\t-i\tThe input graph file" << endl;
@@ -85,6 +96,7 @@ void help() {
     cout << "\t-p\tInitial ON percentage for single runs" << endl;
     cout << "\t-r\tSize of subregion for initial configuration" << endl;
     cout << "\t-s\tA particular seed for the RNG" << endl;
+    cout << "\t-g\tSpecifies a graph type to generate TODO" << endl;
 	cout << endl;
     print_experiment_opt();
 	exit(1);
@@ -95,8 +107,9 @@ Parses arg to set appropriate experiment type.
 */
 void set_experiment(string arg){
 
-    if(arg == "gol")     expmt_type = S_LIFE;
-    else if(arg == "lm") expmt_type = L_MAJORITY;
+    if(arg == GOL_STR)     expmt_type = S_LIFE;
+    else if(arg == LM_STR) expmt_type = L_MAJORITY;
+    else if(arg == LAMBDA_STR) expmt_type = LAMBDA;
     
     else {
         print_experiment_opt();

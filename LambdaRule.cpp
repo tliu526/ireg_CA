@@ -9,6 +9,7 @@ Implementation of LambdaRule.
 //for debugging
 #include "VNStencil.h"
 #include "RegularGridGenerator.h"
+#include "Simulator.h"
 
 #include <string>
 #include <cmath>
@@ -23,18 +24,18 @@ LambdaRule::LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int n_n
   num_neighbors = n_neighbors;
   num_states = n_states;
   seed = s;
+
+  num_bits = count_bits(num_states-1);
+  
+  bit_rule.resize( ( (1 << ((num_neighbors+1)* num_bits)) * num_bits), false);
+  
+  q_state = 0; //quiescent state is 0 unless otherwise noted in derived classes
+  lambda = 0; //start out with everything mapped to the quiescent state
+  nonq_count = 0;
 }
 
 void LambdaRule::initialize() {
     RuleTable::initialize();
-
-    num_bits = count_bits(num_states-1);
-
-    bit_rule.resize( ( (1 << ((num_neighbors+1)* num_bits)) * num_bits), false);
-
-    q_state = 0; //quiescent state is 0 unless otherwise noted in derived classes
-    lambda = 0; //start out with everything mapped to the quiescent state
-    nonq_count = 0;
 
     //initialize metrics 
     Property lambda_prop(LambdaRule::LAMBDA, lambda);
@@ -43,7 +44,7 @@ void LambdaRule::initialize() {
 
     for(size_t state = 0; state < num_states; state++){
         string f_label = FREQUENCY + to_string(state);
-        Property freq_count(f_label, 0); //TODO is frequency a float or int?
+        Property freq_count(f_label, int(0)); 
 
         metrics[f_label] = freq_count;
     }
@@ -66,37 +67,50 @@ void LambdaRule::initialize() {
             c->add_property(p);
         }
     }
-
-    /*
-    //for debugging set_bit_rule
-    for (size_t i = 0; i < (1<<15); i++) {
-      set_bit_rule_state(i, 6);
-    }
-    */
-
 }
 
 void LambdaRule::transition() {
     RuleTable::transition();
+
+    compute_freq();
 }
 
 void LambdaRule::compute_metrics() {
     RuleTable::compute_metrics();
 
     metrics[LAMBDA].set_int(lambda);
-    //TODO frequency 
+
+    //compute_freq();
+    
+    for(int i = 0; i < num_states; i++) {
+        string label = FREQUENCY + to_string(i);
+        metrics[label].set_int(state_counts[i]);
+    }
+}
+
+void LambdaRule::compute_freq() {
+    //state_counts.clear();
+   
+    vector<string> labels = graph->get_vert_labels();
+    
+    for(size_t i = 0; i < labels.size(); i++) {
+        Property p = graph->get_data(labels[i])->get_property(GridGenerator::I_STATE);
+        if(p.get_type() == Property::INT) {
+            if(state_counts.count(p.i) == 0) {
+                state_counts[p.i] = 0;
+            }
+            state_counts[p.i] += 1;
+        }        
+    }
+    
 }
 
 void LambdaRule::apply_rule(string &label) {
     int s_index = get_bit_rule_index(label);
 
-    cout << "State index: " << s_index << endl;
-
     Property p = graph->get_data(label)->get_property(GridGenerator::I_STATE);
 
     int state = get_bit_rule_state(s_index);
-
-    cout << "Next state: " << state << endl;    
 
     p.set_int(state);
     state_map[label] = p;
@@ -139,7 +153,14 @@ int LambdaRule::get_bit_rule_index(string &label) {
         p = graph->get_data((*neighbors)[i])->get_property(GridGenerator::I_STATE);
 
         if(p.get_type() == Property::INT){
-            bit_str += get_bit_str(p.i);
+            if(p.i != 0) {
+                bit_str += get_bit_str(p.i);
+            }
+            else {
+                for(size_t i = 0; i < num_bits; i++) {
+                    bit_str += "0";
+                }
+            }
         }
         else {
             cout << "Invalid State type" << endl;
@@ -148,7 +169,15 @@ int LambdaRule::get_bit_rule_index(string &label) {
     }
 
     p = graph->get_data(label)->get_property(GridGenerator::I_STATE);
-    bit_str += get_bit_str(p.i);
+
+    if(p.i != 0) {
+        bit_str += get_bit_str(p.i);
+    }
+    else {
+        for(size_t i = 0; i < num_bits; i++) {
+           bit_str += "0";
+        }
+    }
 
     //base 2
     return stoi(bit_str, 0, 2);
@@ -173,6 +202,10 @@ size_t LambdaRule::get_grid_state() {
 }
 
 void LambdaRule::set_lambda(int l) {
+    if(l > 100 || l < 0) {
+        cout << "invalid lambda value" << endl;
+        return;
+    }
     //TODO
 }
 
@@ -183,10 +216,9 @@ int LambdaRule::increment_lambda() {
         return -1;
     }
 
-
     int on_count; //the number of non quiescent states needed to increment lambda  
-    lambda++;
-    on_count = int( pow(num_states, num_neighbors)*(float(lambda)/float(100)));
+    lambda += 1;
+    on_count = int( pow(num_states, num_neighbors+1)*(float(lambda)/float(100)));
 
     cout << "On count for lambda: " << on_count << endl;
 
@@ -216,16 +248,18 @@ int LambdaRule::increment_lambda() {
 }
 
 int main() {
+    int seed = 100;
+
     RegularGridGenerator gen(0, 64, 0, 64, true);
     Stencil stencil(gen.get_graph());
+    LambdaRule rule(gen.get_graph(), &stencil, 4, 8, seed);
 
-    LambdaRule rule(gen.get_graph(), &stencil, 4, 8, 5);
+    Simulator s(&gen, &rule, 1000, "lambda_med");
+    s.metric_headers();
 
-    //    cout << "rule bit size: " << ((1 << (5 * 3)) * 3) << endl;
-    rule.initialize();
-
-    rule.increment_lambda();
-    rule.increment_lambda();
-
-    rule.transition();
+    for(int i = 0; i < 100; i++) {
+      Simulator s(&gen, &rule, 1000, "lambda_med");
+      s.simulate();
+      rule.increment_lambda();
+    }
 }

@@ -54,11 +54,15 @@ class LambdaRule : public RuleTable {
         */
         int get_bit_rule_state(int index);
 
-
         /**
         Sets the state in the bit rule table at the specified index.
         */
         void set_bit_rule_state(int index, int state);
+
+        /**
+        Computes the frequency metrics to be stored
+        */
+        void compute_freq();
 
         int q_state; //the quiescent state
         int lambda; //the current value for lamda, integer from 1 to 100 for ease of indexing
@@ -68,6 +72,8 @@ class LambdaRule : public RuleTable {
         int num_states;
         int init_percent;
         int seed;
+
+        std::map<int,int> state_counts; //for tracking frequencies
 
         //the number of bits to represent a single state
         int num_bits;
