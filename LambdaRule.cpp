@@ -37,6 +37,8 @@ LambdaRule::LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int n_n
 void LambdaRule::initialize() {
     RuleTable::initialize();
 
+    state_counts.clear();
+
     //initialize metrics 
     Property lambda_prop(LambdaRule::LAMBDA, lambda);
 
