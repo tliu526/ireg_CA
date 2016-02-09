@@ -32,6 +32,8 @@ LambdaRule::LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int n_n
   q_state = 0; //quiescent state is 0 unless otherwise noted in derived classes
   lambda = 0; //start out with everything mapped to the quiescent state
   nonq_count = 0;
+
+  init_transition_table();
 }
 
 void LambdaRule::initialize() {
@@ -69,6 +71,52 @@ void LambdaRule::initialize() {
             c->add_property(p);
         }
     }
+}
+
+void LambdaRule::init_transition_table() {
+    string cur_str;
+    string table_key;
+
+    vector<string> min_rot_nbrs; //tracks the minimal rotation neighborhoods
+    //iterate over all possible neighborhood values
+    for (int i = 0; i < int(pow(num_states, num_neighbors)); i++){        
+        cur_str = str_change_base(i, num_states);
+        
+        while(cur_str.size() < num_neighbors){
+            cur_str = "0" + cur_str;
+        }
+
+        cur_str = min_rotation(cur_str);
+
+        if(count(min_rot_nbrs.begin(), min_rot_nbrs.end(), cur_str) == 0){
+            min_rot_nbrs.push_back(cur_str);
+            //cout << cur_str << endl;
+            //insert into trans_table, init to 0
+            for(int center = 0; center < num_states; center++){
+                table_key = cur_str + to_string(center);
+                trans_table[table_key] = 0;
+            }
+        }
+    }
+
+    cout << "Number of unique rotations: " << min_rot_nbrs.size() << endl;
+}
+
+string LambdaRule::min_rotation(string& in) {
+    string best = in;
+    string start = in;
+
+    do {
+        rotate(in.begin(), in.begin()+1, in.end());
+  //      cout << in << endl;
+        if(in < best){
+            best = in;
+        }
+    }
+    while(start != in);
+
+//    cout << "min rotation: " << best << endl;
+    return best;
 }
 
 void LambdaRule::transition() {
@@ -250,12 +298,18 @@ int LambdaRule::increment_lambda() {
 }
 
 int main() {
+    
+    cout << str_change_base(8,8) << endl;
+    cout << str_change_base(4096,8) << endl;
+
+    
     int seed = 100;
 
     RegularGridGenerator gen(0, 64, 0, 64, true);
     Stencil stencil(gen.get_graph());
     LambdaRule rule(gen.get_graph(), &stencil, 4, 8, seed);
 
+    /*
     Simulator s(&gen, &rule, 1000, "lambda_med");
     s.metric_headers();
 
@@ -264,4 +318,5 @@ int main() {
       s.simulate();
       rule.increment_lambda();
     }
+    */
 }

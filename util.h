@@ -135,4 +135,8 @@ Returns the bitstring representation of n
 */
 std::string get_bit_str(int n);
 
+/**
+Returns the string representation of n in base b
+*/
+std::string str_change_base(int n, int b);
 #endif

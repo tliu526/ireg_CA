@@ -40,8 +40,18 @@ class LambdaRule : public RuleTable {
         static const std::string LAMBDA; //lambda value for a particular configuration
         static const std::string FREQUENCY; //Frequency of state appearances
 
-
         virtual void apply_rule(std::string &label);
+
+        /**
+        Initializes the transition table with the lexographically minimal strings
+        */
+        void init_transition_table();
+
+        /**
+        Returns the lexicographically minimal string rotation for in
+        TODO need to implement faster rotation
+        */
+        std::string min_rotation(std::string& in);
 
         /*
         Converts the cell neighborhood to an index of bit_rule. Currently assumes that 
@@ -74,6 +84,8 @@ class LambdaRule : public RuleTable {
         int seed;
 
         std::map<int,int> state_counts; //for tracking frequencies
+
+        std::map<std::string, int> trans_table; //transition table, min rotation string as key
 
         //the number of bits to represent a single state
         int num_bits;

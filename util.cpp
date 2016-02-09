@@ -290,6 +290,18 @@ string get_bit_str(int n) {
     return bit_str;
 }
 
+string str_change_base(int n, int b) {
+    int rmdr; //remainder
+    string outstr;
+    while(n) {
+        rmdr = n % b;
+        outstr = to_string(rmdr) + outstr;
+        n /= b;
+    }
+
+    return outstr;
+}
+
 /**
 //For debugging my incompetence in C++
 int main() {
