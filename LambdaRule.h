@@ -53,6 +53,11 @@ class LambdaRule : public RuleTable {
         */
         std::string min_rotation(std::string& in);
 
+        /**
+        Returns the correctly formatted min rotation key for trans table.
+        */
+        std::string get_trans_key(std::string& label);
+
         /*
         Converts the cell neighborhood to an index of bit_rule. Currently assumes that 
         the neighborhood is correctly ordered in the neighborhood maps provided by stencil.
@@ -75,6 +80,7 @@ class LambdaRule : public RuleTable {
         void compute_freq();
 
         int q_state; //the quiescent state
+        string q_str; //the quiescent neighborhood
         int lambda; //the current value for lamda, integer from 1 to 100 for ease of indexing
         int nonq_count; //tracks the number of states not mapped to the quiescent state
 
@@ -84,11 +90,13 @@ class LambdaRule : public RuleTable {
         int seed;
 
         std::map<int,int> state_counts; //for tracking frequencies
-
         std::map<std::string, int> trans_table; //transition table, min rotation string as key
+
+        std::vector<string> trans_keys; //vector of transition keys to modify
 
         //the number of bits to represent a single state
         int num_bits;
+
         /**
         holds the transition rules of the specified rule table. Without rotational invariants
         there needs to be 2^(N*log(K)) * log(K) bits, where N = num_neighbors and

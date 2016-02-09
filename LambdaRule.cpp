@@ -21,19 +21,32 @@ const string LambdaRule::FREQUENCY = "Freq";
 
 
 LambdaRule::LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int n_neighbors, int n_states, int s) : RuleTable(graph, stencil) {
-  num_neighbors = n_neighbors;
-  num_states = n_states;
-  seed = s;
+    num_neighbors = n_neighbors;
+    num_states = n_states;
+    seed = s;
 
-  num_bits = count_bits(num_states-1);
-  
-  bit_rule.resize( ( (1 << ((num_neighbors+1)* num_bits)) * num_bits), false);
-  
-  q_state = 0; //quiescent state is 0 unless otherwise noted in derived classes
-  lambda = 0; //start out with everything mapped to the quiescent state
-  nonq_count = 0;
+    while(q_str.size() < num_neighbors){
+        q_str += "0";
+    }
 
-  init_transition_table();
+    num_bits = count_bits(num_states-1);
+
+    bit_rule.resize( ( (1 << ((num_neighbors+1)* num_bits)) * num_bits), false);
+
+    q_state = 0; //quiescent state is 0 unless otherwise noted in derived classes
+    lambda = 0; //start out with everything mapped to the quiescent state
+    nonq_count = 0;
+
+
+    init_transition_table();
+
+    typename map<string, int>::iterator map_it;
+    for(map_it = trans_table.begin(); map_it != trans_table.end(); map_it++){
+        string key = map_it->first;
+        if(key.find(q_str) == string::npos){
+            trans_keys.push_back(key);
+        }
+    }
 }
 
 void LambdaRule::initialize() {
@@ -155,7 +168,39 @@ void LambdaRule::compute_freq() {
     
 }
 
+string LambdaRule::get_trans_key(string &label) {
+    Property p;
+    string out_str;
+
+    vector<string>* neighbors = stencil->get_neighbors(label);
+    
+    for(size_t i=0; i < neighbors->size(); i++){
+        p = graph->get_data((*neighbors)[i])->get_property(GridGenerator::I_STATE);
+
+        if(p.get_type() == Property::INT){
+            out_str += to_string(p.i);
+        }
+    }
+
+    out_str = min_rotation(out_str);
+    //append center state
+    p = graph->get_data(label)->get_property(GridGenerator::I_STATE);
+
+    if(p.get_type() == Property::INT){
+        out_str += to_string(p.i);
+    }
+
+    return out_str;
+}
+
 void LambdaRule::apply_rule(string &label) {
+    Property p = graph->get_data(label)->get_property(GridGenerator::I_STATE);
+
+    int state = trans_table[get_trans_key(label)];
+    p.set_int(state);
+    state_map[label] = p;
+
+    /*
     int s_index = get_bit_rule_index(label);
 
     Property p = graph->get_data(label)->get_property(GridGenerator::I_STATE);
@@ -164,6 +209,7 @@ void LambdaRule::apply_rule(string &label) {
 
     p.set_int(state);
     state_map[label] = p;
+    */
 }
 
 int LambdaRule::get_bit_rule_state(int index) {
@@ -265,7 +311,7 @@ int LambdaRule::increment_lambda() {
         cout << "lambda cannot be incremented further" << endl;
         return -1;
     }
-
+/*
     int on_count; //the number of non quiescent states needed to increment lambda  
     lambda += 1;
     on_count = int( pow(num_states, num_neighbors+1)*(float(lambda)/float(100)));
@@ -293,6 +339,15 @@ int LambdaRule::increment_lambda() {
 
         i++;
     }
+*/
+
+    int on_count; //the number of non quiescent states needed to increment lambda  
+    lambda += 1;
+    on_count = int( trans_table.size()*(float(lambda)/float(100)));
+
+    cout << "On count for lambda: " << on_count << endl;
+
+    //TODODODODODODDODODODODO
 
     return lambda;
 }
