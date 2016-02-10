@@ -13,7 +13,7 @@ A derived rule table class for investigating lambda values.
 
 class LambdaRule : public RuleTable {
     public:   
-  LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int num_neighbors, int num_states, int seed = -1);
+  LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int num_neighbors, int num_states, int seed);
 
         virtual void transition();
         virtual void initialize();
@@ -93,7 +93,8 @@ class LambdaRule : public RuleTable {
         std::map<std::string, int> trans_table; //transition table, min rotation string as key
 
         std::vector<string> trans_keys; //vector of transition keys to modify
-
+        std::vector<string>::iterator key_it; //an iterator for trans_keys
+        default_random_engine gen;        
         //the number of bits to represent a single state
         int num_bits;
 

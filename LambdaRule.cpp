@@ -40,6 +40,7 @@ LambdaRule::LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int n_n
 
     init_transition_table();
 
+    //sets up transition keys to modify
     typename map<string, int>::iterator map_it;
     for(map_it = trans_table.begin(); map_it != trans_table.end(); map_it++){
         string key = map_it->first;
@@ -47,6 +48,12 @@ LambdaRule::LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int n_n
             trans_keys.push_back(key);
         }
     }
+
+    //initialize seed
+    gen.seed(seed);    
+
+    shuffle(trans_keys.begin(), trans_keys.end(), gen);
+    key_it = trans_keys.begin();
 }
 
 void LambdaRule::initialize() {
@@ -68,8 +75,8 @@ void LambdaRule::initialize() {
 
     //random initial configuration
     if(seed > 0){
-        default_random_engine gen;
-        gen.seed(seed);
+    //    default_random_engine gen;
+    //    gen.seed(seed);
         
         //range from 0 to num_states-1
         uniform_int_distribution<int> s_distr(0, num_states-1);
@@ -121,20 +128,17 @@ string LambdaRule::min_rotation(string& in) {
 
     do {
         rotate(in.begin(), in.begin()+1, in.end());
-  //      cout << in << endl;
         if(in < best){
             best = in;
         }
     }
     while(start != in);
 
-//    cout << "min rotation: " << best << endl;
     return best;
 }
 
 void LambdaRule::transition() {
     RuleTable::transition();
-
     compute_freq();
 }
 
@@ -343,35 +347,41 @@ int LambdaRule::increment_lambda() {
 
     int on_count; //the number of non quiescent states needed to increment lambda  
     lambda += 1;
-    on_count = int( trans_table.size()*(float(lambda)/float(100)));
+    on_count = int(trans_keys.size()*(float(lambda)/float(100)));
 
     cout << "On count for lambda: " << on_count << endl;
 
-    //TODODODODODODDODODODODO
+    //non quiescent states
+    uniform_int_distribution<int> state_distr(1, num_states-1);
+
+    while(nonq_count < on_count) {
+        string key = *key_it;
+        if(trans_table[key] == q_state){
+            trans_table[key] = state_distr(gen);
+            nonq_count++;
+        }
+        key_it++;
+    }
 
     return lambda;
 }
 
-int main() {
-    
-    cout << str_change_base(8,8) << endl;
-    cout << str_change_base(4096,8) << endl;
+int main(int argc, char**argv) {
 
-    
-    int seed = 100;
+    for(int seed = 67; seed <= 99; seed++){
 
-    RegularGridGenerator gen(0, 64, 0, 64, true);
-    Stencil stencil(gen.get_graph());
-    LambdaRule rule(gen.get_graph(), &stencil, 4, 8, seed);
+        string name = "lambda_short" + to_string(seed);
+        RegularGridGenerator gen(0, 64, 0, 64, true);
+        Stencil stencil(gen.get_graph());
+        LambdaRule rule(gen.get_graph(), &stencil, 4, 8, seed);
 
-    /*
-    Simulator s(&gen, &rule, 1000, "lambda_med");
-    s.metric_headers();
+        Simulator s(&gen, &rule, 500, name);
+        s.metric_headers();
 
-    for(int i = 0; i < 100; i++) {
-      Simulator s(&gen, &rule, 1000, "lambda_med");
-      s.simulate();
-      rule.increment_lambda();
+        for(int i = 0; i < 100; i++) {
+            Simulator s(&gen, &rule, 500, name);
+            s.simulate();
+            rule.increment_lambda();
+        }
     }
-    */
 }

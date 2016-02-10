@@ -44,19 +44,24 @@ map<string, Property>* RuleTable::get_metrics() {
 
 void RuleTable::update_graph(){
 
-    cells_to_update.clear();
+// For testing speed of spreading activation
+//    cells_to_update.clear();
 
     typename map<string, Property>::iterator map_it;
     for(map_it = state_map.begin(); map_it != state_map.end(); map_it++){
         string cell_label = map_it->first;
         Cell* cell_ptr = graph->get_data(cell_label);
         Property p = map_it->second;
+        
+        cell_ptr->add_property(p);
 
+/*
         //only update if the state is different
         if(cell_ptr->get_property(p.get_label()) != p){
             cell_ptr->add_property(p);
             add_cells(cell_label);
         }
+*/
     }
 
     state_map.clear();
