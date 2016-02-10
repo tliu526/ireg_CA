@@ -1,7 +1,35 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
-##2-3-2016
+##2-10-2016
+
+###Lambda Experiment Replication
+
+Q: tense of explaining experiments?
+
+In order to confirm the correctness of the Lambda Rule Table transitions implemented, we replicated some of the experiments ran in wo90 and la90. The particular class of cellular automata we are examining are 64 by 64 with periodic boundary conditions and K=8, N=5 (von Neumman neighborhood). Utilizing the table walk-through method described in la90, we simulated individual runs of incrementing lambda rule tables from lambda=0.01 to lambda=1.0. Note that Langton and Wootters specified that the rule tables map quiescent neighborhoods to the quiescent state, and that rule table transitions are invariant under rotations. Also note that we let each simulation run for a maximum of 500 time steps, as opposed to 1000-1500 time steps in wo90 in order to reduce computation time, though the results as we will see are very comparable. 
+
+![](lambda_single_26.jpg)
+
+Pictured above is a single run of a table walkthrough, modifying the same rule table as well as beginning with the same initial configuration. Like the results shown in la90, we see a sharp transition point at approximately lambda=0.5 where the average entropy drastically increases.
+
+![](lambda_100.jpg)
+
+We have superimposed 100 runs of the simulation in order to approximate the same shape of the graph illustrated in la90. This graph corresponds to the results obtained in la90, with a sharp cutoff of low entropy values at lambda = 0.6 as well as a tight convergence (low variance) of higher entropy levels across all runs. The corresponding figure in la90 (figure 8) is shown below:
+
+<img src="la90_fig8_lambda_runs.png" style="width: 400px;height: 400px"/>
+
+This is a verification that our Lambda RuleTable implementation is in fact correct, and thus we can move forward with lambda experiments on irregular grids. One question that needs to be addressed is how to map the lambda transition rules to grids with irregular neighborhoods. One possibility is to divide a Voronoi diagram into quads using Voronoi face vertices and Voronoi generator points as corners of the quad, as illustrated [here](http://www-cs-students.stanford.edu/~amitp/game-programming/polygon-map-generation/) and shown below:
+
+![](voronoi_quad_construction_ex.png)
+
+This mapping can be applied across an entire Voronoi grid, resulting in the following transformation:
+
+![](voronoi_ex.png)
+
+![](voronoi_quad_ex.png)
+
+(The above three pictures were taken from [http://www-cs-students.stanford.edu/~amitp/game-programming/polygon-map-generation/](http://www-cs-students.stanford.edu/~amitp/game-programming/polygon-map-generation/))
 
 ##2-1-2016
 
