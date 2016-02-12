@@ -88,9 +88,11 @@ class LambdaRule : public RuleTable {
         int num_states;
         int init_percent;
         int seed;
+
         //the subregion radius
         float sub_radius;
-
+        std::vector<std::string> subregion_labels;
+        
         std::map<int,int> state_counts; //for tracking frequencies
         std::map<std::string, int> trans_table; //transition table, min rotation string as key
 

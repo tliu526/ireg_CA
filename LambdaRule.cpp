@@ -84,29 +84,24 @@ void LambdaRule::initialize() {
     int sub_index = vert_labels.size();
 
     if (sub_radius > 0){
-            Point origin(0,0);
+        sub_index = 0;
+        Point origin(0,0);
 
-            //lambda comparator function
-            sort(vert_labels.begin(), vert_labels.end(), [&](const string& s1, const string& s2){
-                    Point orig(0,0);
-                    DistComp comp(orig);
+        //lambda comparator function
+        sort(vert_labels.begin(), vert_labels.end(), [&](const string& s1, const string& s2){
+            Point orig(0,0);
+            DistComp comp(orig);
 
-                    Point p1 =  graph->get_data(s1)->get_point();           
-                    Point p2 =  graph->get_data(s2)->get_point();           
-                    return comp(p1, p2);
-            });
+            Point p1 =  graph->get_data(s1)->get_point();           
+            Point p2 =  graph->get_data(s2)->get_point();           
+            return comp(p1, p2);
+        });
 
-            Point p;
+        Point p;
+        do { p = graph->get_data(vert_labels[sub_index++])->get_point(); }
+        while((sub_index < vert_labels.size()) && pt_in_circle(origin, p, sub_radius));
 
-            do { p = graph->get_data(vert_labels[sub_index++])->get_point(); }
-            while((sub_index < vert_labels.size()) && pt_in_circle(origin, p, sub_radius));
-
-            //clear the labels that don't sit within the radius
-            vert_labels.erase(vert_labels.begin() + sub_index, vert_labels.end());
-            
-            //REALLY TODO
-            //TODO subregions
-            //subregion_labels = vert_labels;
+        subregion_labels = vector<string>(vert_labels.begin(), vert_labels.begin()+sub_index);
     }
 
     for (size_t i = 0; i < vert_labels.size(); i++){
@@ -187,10 +182,18 @@ void LambdaRule::compute_metrics() {
 }
 
 void LambdaRule::compute_freq() {
-    state_counts.clear();
-   
-    vector<string> labels = graph->get_vert_labels();
+    state_counts.clear();    
     
+
+    vector<string> labels;
+
+    if(sub_radius > 0){
+        labels = subregion_labels;
+    }
+    else {
+        labels = graph->get_vert_labels();
+    }
+
     for(size_t i = 0; i < labels.size(); i++) {
         Property p = graph->get_data(labels[i])->get_property(GridGenerator::I_STATE);
         if(p.get_type() == Property::INT) {
@@ -375,10 +378,10 @@ int main(int argc, char**argv) {
 
     for(int seed = begin; seed <= end; seed++){
 
-        string name = "asymp_entropy_" + to_string(seed);
-        RegularGridGenerator gen(-32, 32, -32, 32, true);
+        string name = "subregion_entropy_" + to_string(seed);
+        RegularGridGenerator gen(-64, 64, -64, 64, true);
         Stencil stencil(gen.get_graph());
-        LambdaRule rule(gen.get_graph(), &stencil, 4, 8, seed);
+        LambdaRule rule(gen.get_graph(), &stencil, 4, 8, seed, 40);
 
         Simulator s(&gen, &rule, 500, name);
         s.metric_headers();
