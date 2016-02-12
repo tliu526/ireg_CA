@@ -381,7 +381,7 @@ int main(int argc, char**argv) {
         string name = "subregion_entropy_" + to_string(seed);
         RegularGridGenerator gen(-64, 64, -64, 64, true);
         Stencil stencil(gen.get_graph());
-        LambdaRule rule(gen.get_graph(), &stencil, 4, 8, seed, 40);
+        LambdaRule rule(gen.get_graph(), &stencil, 4, 8, seed, 32);
 
         Simulator s(&gen, &rule, 500, name);
         s.metric_headers();

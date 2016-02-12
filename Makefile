@@ -19,6 +19,8 @@ RGG: RegularGridGenerator.cpp
 Main: main.cpp
 	g++ -g -o Main.out -std=c++11 *.cpp 
 
+QGG: VQuadGridGenerator.cpp
+	g++ -g -o QGG.out -std=c++11 Cell.cpp GridGenerator.cpp util.cpp Tri.cpp Poly.cpp Edge.cpp Point.cpp Property.cpp VQuadGridGenerator.cpp
 
 Lambda: LambdaRule.cpp
 	g++ -g -o Lambda.out -std=c++11 *.cpp 

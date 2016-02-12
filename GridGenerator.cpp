@@ -77,10 +77,6 @@ void GridGenerator::init_from_file(string file){
 	    	properties.push_back(build_property(prop_labels[i], prop));
 	    }
 
-		//TODO something's up with mingw
-		//float x = stof(coord.substr(0, coord.find(","));
-		//float y = stof(coord.substr(coord.find(",")+1, coord.size());
-
 		float x = atof(coord.substr(0, coord.find(",")).c_str());
 		float y = atof(coord.substr(coord.find(",")+1, coord.size()).c_str());
 
@@ -496,7 +492,7 @@ void GridGenerator::map_faces() {
 			for (size_t k = 0; k < verts->size(); k++) {
 				avg += distance(gen_pts[i], (*verts)[k]);
 			}
-			avg /= verts->size();
+			avg /= float(verts->size());
 
 			if (avg < min_dist) {
 				min_dist = avg;

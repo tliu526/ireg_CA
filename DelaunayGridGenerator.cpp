@@ -278,6 +278,12 @@ int main() {
     gen.grid_to_file("stoma");
     gen.grid_to_dot("stoma");
 
+    vector<Point> pts = generate_poisson_disk(50,50,30,1.5, 5);
+    DelaunayGridGenerator gen(pts,0,50,0,50);
+    gen.grid_to_file("d_test");
+    gen.grid_to_dot("d_test");
+
+
     return 0;   
 }
 */

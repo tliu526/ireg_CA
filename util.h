@@ -58,6 +58,10 @@ The input file will be in the following format: x y
 std::vector<Point> generate_from_file(std::string file);
 
 /**** GEOMETRY FUNCTIONS ****/
+/**
+Returns the midpoint of the points in the edge
+*/
+Point midpoint(Edge& e);
 
 /*
 Gives the distance between two points

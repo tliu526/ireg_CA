@@ -302,6 +302,13 @@ string str_change_base(int n, int b) {
     return outstr;
 }
 
+Point midpoint(Edge &e){
+    float x = (float(e.p.x) + float(e.q.x)) / float(2);
+    float y = (float(e.p.y) + float(e.q.y)) / float(2);
+
+    return Point(x,y);
+}
+
 /**
 //For debugging my incompetence in C++
 int main() {

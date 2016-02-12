@@ -37,12 +37,6 @@ void RegularGridGenerator::init_grid() {
                 Point gen_pt(x, y);
                 gen_pts.push_back(gen_pt);
 
-    /*
-                if(is_toroidal){
-                    gen_edges.push_back(Edge(gen_pt, Point(fmod(x+1, max_x),y)));
-                    gen_edges.push_back(Edge(gen_pt, Point(x,fmod(y-1, ))));
-                }
-    */
                 if (i < max_x-1) gen_edges.push_back(Edge(gen_pt, Point(x+1,y)));
                 else if (is_toroidal) gen_edges.push_back(Edge(gen_pt, Point(min_x + OFFSET,y)));
 
@@ -97,8 +91,8 @@ void RegularGridGenerator::generate_graph() {
 }
 /*
 int main(){
-    RegularGridGenerator gen(-5,5,-5,5, true);
-    gen.grid_to_file("reg_test.txt");
+    RegularGridGenerator gen(0,25,0,25, true);
+    gen.grid_to_file("reg_test");
     gen.grid_to_dot("reg_test");
 
     return 0;
