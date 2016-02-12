@@ -13,7 +13,7 @@ A derived rule table class for investigating lambda values.
 
 class LambdaRule : public RuleTable {
     public:   
-  LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int num_neighbors, int num_states, int seed);
+  LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int num_neighbors, int num_states, int seed, float s_radius = 0);
 
         virtual void transition();
         virtual void initialize();
@@ -33,7 +33,7 @@ class LambdaRule : public RuleTable {
 
         size_t get_grid_state();
 
-
+        float get_max_lambda();
 
     protected:
         //metric names 
@@ -88,6 +88,8 @@ class LambdaRule : public RuleTable {
         int num_states;
         int init_percent;
         int seed;
+        //the subregion radius
+        float sub_radius;
 
         std::map<int,int> state_counts; //for tracking frequencies
         std::map<std::string, int> trans_table; //transition table, min rotation string as key

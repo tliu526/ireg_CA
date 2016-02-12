@@ -10,6 +10,7 @@ Implementation of LambdaRule.
 #include "VNStencil.h"
 #include "RegularGridGenerator.h"
 #include "Simulator.h"
+#include "DistComp.h"
 
 #include <string>
 #include <cmath>
@@ -20,10 +21,11 @@ const string LambdaRule::LAMBDA = "Lambda";
 const string LambdaRule::FREQUENCY = "Freq";
 
 
-LambdaRule::LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int n_neighbors, int n_states, int s) : RuleTable(graph, stencil) {
+LambdaRule::LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int n_neighbors, int n_states, int s, float s_radius) : RuleTable(graph, stencil) {
     num_neighbors = n_neighbors;
     num_states = n_states;
     seed = s;
+    sub_radius = s_radius;
 
     while(q_str.size() < num_neighbors){
         q_str += "0";
@@ -74,23 +76,52 @@ void LambdaRule::initialize() {
     }
 
     //random initial configuration
-    if(seed > 0){
-    //    default_random_engine gen;
-    //    gen.seed(seed);
-        
-        //range from 0 to num_states-1
-        uniform_int_distribution<int> s_distr(0, num_states-1);
+    //range from 0 to num_states-1
+    uniform_int_distribution<int> s_distr(0, num_states-1);
 
-        vector<string> vert_labels = graph->get_vert_labels();
-        for (size_t i = 0; i < vert_labels.size(); i++){
-            int state = s_distr(gen);
+    vector<string> vert_labels = graph->get_vert_labels();
 
-            Property p("State", state);
+    int sub_index = vert_labels.size();
 
-            Cell *c = graph->get_data(vert_labels[i]);
-            c->add_property(p);
-        }
+    if (sub_radius > 0){
+            Point origin(0,0);
+
+            //lambda comparator function
+            sort(vert_labels.begin(), vert_labels.end(), [&](const string& s1, const string& s2){
+                    Point orig(0,0);
+                    DistComp comp(orig);
+
+                    Point p1 =  graph->get_data(s1)->get_point();           
+                    Point p2 =  graph->get_data(s2)->get_point();           
+                    return comp(p1, p2);
+            });
+
+            Point p;
+
+            do { p = graph->get_data(vert_labels[sub_index++])->get_point(); }
+            while((sub_index < vert_labels.size()) && pt_in_circle(origin, p, sub_radius));
+
+            //clear the labels that don't sit within the radius
+            vert_labels.erase(vert_labels.begin() + sub_index, vert_labels.end());
+            
+            //REALLY TODO
+            //TODO subregions
+            //subregion_labels = vert_labels;
     }
+
+    for (size_t i = 0; i < vert_labels.size(); i++){
+        int state = 0;
+        //only change if within radius
+        if(i < sub_index) {
+            state = s_distr(gen);
+        }
+
+        Property p("State", state);
+
+        Cell *c = graph->get_data(vert_labels[i]);
+        c->add_property(p);
+    }
+
 }
 
 void LambdaRule::init_transition_table() {
@@ -139,7 +170,7 @@ string LambdaRule::min_rotation(string& in) {
 
 void LambdaRule::transition() {
     RuleTable::transition();
-    compute_freq();
+    //compute_freq();
 }
 
 void LambdaRule::compute_metrics() {
@@ -147,7 +178,7 @@ void LambdaRule::compute_metrics() {
 
     metrics[LAMBDA].set_int(lambda);
 
-    //compute_freq();
+    compute_freq();
     
     for(int i = 0; i < num_states; i++) {
         string label = FREQUENCY + to_string(i);
@@ -156,7 +187,7 @@ void LambdaRule::compute_metrics() {
 }
 
 void LambdaRule::compute_freq() {
-    //state_counts.clear();
+    state_counts.clear();
    
     vector<string> labels = graph->get_vert_labels();
     
@@ -203,17 +234,6 @@ void LambdaRule::apply_rule(string &label) {
     int state = trans_table[get_trans_key(label)];
     p.set_int(state);
     state_map[label] = p;
-
-    /*
-    int s_index = get_bit_rule_index(label);
-
-    Property p = graph->get_data(label)->get_property(GridGenerator::I_STATE);
-
-    int state = get_bit_rule_state(s_index);
-
-    p.set_int(state);
-    state_map[label] = p;
-    */
 }
 
 int LambdaRule::get_bit_rule_state(int index) {
@@ -309,47 +329,22 @@ void LambdaRule::set_lambda(int l) {
     //TODO
 }
 
+float LambdaRule::get_max_lambda() {
+    return 1.0 - float(1)/float(num_states);
+}
+
 int LambdaRule::increment_lambda() {
     
     if(lambda > 100) {
         cout << "lambda cannot be incremented further" << endl;
         return -1;
     }
-/*
-    int on_count; //the number of non quiescent states needed to increment lambda  
-    lambda += 1;
-    on_count = int( pow(num_states, num_neighbors+1)*(float(lambda)/float(100)));
-
-    cout << "On count for lambda: " << on_count << endl;
-
-    default_random_engine gen;
-    gen.seed(seed);
-    
-    vector<int> indices;
-    for(size_t i = 0; i <= bit_rule.size() / num_bits; i++) {
-        indices.push_back(i);
-    }
-    shuffle(indices.begin(), indices.end(), gen);
-
-    //non quiescent states
-    uniform_int_distribution<int> state_distr(1, num_states-1);
-
-    int i = 0;
-    while(nonq_count < on_count) {
-        if(get_bit_rule_state(i) == q_state) {
-            set_bit_rule_state(i, state_distr(gen));
-            nonq_count++;
-        }   
-
-        i++;
-    }
-*/
 
     int on_count; //the number of non quiescent states needed to increment lambda  
     lambda += 1;
     on_count = int(trans_keys.size()*(float(lambda)/float(100)));
 
-    cout << "On count for lambda: " << on_count << endl;
+//    cout << "On count for lambda: " << on_count << endl;
 
     //non quiescent states
     uniform_int_distribution<int> state_distr(1, num_states-1);
@@ -367,19 +362,29 @@ int LambdaRule::increment_lambda() {
 }
 
 int main(int argc, char**argv) {
+    if(argc < 3){
+        cout << "Provide a begin and end seed" << endl;
+        return -1;
+    }
 
-    for(int seed = 67; seed <= 99; seed++){
+    int begin = atoi(argv[1]);
+    int end = atoi(argv[2]);
 
-        string name = "lambda_short" + to_string(seed);
-        RegularGridGenerator gen(0, 64, 0, 64, true);
+    cout << "Begin seed: " << begin << endl;
+    cout << "End seed: " << end << endl;
+
+    for(int seed = begin; seed <= end; seed++){
+
+        string name = "asymp_entropy_" + to_string(seed);
+        RegularGridGenerator gen(-32, 32, -32, 32, true);
         Stencil stencil(gen.get_graph());
         LambdaRule rule(gen.get_graph(), &stencil, 4, 8, seed);
 
         Simulator s(&gen, &rule, 500, name);
         s.metric_headers();
 
-        for(int i = 0; i < 100; i++) {
-            Simulator s(&gen, &rule, 500, name);
+        for(int i = 0; i <= int(rule.get_max_lambda()*100); i++) {
+            Simulator s(&gen, &rule, 500, name, 0, 1);
             s.simulate();
             rule.increment_lambda();
         }
