@@ -31,7 +31,6 @@ Poly::Poly(vector<Edge> &in_edges){
 }
 
 bool Poly::contains_edge(Edge &e){
-//	cout << e << endl;
 	return count(edges.begin(), edges.end(), e) > 0;
 }
 

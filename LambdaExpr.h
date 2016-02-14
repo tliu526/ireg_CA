@@ -1,0 +1,70 @@
+/**
+An experiment template for running lambda experiments.
+
+Valid experiment flags:
+-subregion
+-starting configurations (trials)
+-time 
+
+TODO:
+-add option to set number of neighbors or number of states
+
+(c) 2016 Tony Liu.
+*/
+
+#ifndef LAMBDAEXPR_H
+#define LAMBDAEXPR_H
+
+#include "Experiment.h"
+#include "LambdaRule.h"
+
+using namespace std;
+
+class LambdaExpr : public Experiment {
+    public:
+        LambdaExpr(string in, string out, int configs, in steps, float r = 0, bool step = true)
+        : grid_file(in), output(out), num_configs(configs), num_steps(steps), init_radius(r), step_through(step) {};
+
+        void run(){
+            int NUM_STATES = 8;
+            int NUM_NEIGHBORS = 4;
+
+            for(int seed = 0; seed <= num_configs; seed++){
+                GridGenerator gen(grid_file);
+                Stencil stencil(gen.get_graph());
+                LambdaRule rule(gen.get_graph(), &stencil, NUM_NEIGHBORS, NUM_STATES, seed, init_radius);
+
+                //ugly way to initialize headers
+                Simulator s(&gen, &rule, num_steps, name);
+                s.metric_headers();
+
+                for(int i = 0; i <= rule.get_max_lambda(); i++) {
+                    Simulator s(&gen, &rule, num_steps, name, 0, 1);
+                    s.simulate();
+                    if(step_through) rule.increment_lambda();
+                    else rule.set_lambda(i);
+                }
+            }
+        }
+
+    protected:
+        //the input gridname
+        string grid_file;
+        //the output filename
+        string output;
+
+        //the number of initial starting configurations
+        int num_configs;
+
+        //the maximum number of timesteps to run for
+        int num_steps;
+
+        //the subregion radius for initialization
+        float init_radius;
+
+        //determines whether lambda is changed via step-through or by random table
+        bool step_through;
+
+};
+
+#endif

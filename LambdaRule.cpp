@@ -55,7 +55,7 @@ LambdaRule::LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int n_n
     gen.seed(seed);    
 
     shuffle(trans_keys.begin(), trans_keys.end(), gen);
-    key_it = trans_keys.begin();
+     = trans_keys.begin();
 }
 
 void LambdaRule::initialize() {
@@ -220,6 +220,11 @@ string LambdaRule::get_trans_key(string &label) {
         }
     }
 
+    //append additional zeroes as neighbors if at the border
+    for(size_t t = 0; i < neighbors->size()- num_neighbors; i++){
+        out_str += to_string(q_state);
+    }
+
     out_str = min_rotation(out_str);
     //append center state
     p = graph->get_data(label)->get_property(GridGenerator::I_STATE);
@@ -324,16 +329,31 @@ size_t LambdaRule::get_grid_state() {
     return hash_fn(state);
 }
 
+//NOTE do not use in conjunction with increment lambda
 void LambdaRule::set_lambda(int l) {
     if(l > 100 || l < 0) {
         cout << "invalid lambda value" << endl;
         return;
     }
-    //TODO
+
+    lambda = l;
+    on_count = int(trans_keys.size()*(float(l)/float(100)));
+
+    uniform_int_distribution<int> state_distr(1, num_states-1);
+    shuffle(trans_keys.begin(), trans_keys.end(), gen);
+
+    for(size_t key_i = 0; key_i < trans_keys.size(); key_i++){
+        if(key_i < on_count){
+            trans_table[key[key_i]] = state_distr(gen);
+        }
+        else {
+            trans_table[key[key_i]] = q_state;
+        }
+    }
 }
 
-float LambdaRule::get_max_lambda() {
-    return 1.0 - float(1)/float(num_states);
+int LambdaRule::get_max_lambda() {
+    return int((1.0 - float(1)/float(num_states))*100);
 }
 
 int LambdaRule::increment_lambda() {
@@ -386,7 +406,7 @@ int main(int argc, char**argv) {
         Simulator s(&gen, &rule, 500, name);
         s.metric_headers();
 
-        for(int i = 0; i <= int(rule.get_max_lambda()*100); i++) {
+        for(int i = 0; i <= rule.get_max_lambda(); i++) {
             Simulator s(&gen, &rule, 500, name, 0, 1);
             s.simulate();
             rule.increment_lambda();

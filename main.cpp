@@ -3,7 +3,7 @@ Where all experiments are called and ran.
 
 Things TODO
 - Stencil options from command line
-- GridGenerator options from command line (currently only reads in graph files)
+- GridGenerator options from command line -g flag (currently only reads in graph files) 
 
 (c) 2016 Tony Liu.
 */
@@ -73,7 +73,7 @@ void print_experiment_opt(){
     cout << endl;
     cout << "Full experiments need -t -c set" << endl;
     cout << "Single experiments (-S) need -t -p -s set" << endl;
-    cout << "Lambda experiments need -i OR -g and -t -s -o set" << endl;
+    cout << "Lambda experiments need -i OR -g and -t -c set" << endl;
 }
 
 /**
@@ -92,10 +92,10 @@ void help() {
     cout << "\t-S\tSpecifies a single run experiment" << endl;
     cout << "\t-N\tRecords additional metrics about neighborhood frequency" << endl;
 	cout << "\t-t\tMaximum number of timesteps" << endl;
-	cout << "\t-c\tNumber of different starting configurations (trials)" << endl;
+	cout << "\t-c\tNumber of starting configurations/trials" << endl;
     cout << "\t-p\tInitial ON percentage for single runs" << endl;
     cout << "\t-r\tSize of subregion for initial configuration" << endl;
-    cout << "\t-s\tA particular seed for the RNG" << endl;
+    cout << "\t-s\tA particular seed for the RNG (single runs" << endl;
     cout << "\t-g\tSpecifies a graph type to generate TODO" << endl;
 	cout << endl;
     print_experiment_opt();

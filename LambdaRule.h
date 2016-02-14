@@ -33,7 +33,7 @@ class LambdaRule : public RuleTable {
 
         size_t get_grid_state();
 
-        float get_max_lambda();
+        int get_max_lambda();
 
     protected:
         //metric names 
