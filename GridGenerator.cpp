@@ -258,8 +258,7 @@ void GridGenerator::grid_to_file(string f){
 	for (size_t i = 0; i < gen_pts.size(); i++){
 		string p_id = rev_gen_pt_map[gen_pts[i]];
 		Cell *c = graph.get_data(p_id);
-		file << p_id << " " << gen_pts[i] << " "; //<< c.is_alive();
-
+		file << p_id << " " << gen_pts[i] << " ";
 
 		map<string, Property>* prop_map = c->get_prop_map();
 		typename map<string, Property>::iterator map_it;

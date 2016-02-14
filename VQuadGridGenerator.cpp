@@ -43,7 +43,7 @@ void VQuadGridGenerator::init_vgrid() {
     vector<Point> new_gen_pts;
     vector<Point> new_verts;
 
-    //find valid
+    //find valid face pairs
     typename map<string, vector<string>>::iterator map_it;
     for(map_it = edge_gen_pt_map.begin(); map_it != edge_gen_pt_map.end(); map_it++){
         string e_label = map_it->first;
@@ -96,8 +96,10 @@ void VQuadGridGenerator::init_vgrid() {
     gen_pts.clear();
     gen_pts = new_gen_pts;
     rev_gen_pt_map.clear();
+    gen_pt_face_map.clear();
 
     init_maps();
+    map_faces();
 }
 
 //pre: gp_1 and gp_2's associated faces share an edge
@@ -124,9 +126,6 @@ void VQuadGridGenerator::generate_graph(){
     for(gp_it = gen_pt_face_map.begin(); gp_it != gen_pt_face_map.end(); gp_it++){
         string gp_label = gp_it->first;
         string face_label = gp_it->second;
-        cout << gp_label << endl;
-        cout << face_label << endl;
-        cout << endl;
 
         graph.add_vertex(gp_label, Cell(pt_map[gp_label], gp_label));
         list<string>* neighbors = graph.get_neighbors(gp_label);
