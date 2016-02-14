@@ -27,6 +27,11 @@ class Poly {
 		bool contains_vert(Point &p);
 		bool contains_edge(Edge &e);
 
+		/**
+		Determines whether or not the given edges form a valid polygon
+		*/
+		bool is_valid_poly();
+
 		bool operator==(const Poly &p);
 		bool operator< (const Poly &p) const;
 

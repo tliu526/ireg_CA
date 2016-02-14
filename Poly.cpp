@@ -5,6 +5,7 @@ Implmentation of Poly class.
 
 #include <iostream>
 #include <algorithm>
+#include <map>
 
 using namespace std;
 
@@ -45,6 +46,35 @@ bool Poly::operator==(const Poly& poly){
 	return true;
 }
 
+//checks if each point is included exactly twice in edge vector
+//TODO doesn't cover all cases
+bool Poly::is_valid_poly(){
+	map<Point, int> pt_count;
+
+	for(size_t e_i = 0; e_i < edges.size(); e_i++){
+		Edge e = edges[e_i];
+		
+		if(pt_count.count(e.p) == 0){
+			pt_count[e.p];
+		}
+
+		if(pt_count.count(e.q) == 0){
+			pt_count[e.q];
+		}
+
+		pt_count[e.q]++;
+		pt_count[e.p]++;
+	}
+
+	map<Point, int>::iterator map_it;
+	for(map_it = pt_count.begin(); map_it != pt_count.end(); map_it++){
+		if(map_it->second != 2){
+			return false;
+		}
+	}
+
+	return true;
+}
 
 bool Poly::shares_edge(Poly &poly){
 	for(int i = 0; i < edges.size(); i++){

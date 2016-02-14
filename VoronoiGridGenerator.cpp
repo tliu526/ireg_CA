@@ -128,14 +128,21 @@ void VoronoiGridGenerator::init_voronoi(){
 		}
 
 		add_border_edge(face_edges);
+		Poly new_face(face_edges);
 		
-		for(int i = 0; i < face_edges.size(); i++){
-			if(count(new_edges.begin(), new_edges.end(), face_edges[i]) == 0){
-				new_edges.push_back(face_edges[i]);
-			}
+		//TODO this makes the face generation incomplete, need a better way 
+		//to handle border cases
+		if(new_face.is_valid_poly()){
+			for(int i = 0; i < face_edges.size(); i++){
+				if(count(new_edges.begin(), new_edges.end(), face_edges[i]) == 0){
+					new_edges.push_back(face_edges[i]);
+				}
+			}	
+			new_faces.push_back(Poly(face_edges));
 		}
-
-		new_faces.push_back(Poly(face_edges));
+		else {
+			//TODO degeneracy with gen_pts
+		}
 	}
 
 	//clear data from delaunay initialization
@@ -256,13 +263,13 @@ Edge VoronoiGridGenerator::closest_border(Edge e){
 }
 
 void VoronoiGridGenerator::generate_graph(){}
-/*
+
 int main(){
-	VoronoiGridGenerator v("d_test.txt");
-	v.grid_to_file("v_test");
-	v.grid_to_dot("v_test");
+	VoronoiGridGenerator v("stoma.txt");
+	v.grid_to_file("v_stoma");
+	v.grid_to_dot("v_stoma");
 
 	return 0;
 }
-*/
+
 

@@ -471,6 +471,20 @@ Property GridGenerator::build_property(std::string& name, std::string& value) {
 
 //assigns a gen_pt to the face that is closest to it (by avg vertex distance)
 void GridGenerator::map_faces() {
+
+	for (size_t gp_i = 0; gp_i < gen_pts.size(); gp_i++){
+		Point cur_gp = gen_pts[gp_i];
+
+		map<string, Poly>::iterator face_it;
+		for(face_it = face_map.begin(); face_it != face_map.end(); face_it++){
+			if(pt_in_poly(cur_gp, face_it->second)){
+				gen_pt_face_map[rev_gen_pt_map[cur_gp]] = face_it->first;
+				break;
+			}
+		}
+	}
+
+	/*
 	//init vector of faces
 	vector<string> face_labels;
 	typename map<string, Poly>::iterator face_it;
@@ -502,12 +516,13 @@ void GridGenerator::map_faces() {
 
 		gen_pt_face_map[rev_gen_pt_map[gen_pts[i]]] = closest_face;
 	}
-
+	*/
+	
 	//debugging
-/*
+	/*
 	typename map<string, string>::iterator map_it;
 	for(map_it = gen_pt_face_map.begin(); map_it != gen_pt_face_map.end(); map_it++){
 		cout << "(" << map_it->first << ", " << map_it->second << ")" << endl;
 	}
-*/
+	*/
 }

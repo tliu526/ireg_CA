@@ -17,6 +17,7 @@ Current methods for generating points:
 
 #include "Tri.h"
 #include "Edge.h"
+#include "Poly.h"
 
 #include <utility>
 #include <vector>
@@ -90,6 +91,11 @@ Checks whether p is enclosed within the boundary of t. Uses the barycentric meth
 From http://totologic.blogspot.fr/2014/01/accurate-point-in-triangle-test.html
 */
 bool pt_in_tri(Point p, Tri& t);
+
+/*
+Checks whether the pt is enclosed within the boundary of poly. Uses the 
+*/
+bool pt_in_poly(Point &pt, Poly& poly);
 
 /*
 checks whether Point p is in the circumcircle defined by t.

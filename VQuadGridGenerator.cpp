@@ -48,24 +48,28 @@ void VQuadGridGenerator::init_vgrid() {
         vector<string> *gp_labels = &(map_it->second);
 
         //create new face
-        if(gp_labels->size() == 2){            
-            Poly face = build_quad(e_label, (*gp_labels)[0], (*gp_labels)[1]);
+        if(gp_labels->size() == 2){
+            Point new_gp = midpoint(edge_map[e_label]);
+            if(pt_in_grid(new_gp)){
+                Poly face = build_quad(e_label, (*gp_labels)[0], (*gp_labels)[1]);
 
-            new_gen_pts.push_back(midpoint(edge_map[e_label]));
-            new_faces.push_back(face);
+                new_gen_pts.push_back(new_gp);
+                new_faces.push_back(face);
 
-            for (size_t v_i = 0; v_i < face.verts.size(); v_i++){
-                Point vert = face.verts[v_i];
-                if(count(new_verts.begin(), new_verts.end(), vert) == 0) {
-                    new_verts.push_back(vert);
+                //add new verts and edges to respective GridGenerator vectors
+                for (size_t v_i = 0; v_i < face.verts.size(); v_i++){
+                    Point vert = face.verts[v_i];
+                    if(count(new_verts.begin(), new_verts.end(), vert) == 0) {
+                        new_verts.push_back(vert);
+                    }
                 }
-            }
 
-            for (size_t e_i = 0; e_i < face.edges.size(); e_i++){
-                Edge edge = face.edges[e_i];
-                if(count(new_edges.begin(), new_edges.end(), edge) == 0) {
-                    new_edges.push_back(edge);
-                }
+                for (size_t e_i = 0; e_i < face.edges.size(); e_i++){
+                    Edge edge = face.edges[e_i];
+                    if(count(new_edges.begin(), new_edges.end(), edge) == 0) {
+                        new_edges.push_back(edge);
+                    }
+                }    
             }
         }
     }
@@ -109,12 +113,14 @@ Poly VQuadGridGenerator::build_quad(string& e_label, string& gp_label1, string& 
     return Poly(quad_edges);
 }
 
-void VQuadGridGenerator::generate_graph(){}
-/*
+void VQuadGridGenerator::generate_graph(){
+
+
+}
+
 int main(){
-    VQuadGridGenerator gen("v_test.txt");
-    gen.grid_to_file("q_test");
-    gen.grid_to_dot("q_test");
+    VQuadGridGenerator gen("v_stoma.txt");
+    gen.grid_to_file("q_stoma");
+    gen.grid_to_dot("q_stoma");
     return 0;
 }
-*/

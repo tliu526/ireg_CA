@@ -8,10 +8,10 @@
 #include <cstdlib>
 #include <fstream>
 #include <sstream>
-
+#include <climits>
 
 using namespace std;
-	
+
 vector<Point> generate_uniform_rand(int n, float x, float y, float seed) { 
 	vector<Point> pts;
 
@@ -309,11 +309,42 @@ Point midpoint(Edge &e){
     return Point(x,y);
 }
 
-/**
+//NOTE: does not handle the case of pt laying on an edge
+//Assumes convex, if point is in poly there will be exactly one intersectoin
+bool pt_in_poly(Point &pt, Poly& poly) {
+    Point inf_pt(INT_MAX, pt.y);
+  //  cout << inf_pt << endl;
+    Edge test(pt, inf_pt);
+    int intersect_count = 0;
+
+    for (size_t e_i = 0; e_i < poly.edges.size(); e_i++){
+        if(edge_intersect(test, poly.edges[e_i])){
+    //        cout << "intersect" << endl;
+            intersect_count++;
+        }
+    }
+
+    return intersect_count == 1;
+}
+
+/*
 //For debugging my incompetence in C++
 int main() {
-    cout << get_bit_str(8) << endl;
-    cout << get_bit_str(15) << endl;
+    //TODO debugggggg
+    Point p1(-0.5,-0.5);
+    Point p2(1,-1);
+    Point p3(-1,-1);
+    Point p4(0,1);
+
+    vector<Edge> edges;
+    edges.push_back(Edge(p2,p3));
+    edges.push_back(Edge(p2,p4));
+    edges.push_back(Edge(p3,p4));
+
+    Poly poly(edges);
+
+    cout <<  p1 << " in Poly: " << pt_in_poly(p1, poly) << endl;
+
 	return 0;
 }
 */
