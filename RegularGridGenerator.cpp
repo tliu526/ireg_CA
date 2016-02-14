@@ -89,6 +89,7 @@ void RegularGridGenerator::generate_graph() {
 
    //graph.print_adj_list();
 }
+
 /*
 int main(){
     RegularGridGenerator gen(0,25,0,25, true);

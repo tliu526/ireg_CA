@@ -55,7 +55,7 @@ LambdaRule::LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int n_n
     gen.seed(seed);    
 
     shuffle(trans_keys.begin(), trans_keys.end(), gen);
-     = trans_keys.begin();
+    key_it = trans_keys.begin();
 }
 
 void LambdaRule::initialize() {
@@ -221,7 +221,7 @@ string LambdaRule::get_trans_key(string &label) {
     }
 
     //append additional zeroes as neighbors if at the border
-    for(size_t t = 0; i < neighbors->size()- num_neighbors; i++){
+    for(size_t i = 0; i < (num_neighbors - neighbors->size()); i++){
         out_str += to_string(q_state);
     }
 
@@ -337,17 +337,17 @@ void LambdaRule::set_lambda(int l) {
     }
 
     lambda = l;
-    on_count = int(trans_keys.size()*(float(l)/float(100)));
+    int on_count = int(trans_keys.size()*(float(l)/float(100)));
 
     uniform_int_distribution<int> state_distr(1, num_states-1);
     shuffle(trans_keys.begin(), trans_keys.end(), gen);
 
     for(size_t key_i = 0; key_i < trans_keys.size(); key_i++){
         if(key_i < on_count){
-            trans_table[key[key_i]] = state_distr(gen);
+            trans_table[trans_keys[key_i]] = state_distr(gen);
         }
         else {
-            trans_table[key[key_i]] = q_state;
+            trans_table[trans_keys[key_i]] = q_state;
         }
     }
 }
@@ -398,8 +398,8 @@ int main(int argc, char**argv) {
 
     for(int seed = begin; seed <= end; seed++){
 
-        string name = "subregion_entropy_" + to_string(seed);
-        RegularGridGenerator gen(-64, 64, -64, 64, true);
+        string name = "border_test_" + to_string(seed);
+        RegularGridGenerator gen(-64, 64, -64, 64, false);
         Stencil stencil(gen.get_graph());
         LambdaRule rule(gen.get_graph(), &stencil, 4, 8, seed, 32);
 

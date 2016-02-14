@@ -145,10 +145,11 @@ void VQuadGridGenerator::generate_graph(){
     graph.print_adj_list();
 
 }
-
+/*
 int main(){
     VQuadGridGenerator gen("v_stoma.txt");
     gen.grid_to_file("q_stoma");
     gen.grid_to_dot("q_stoma");
     return 0;
 }
+*/
