@@ -33,6 +33,8 @@ VQuadGridGenerator::VQuadGridGenerator(string file){
     }
 
     init_vgrid();
+
+    generate_graph();
 }
 
 void VQuadGridGenerator::init_vgrid() {
@@ -114,7 +116,34 @@ Poly VQuadGridGenerator::build_quad(string& e_label, string& gp_label1, string& 
 }
 
 void VQuadGridGenerator::generate_graph(){
+    graph = Graph<string,Cell>();
 
+    map<string, string>::iterator gp_it;
+    map<string, string>::iterator chk_it;
+
+    for(gp_it = gen_pt_face_map.begin(); gp_it != gen_pt_face_map.end(); gp_it++){
+        string gp_label = gp_it->first;
+        string face_label = gp_it->second;
+        cout << gp_label << endl;
+        cout << face_label << endl;
+        cout << endl;
+
+        graph.add_vertex(gp_label, Cell(pt_map[gp_label], gp_label));
+        list<string>* neighbors = graph.get_neighbors(gp_label);
+
+        for(chk_it = gen_pt_face_map.begin(); chk_it != gen_pt_face_map.end(); chk_it++){
+            string nbr_label = chk_it->first;
+            string nbr_face_label = chk_it->second;
+
+            //checksd if two faces share an edge 
+            if (gp_label != nbr_label && face_map[face_label].shares_edge(face_map[nbr_face_label])) {
+                //&& (find(neighbors->begin(), neighbors->end(), gp_label_test) == neighbors->end())){
+                graph.add_edge(gp_label, nbr_label);
+            }
+        }
+    }
+
+    graph.print_adj_list();
 
 }
 

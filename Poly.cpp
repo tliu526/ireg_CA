@@ -2,6 +2,7 @@
 Implmentation of Poly class.
 */
 #include "Poly.h"
+#include "ClockwiseComp.h"
 
 #include <iostream>
 #include <algorithm>
@@ -12,7 +13,7 @@ using namespace std;
 Poly::Poly(vector<Edge> &in_edges){
 	edges = in_edges;
 
-	for (int i = 0; i < edges.size(); i++){
+	for (size_t i = 0; i < edges.size(); i++){
 		if(count(verts.begin(), verts.end(), edges[i].p) == 0)
 			verts.push_back(edges[i].p);
 
@@ -20,7 +21,9 @@ Poly::Poly(vector<Edge> &in_edges){
 			verts.push_back(edges[i].q);
 	}
 
-	sort(verts.begin(), verts.end());
+	ClockwiseComp comp(Point(0,0));
+
+	sort(verts.begin(), verts.end(), comp);
 	sort(edges.begin(), edges.end());
 
 	num_edges = edges.size();
@@ -28,7 +31,25 @@ Poly::Poly(vector<Edge> &in_edges){
 }
 
 bool Poly::contains_edge(Edge &e){
+//	cout << e << endl;
 	return count(edges.begin(), edges.end(), e) > 0;
+}
+
+float Poly::get_area() const{
+
+	float sum = 0;
+	for(size_t v_i = 0; v_i < verts.size(); v_i++){
+		Point p1 = verts[v_i];
+		Point p2 = verts[(v_i+1) % verts.size()];
+
+		sum += (p1.x*p2.y) - (p1.y*p2.x);
+	}
+
+	return sum / float(2);
+}
+
+bool Poly::operator<(const Poly& poly) const{
+	return get_area() < poly.get_area();
 }
 
 bool Poly::contains_vert(Point &p){
@@ -37,7 +58,7 @@ bool Poly::contains_vert(Point &p){
 
 bool Poly::operator==(const Poly& poly){
 
-	for(int i = 0; i < poly.verts.size(); i++){
+	for(size_t i = 0; i < poly.verts.size(); i++){
 		if(count(verts.begin(), verts.end(), poly.verts[i]) == 0){
 			return false;
 		}
@@ -77,8 +98,7 @@ bool Poly::is_valid_poly(){
 }
 
 bool Poly::shares_edge(Poly &poly){
-	for(int i = 0; i < edges.size(); i++){
-//		if(count(poly.edges.begin(), poly.edges.end(), edges[i]) > 0){
+	for(size_t i = 0; i < edges.size(); i++){
 		if(poly.contains_edge(edges[i])){
 			return true;
 		}
@@ -88,7 +108,7 @@ bool Poly::shares_edge(Poly &poly){
 }
 
 bool Poly::shares_vert(Poly &poly){
-	for(int i = 0; i < verts.size(); i++){
+	for(size_t i = 0; i < verts.size(); i++){
 		if(poly.contains_vert(verts[i])){
 			return true;
 		}
@@ -97,11 +117,6 @@ bool Poly::shares_vert(Poly &poly){
 	return false;
 }
 
-
-//TODO comparisons should be made via area
-bool Poly::operator< (const Poly &poly) const {
-	return false;
-}
 /*
 int main() {
 	vector<Edge> edges;

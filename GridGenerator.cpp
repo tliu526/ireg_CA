@@ -220,7 +220,6 @@ void GridGenerator::init_maps(){
 	}
 
 	//TODO vert_map, edge_map, face_map
-	/*
 	for (int i = 0; i < faces.size(); i++) {
 		stringstream ss;
 		ss << "f";
@@ -229,9 +228,9 @@ void GridGenerator::init_maps(){
 		while(n--) { ss << "0"; }
 			
 		ss << i; 
-		face_map[faces[i]] = ss.str();
+		face_map[ss.str()] = faces[i];
 	}
-	*/
+	
 }
 
 void GridGenerator::grid_to_file(string f){
@@ -469,7 +468,7 @@ Property GridGenerator::build_property(std::string& name, std::string& value) {
 	return Property();
 }
 
-//assigns a gen_pt to the face that is closest to it (by avg vertex distance)
+//assigns a gen_pt to the face that it is contained in
 void GridGenerator::map_faces() {
 
 	for (size_t gp_i = 0; gp_i < gen_pts.size(); gp_i++){

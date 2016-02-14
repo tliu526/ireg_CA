@@ -32,6 +32,11 @@ class Poly {
 		*/
 		bool is_valid_poly();
 
+		/**
+		Returns the area of the polygon
+		*/
+		float get_area() const;
+
 		bool operator==(const Poly &p);
 		bool operator< (const Poly &p) const;
 
