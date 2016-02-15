@@ -22,15 +22,17 @@ using namespace std;
 
 class LambdaExpr : public Experiment {
     public:
-        LambdaExpr(string in, string out, int configs, in steps, float r = 0, bool step = true)
-        : grid_file(in), output(out), num_configs(configs), num_steps(steps), init_radius(r), step_through(step) {};
+        LambdaExpr(string in, string out, int configs, int steps, int sd, float r = 0, bool step = true)
+        : grid_file(in), output(out), num_configs(configs), num_steps(steps), start_seed(sd), init_radius(r), step_through(step) {};
 
         void run(){
             int NUM_STATES = 8;
             int NUM_NEIGHBORS = 4;
 
-            for(int seed = 0; seed <= num_configs; seed++){
+            for(int seed = start_seed; seed < (start_seed + num_configs); seed++){
+                string name = output + "_" + to_string(seed);
                 GridGenerator gen(grid_file);
+
                 Stencil stencil(gen.get_graph());
                 LambdaRule rule(gen.get_graph(), &stencil, NUM_NEIGHBORS, NUM_STATES, seed, init_radius);
 
@@ -52,6 +54,9 @@ class LambdaExpr : public Experiment {
         string grid_file;
         //the output filename
         string output;
+
+        //the initial seed starting value
+        int start_seed;
 
         //the number of initial starting configurations
         int num_configs;

@@ -11,7 +11,7 @@ Things TODO
 #include "RegularGridGenerator.h"
 #include "LifeAsh.h"
 #include "LifeSingle.h"
-//#include "LambdaExpr.h"
+#include "LambdaExpr.h"
 #include "ConnectivityExpr.h"
 #include "LocalMajority.h"
 
@@ -60,7 +60,7 @@ int seed;
 int FULL_EXPMT = (IN | OUT | EXPMT | TIME | CONFIGS);
 int SINGLE_EXPMT = (IN | OUT | EXPMT | TIME | SEED | PERCENT | SINGLE);
 
-int LAMBDA_EXPMT = (IN | OUT | EXPMT | TIME | SEED );
+int LAMBDA_EXPMT = (IN | OUT | EXPMT | TIME | CONFIGS | SEED);
 
 /**
 Prints out the experiment types and options.
@@ -73,7 +73,7 @@ void print_experiment_opt(){
     cout << endl;
     cout << "Full experiments need -t -c set" << endl;
     cout << "Single experiments (-S) need -t -p -s set" << endl;
-    cout << "Lambda experiments need -i OR -g and -t -c set" << endl;
+    cout << "Lambda experiments need -i OR -g and -t -c -s set" << endl;
 }
 
 /**
@@ -95,7 +95,7 @@ void help() {
 	cout << "\t-c\tNumber of starting configurations/trials" << endl;
     cout << "\t-p\tInitial ON percentage for single runs" << endl;
     cout << "\t-r\tSize of subregion for initial configuration" << endl;
-    cout << "\t-s\tA particular seed for the RNG (single runs" << endl;
+    cout << "\t-s\tA particular seed for the RNG (single runs)" << endl;
     cout << "\t-g\tSpecifies a graph type to generate TODO" << endl;
 	cout << endl;
     print_experiment_opt();
@@ -169,7 +169,7 @@ void parse_args(int argc, char **argv) {
             case '?':
                 if(optopt == 'i') cout << "An input file is required" << endl;
                 else if(optopt == 'o') cout << "An output name is required" << endl;
-                else if(optopt == 't') cout << "An " << endl;
+                else if(optopt == 't') cout << "A max time is required" << endl;
                 break;
 		        //TODO
             case 'h':
@@ -207,8 +207,8 @@ void run() {
         case L_MAJORITY:
             if((flags & SINGLE_EXPMT) == SINGLE_EXPMT) { //TODO flag checks
                 cout << "Running LMSingle TODO" << endl;
-    //                LifeSingle expmt(infile, outname, init_percent, seed, max_time, subregion_rad);
-    //                expmt.run();
+                //LifeSingle expmt(infile, outname, init_percent, seed, max_time, subregion_rad);
+                //expmt.run();
             } 
             else if ((flags & FULL_EXPMT) == FULL_EXPMT) {
                 cout << "Running LocalMajority" << endl;
@@ -220,6 +220,18 @@ void run() {
                 exit(1);
             }
             break;
+
+        case LAMBDA:
+            if((flags & LAMBDA_EXPMT) == LAMBDA_EXPMT) {
+                cout << "Running Lambda Expr" << endl;
+                LambdaExpr expmt(infile, outname, num_configs, max_time, seed, subregion_rad);
+                expmt.run();
+            }
+            else {
+                print_experiment_opt();
+                exit(1);
+            }
+
         default:
             print_experiment_opt();
             exit(1);
@@ -227,11 +239,8 @@ void run() {
     }    
 }
 
-
-/*
 int main(int argc, char **argv){
     parse_args(argc, argv);
     run();
     return 0;
 }
-*/

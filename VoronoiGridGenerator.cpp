@@ -266,9 +266,9 @@ void VoronoiGridGenerator::generate_graph(){}
 
 /*
 int main(){
-	VoronoiGridGenerator v("stoma.txt");
-	v.grid_to_file("v_stoma");
-	v.grid_to_dot("v_stoma");
+	VoronoiGridGenerator v("d_lambda.txt");
+	v.grid_to_file("v_lambda");
+	v.grid_to_dot("v_lambda");
 
 	return 0;
 }

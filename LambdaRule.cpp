@@ -353,7 +353,7 @@ void LambdaRule::set_lambda(int l) {
 }
 
 int LambdaRule::get_max_lambda() {
-    return int((1.0 - float(1)/float(num_states))*100);
+    return int((1.0 - float(1)/float(num_states)) * 100);
 }
 
 int LambdaRule::increment_lambda() {
@@ -383,7 +383,7 @@ int LambdaRule::increment_lambda() {
 
     return lambda;
 }
-
+/*
 int main(int argc, char**argv) {
     if(argc < 3){
         cout << "Provide a begin and end seed" << endl;
@@ -399,7 +399,9 @@ int main(int argc, char**argv) {
     for(int seed = begin; seed <= end; seed++){
 
         string name = "border_test_" + to_string(seed);
-        RegularGridGenerator gen(-64, 64, -64, 64, false);
+        //RegularGridGenerator gen(-64, 64, -64, 64, false);
+        //gen.grid_to_file("large_reg");
+        GridGenerator gen("grids/q_stoma.txt");
         Stencil stencil(gen.get_graph());
         LambdaRule rule(gen.get_graph(), &stencil, 4, 8, seed, 32);
 
@@ -413,3 +415,4 @@ int main(int argc, char**argv) {
         }
     }
 }
+*/

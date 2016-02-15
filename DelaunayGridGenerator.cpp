@@ -273,20 +273,18 @@ void DelaunayGridGenerator::delaunay_triangulation() {
 // for debugging
 int main() {
 
-    vector<Point> pts = generate_from_file("stomanet.dat");
-    DelaunayGridGenerator gen(pts, -100, 100, -100, 100);
+//    vector<Point> pts = generate_from_file("stomanet.dat");
+//    DelaunayGridGenerator gen(pts, -100, 100, -100, 100);
 
-    gen.grid_to_file("stoma");
-    gen.grid_to_dot("stoma");
+//    gen.grid_to_file("stoma");
+//    gen.grid_to_dot("stoma");
 
-//    vector<Point> pts = generate_poisson_disk(50,50,30,1.5, 5);
-    vector<Point> pts = generate_uniform_rand(1000,25,25,5);
-    DelaunayGridGenerator gen(pts, -25, 25, -25, 25);
-    gen.grid_to_file("d_unif");
-    gen.grid_to_dot("d_unif");
-
+    vector<Point> pts = generate_poisson_disk(64,64,30, .80, 5);
+//    vector<Point> pts = generate_uniform_rand(1000,25,25,5);
+    DelaunayGridGenerator gen(pts, 0, 64, 0, 64);
+    gen.grid_to_file("d_lambda");
+    gen.grid_to_dot("d_lambda");
 
     return 0;   
 }
 */
-
