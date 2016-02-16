@@ -1,6 +1,28 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##2-16-2016
+
+###Lambda Analysis for Voronoi Quads, Subregioned Grids
+
+We conducted a subregioned grid lambda experiment with "dead" boundaries to investigate the impact of having non-periodic boundaries. The results (50 runs) are shown below:
+
+![](asymp_sub_entropy_500.jpg)
+
+The overall shape of the subregioned, "dead" boundary lambda graph possesses the same overall shape as the periodic lambda graph, suggesting that the boundary conditions do not impact the behavior of the cellular automata in the long run. 
+
+Now that we have irregular grids that have the same neighborhood sizes in the VQuads, we can run equivalent lambda experiments with K=8, N=4. This particular Voronoi Quad grid is approximately 110 by 110 in dimension:
+
+![](voronoi_entropy_500.jpg)
+
+The overall shape of the lambda graph with the voronoi quad grids is remarkably similar to the baseline lambda graph. There is perhaps a more even distribution of "transition points" between lambda=(0, 0.6), but the overall shape of the graph is still largely the same. It should be noted that there are a few runs that have low entropy beyond lambda=0.6, however. This can be better seen in the scatter plot of the two graphs:
+
+![](scatter_asymp_entropy_500.jpg)
+
+![](scatter_voronoi_entropy_500.jpg)
+
+In comparison to the baseline lambda graph, there is more uniform distribution across higher entropy values in the lower lambda range (0, 0.4) despite having the same number of runs.
+
 ##2-14-2016
 
 ###Voronoi Quad Conversion
