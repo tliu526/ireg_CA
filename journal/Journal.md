@@ -1,6 +1,36 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##2-14-2016
+
+###Voronoi Quad Conversion
+
+In order to test the robustness of computation in irregular grids with the same lambda experiments, we needed a way to construct irregular grids that had uniform neighborhood size across the entire grid; the Voronoi quad method hown in [journal entry 2-10](#2-10-2016) allows us to generate size four neighborhoods across a voronoi diagram. Below is an illustration of the process, beginning with a Delaunay Triangulation and ending with a "VQuad" grid:
+
+![](d_stoma_edited.jpg)
+
+![](v_stoma_edited.jpg)
+
+![](q_stoma_edited.jpg)
+
+##2-12-2016
+
+###Lambda Experiment Replication Continued
+
+Though the overall shape of our replicated lambda-entropy graph is similar to the results shown in Langton, there are some differences in the two graphs. In particular, there appears to be a gradual increase in entropy across all runs, shown in [journal entry 2-10](#2-10-2016). After some research into the exact calculation made by Langton and Wootters (av00), entropy in their experiments were measured asymptotically by allowing the computation to run for 1000 time steps and only measuring entropy for the final 500 time steps. Any simulation that failed to reach 1000 time steps was given an entropy of zero, thus giving the relatively flat entropy levels for lower levels of lambda in Langton's results. After applying the asymptotic entropy calculations for our replicated data (with a t=250 cutoff, max t=500), we obtain much more similar results:
+
+![](asymp_entropy.jpg)
+
+There is still a discrepancy between our replicated data and the original Langton results: though Langton observes a sharp cutoff of low entropy values at lambda=0.6, we see an outlier that goes beyond that value, though most runs appear to adhere to the cutoff. In fact, the entire graph appears to be a "translated" version of the original Langton results. We hypothesize that this may be due to the smaller time cutoff, we will run further experiments with more time steps.
+
+###Lambda Subregion (Periodic)
+
+It is not immediately obvious whether or not the periodic boundary condition in the original lambda experiments play an important role in the shape of the graph; there may be situations where long-distance particles may only be measured because of the periodic condition. As a test for whether or not periodic boundary conditions are essential in these lambda experiments, we initialized a 64 by 64 subregion in a larger 128 by 128 grid and only measured entropy within the subregion. The results of 8 runs are shown below:
+
+![](sub_asymp_entropy_8.jpg)
+
+From these few runs, it appears that the overall shape of the curve is preserved, even without periodic boundary conditions. Further experiments with different treatment of the boundary will be run in order to investigate any potential effects.
+
 ##2-10-2016
 
 ###Lambda Experiment Replication
