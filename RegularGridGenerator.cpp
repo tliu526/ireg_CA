@@ -92,9 +92,9 @@ void RegularGridGenerator::generate_graph() {
 
 /*
 int main(){
-    RegularGridGenerator gen(0,25,0,25, true);
-    gen.grid_to_file("reg_test");
-    gen.grid_to_dot("reg_test");
+    RegularGridGenerator gen(0,64,0,64, true);
+    gen.grid_to_file("small_reg_p");
+    gen.grid_to_dot("small_reg_p");
 
     return 0;
 }

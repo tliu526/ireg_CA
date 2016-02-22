@@ -15,16 +15,27 @@ Can read in the data file of any grid and generate the diagram.
 
 class VQuadGridGenerator : public GridGenerator {
     public:
-        VQuadGridGenerator(std::string file);
+        VQuadGridGenerator(std::string file, int degen_pct = 0, int s = 0);
 
         void generate_graph();
 
     private:
+        //the percentage of generator points to be removed
+        int degen_percent;
+        //seed for randomly selecting points
+        int seed;
+
         void init_vgrid();
 
         Poly build_quad(string& e_label, string& gp_1, string& gp_2);
         //for keeping track of which edges are associated with which gen_pts
         std::map<std::string, std::vector<std::string>> edge_gen_pt_map;
+
+        /**
+        Removes generator points from gen_pt_face_map according to degen_percent.
+        Returns the number of pts removed.
+        */
+        int degenerate_grid();
 };
 
 #endif

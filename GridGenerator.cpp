@@ -84,15 +84,20 @@ void GridGenerator::init_from_file(string file){
 		gen_pts.push_back(p);
 		pt_map[name] = p;
 		rev_gen_pt_map[p] = name;
-		//graph.add_vertex(name, Cell(p, name, isAlive));
-		graph.add_vertex(name, Cell(p, name, properties));
 
+//		graph.add_vertex(name, Cell(p, name, properties));
+
+		int neighbor_count = 0;
 	    //Collect neighbors of each gen_pt
 		while(!iss.eof()){
 			iss >> neighbor;
 			neighbor_map[name].push_back(neighbor);
+			neighbor_count++;
 		}
         
+        if(neighbor_count){
+        	graph.add_vertex(name, Cell(p, name, properties));
+        }
 	}
 
 	getline(in, line);
@@ -467,6 +472,54 @@ Property GridGenerator::build_property(std::string& name, std::string& value) {
 	return Property();
 }
 
+int GridGenerator::degenerate_grid(int percent, int seed){
+	if(percent == 0) return 0;
+
+    vector<string> keys;
+
+    for(map<string, string>::iterator map_it = gen_pt_face_map.begin(); map_it != gen_pt_face_map.end(); map_it++){
+        keys.push_back(map_it->first);
+    }
+
+    default_random_engine gen;
+    gen.seed(seed);
+
+    shuffle(keys.begin(), keys.end(), gen);
+    int num_faces_to_remove = int((float(percent)/float(100))*keys.size());
+
+    for(int i = 0; i < num_faces_to_remove; i++){
+    	remove_gen_pt(keys[i]);
+    }
+
+	//need to rebuild maps, graph
+	init_maps();
+	generate_graph();
+
+    return num_faces_to_remove;
+}
+
+//TODOOOO
+void GridGenerator::remove_gen_pt(string& gp_label){
+
+	gen_pts.erase(remove(gen_pts.begin(), gen_pts.end(), pt_map[gp_label]), gen_pts.end());
+
+	Poly face = face_map[gen_pt_face_map[gp_label]];
+	faces.erase(remove(faces.begin(), faces.end(), face), faces.end());
+/*
+	//remove edges
+	for(size_t i = 0; i < face.edges.size(); i++){
+		edges.erase(remove(edges.begin(), edges.end(), face.edges[i]), edges.end());
+	}
+	//remove points
+	for(size_t i = 0; i < face.verts.size(); i++){
+		verts.erase(remove(verts.begin(), verts.end(), face.verts[i]), verts.end());
+	}
+*/
+
+
+	gen_pt_face_map.erase(gp_label);
+}
+
 //assigns a gen_pt to the face that it is contained in
 void GridGenerator::map_faces() {
 
@@ -481,40 +534,6 @@ void GridGenerator::map_faces() {
 			}
 		}
 	}
-
-	/*
-	//init vector of faces
-	vector<string> face_labels;
-	typename map<string, Poly>::iterator face_it;
-
-	for(face_it = face_map.begin(); face_it != face_map.end(); face_it++){
-		face_labels.push_back(face_it->first);
-	}
-
-	//build gen_pt_face_map
-	for(size_t i = 0; i < gen_pts.size(); i++){
-		
-		float min_dist = HUGE_VALF;
-		string closest_face;
-		for(size_t j = 0; j < face_labels.size(); j++){
-			float avg = 0;
-			Poly face = face_map[face_labels[j]];
-			vector<Point>* verts = &face.verts;
-
-			for (size_t k = 0; k < verts->size(); k++) {
-				avg += distance(gen_pts[i], (*verts)[k]);
-			}
-			avg /= float(verts->size());
-
-			if (avg < min_dist) {
-				min_dist = avg;
-				closest_face = face_labels[j];
-			}
-		}
-
-		gen_pt_face_map[rev_gen_pt_map[gen_pts[i]]] = closest_face;
-	}
-	*/
 	
 	//debugging
 	/*

@@ -55,6 +55,15 @@ public:
 	//Builds property according to the labels
 	Property build_property(std::string& label, std::string& value); 
 
+	/**
+	Removes a percentage of gen_pts and subsequently faces from the grid.
+	Requires a call to generate_graph to rebuild connectivity.
+	*/
+	int degenerate_grid(int percent, int seed);
+
+	//Removes all faces, pts, and edges associated with the gp_label
+	void remove_gen_pt(std::string& gp_label);
+
 	std::map <std::string, Point> pt_map;
 	std::map <std::string, Edge> edge_map;
 	std::map <std::string, Poly> face_map;

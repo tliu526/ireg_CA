@@ -8,10 +8,14 @@ Implementation of VQuadGridGenerator.
 
 using namespace std;
 
-VQuadGridGenerator::VQuadGridGenerator(string file){
+VQuadGridGenerator::VQuadGridGenerator(string file, int degen_pct, int s){
+    degen_percent = degen_pct;
+    seed = s;
     init_from_file(file);
     init_maps();
     map_faces(); //initializes gen_pt_face_map
+
+    degenerate_grid();
 
     //initialize edge_gen_pt_map
     typename map<string, string>::iterator map_it;
@@ -102,6 +106,28 @@ void VQuadGridGenerator::init_vgrid() {
     map_faces();
 }
 
+int VQuadGridGenerator::degenerate_grid(){
+    if(degen_percent == 0) return 0;
+
+    vector<string> keys;
+
+    for(map<string, string>::iterator map_it = gen_pt_face_map.begin(); map_it != gen_pt_face_map.end(); map_it++){
+        keys.push_back(map_it->first);
+    }
+
+    default_random_engine gen;
+    gen.seed(seed);
+
+    shuffle(keys.begin(), keys.end(), gen);
+    int num_faces_to_remove = int((float(degen_percent)/float(100))*keys.size());
+
+    for(int i = 0; i < num_faces_to_remove; i++){
+        gen_pt_face_map.erase(keys[i]);
+    }
+
+    return num_faces_to_remove;
+}
+
 //pre: gp_1 and gp_2's associated faces share an edge
 Poly VQuadGridGenerator::build_quad(string& e_label, string& gp_label1, string& gp_label2){
     vector<Edge> quad_edges;
@@ -124,6 +150,7 @@ void VQuadGridGenerator::generate_graph(){
     map<string, string>::iterator chk_it;
 
     for(gp_it = gen_pt_face_map.begin(); gp_it != gen_pt_face_map.end(); gp_it++){
+        int num_neighbors = 0;
         string gp_label = gp_it->first;
         string face_label = gp_it->second;
 
@@ -138,7 +165,13 @@ void VQuadGridGenerator::generate_graph(){
             if (gp_label != nbr_label && face_map[face_label].shares_edge(face_map[nbr_face_label])) {
                 //&& (find(neighbors->begin(), neighbors->end(), gp_label_test) == neighbors->end())){
                 graph.add_edge(gp_label, nbr_label);
+                num_neighbors++;
             }
+        }
+        //if no neighbors, add self edge
+        //TODO FIXXXX
+        if(num_neighbors == 0){
+            graph.add_edge(gp_label,gp_label);
         }
     }
 
@@ -146,10 +179,17 @@ void VQuadGridGenerator::generate_graph(){
 
 }
 
-int main(){
-    VQuadGridGenerator gen("v_lambda.txt");
-    gen.grid_to_file("q_lambda");
-    gen.grid_to_dot("q_lambda");
+int main(int argc, char** argv){
+    if (argc < 3){
+        cout << "Provide in file, degen amt" << endl;
+        return -1;
+    }
+    string in = argv[1];
+    int degen = atoi(argv[2]);
+
+    VQuadGridGenerator gen(in,degen,degen);
+    gen.grid_to_file("degen_stoma_"+to_string(degen));
+    gen.grid_to_dot("degen_stoma_" +to_string(degen));
     return 0;
 }
 
