@@ -177,6 +177,7 @@ void BinaryRuleTable::compute_metrics() {
     float percentage = float(get_on_count()) / float(num_cells);
     metrics[PERCENT_ON].set_float(percentage);
 
+    //TODO only update if sub percentage is initialized?
     float sub_percentage = float(get_on_count(subregion_labels)) / float(subregion_labels.size());
     metrics[SUBREGION_ON].set_float(sub_percentage);
 }

@@ -14,6 +14,7 @@ Things TODO
 #include "LambdaExpr.h"
 #include "ConnectivityExpr.h"
 #include "LocalMajority.h"
+#include "GKLMajority.h"
 
 #include <unistd.h>
 #include <string>
@@ -23,7 +24,8 @@ using namespace std;
 typedef enum Expmt {
     S_LIFE = 1, //simple Life
     L_MAJORITY = 2, //local majority
-    LAMBDA = 3 //lambda experiments
+    LAMBDA = 3, //lambda experiments
+    GKL_MAJ = 4 //gkl majority experiments
 } Expmt;
 
 typedef enum ArgFlag {
@@ -42,6 +44,7 @@ typedef enum ArgFlag {
 const string LAMBDA_STR = "lambda";
 const string GOL_STR = "gol";
 const string LM_STR = "lm";
+const string GKL_STR = "gkl";
 
 /** Experiment parameters **/
 string infile;
@@ -70,10 +73,11 @@ void print_experiment_opt(){
     cout << "\tgol\tGame of Life (simple)" << endl;
     cout << "\tlm\tLocal Majority" << endl;
     cout << "\tlambda\tLambda" << endl;
+    cout << "\tgkl\tGKL Majority" << endl;
     cout << endl;
-    cout << "Full experiments need -t -c set" << endl;
-    cout << "Single experiments (-S) need -t -p -s set" << endl;
-    cout << "Lambda experiments need -i OR -g and -t -c -s set" << endl;
+    cout << "\tFull experiments need -t -c set" << endl;
+    cout << "\tSingle experiments (-S) need -t -p -s set" << endl;
+    cout << "\tLambda experiments need -i OR -g and -t -c -s set" << endl;
 }
 
 /**
@@ -110,6 +114,7 @@ void set_experiment(string arg){
     if(arg == GOL_STR)     expmt_type = S_LIFE;
     else if(arg == LM_STR) expmt_type = L_MAJORITY;
     else if(arg == LAMBDA_STR) expmt_type = LAMBDA;
+    else if(arg == GKL_STR) expmt_type = GKL_MAJ;
     
     else {
         print_experiment_opt();
@@ -225,6 +230,22 @@ void run() {
             if((flags & LAMBDA_EXPMT) == LAMBDA_EXPMT) {
                 cout << "Running Lambda Expr" << endl;
                 LambdaExpr expmt(infile, outname, num_configs, max_time, seed, subregion_rad);
+                expmt.run();
+            }
+            else {
+                print_experiment_opt();
+                exit(1);
+            }
+
+        case GKL_MAJ:
+            if((flags & SINGLE_EXPMT) == SINGLE_EXPMT) { //TODO flag checks
+                cout << "Running GKL Single TODO" << endl;
+                //LifeSingle expmt(infile, outname, init_percent, seed, max_time, subregion_rad);
+                //expmt.run();
+            } 
+            else if ((flags & FULL_EXPMT) == FULL_EXPMT) {
+                cout << "Running GKL Majority" << endl;
+                GKLMajority expmt(infile, outname, num_configs, max_time);
                 expmt.run();
             }
             else {

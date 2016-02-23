@@ -92,10 +92,11 @@ void RegularGridGenerator::generate_graph() {
 
 /*
 int main(){
-    RegularGridGenerator gen(0,64,0,64, true);
-    gen.grid_to_file("small_reg_p");
-    gen.grid_to_dot("small_reg_p");
+    RegularGridGenerator gen(0,15,0,15, true);
+    gen.grid_to_file("majority_baseline");
+    gen.grid_to_dot("majority_baseline");
 
     return 0;
 }
 */
+

@@ -8,45 +8,8 @@ Implementation of SimpleMajorityRule.
 
 using namespace std;
 
-const string SimpleMajorityRule::CORRECT_CLASS = "CorrectClass";
-
 SimpleMajorityRule::SimpleMajorityRule(Graph<string, Cell>* graph, Stencil* stencil, int percent_on, float s) 
-    : BinaryRuleTable(graph, stencil, percent_on, s) {}
-
-void SimpleMajorityRule::initialize() {
-    BinaryRuleTable::initialize();
-
-    //initialize metrics 
-    Property correct_class(CORRECT_CLASS, false);
-    metrics[CORRECT_CLASS] = correct_class;
-
-    target_class = (float(get_on_count()) / float(num_cells)) > 0.5;
-}
-
-void SimpleMajorityRule::compute_metrics() {
-    float percentage = float(get_on_count()) / float(num_cells);
-    if(get_on_count() == num_cells){
-        //currently have all ON cells
-        metrics[CORRECT_CLASS].set_bool(target_class);    
-    }
-    else if(get_on_count() == 0){
-        //currently have all OFF cells
-        metrics[CORRECT_CLASS].set_bool(!target_class);
-    }
-    else {
-        //we have incorrect classification
-        metrics[CORRECT_CLASS].set_bool(false);
-    }
-
-    metrics[PERCENT_ON].set_float(percentage);
-
-    //cout << "Correct Classification: " << metrics[CORRECT_CLASS].to_string() << endl;
-    //cout << "Percent On: " << metrics[PERCENT_ON].to_string() << endl;
-}
-
-void SimpleMajorityRule::transition(){
-    BinaryRuleTable::transition();
-}
+    : MajorityRule(graph, stencil, percent_on, s) {}
 
 //only looks for B_STATE
 void SimpleMajorityRule::apply_rule(std::string& vert_label){

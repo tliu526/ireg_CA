@@ -178,7 +178,7 @@ void VQuadGridGenerator::generate_graph(){
     graph.print_adj_list();
 
 }
-
+/*
 int main(int argc, char** argv){
     if (argc < 3){
         cout << "Provide in file, degen amt" << endl;
@@ -193,3 +193,4 @@ int main(int argc, char** argv){
     return 0;
 }
 
+*/
