@@ -9,6 +9,7 @@ An experiment template for running GKL majority experiments.
 
 #include "Experiment.h"
 #include "GKLRule.h"
+#include "VNStencil.h"
 
 class GKLMajority : public Experiment {
     public:
@@ -18,7 +19,8 @@ class GKLMajority : public Experiment {
         void run() {
             bool header = true;
             GridGenerator gen(grid_file);
-            Stencil stencil(gen.get_graph());
+//            Stencil stencil(gen.get_graph());
+            VNStencil stencil(gen.get_graph(), &gen);
 
             //iterate through starting ratios
             for(int init_percent = 1; init_percent < 100; init_percent++){
@@ -33,7 +35,6 @@ class GKLMajority : public Experiment {
                     s.simulate();
                 }
             }
-
         }
 
     protected:

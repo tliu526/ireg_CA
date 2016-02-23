@@ -19,6 +19,12 @@ void GKLRule::apply_rule(string &label) {
     vector<string> sub_nbrhood;
     sub_nbrhood.push_back(label);
 
+    cout << "Center Point: " << graph->get_data(label)->get_point() << endl;
+
+    for (size_t i = 0 ; i < neighbors->size(); i++){
+        cout << "Neighbor Point: " << graph->get_data((*neighbors)[i])->get_point() << endl;
+    }
+
     //invoke GKL only if there is a correct number of neighbors
     if(neighbors->size() == 4){
         cout << "Invoking GKL" << endl;

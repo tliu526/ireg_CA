@@ -16,7 +16,6 @@ using namespace std;
 VNStencil::VNStencil(Graph<string, Cell>* g, GridGenerator* gen){
    graph = g;
    generator = gen;
-   //type = MOORE;
 
    initialize();   
 }
