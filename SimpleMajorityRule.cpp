@@ -8,8 +8,8 @@ Implementation of SimpleMajorityRule.
 
 using namespace std;
 
-SimpleMajorityRule::SimpleMajorityRule(Graph<string, Cell>* graph, Stencil* stencil, int percent_on, float s) 
-    : MajorityRule(graph, stencil, percent_on, s) {}
+SimpleMajorityRule::SimpleMajorityRule(Graph<string, Cell>* graph, Stencil* stencil, int percent_on, float s, int noise) 
+    : MajorityRule(graph, stencil, percent_on, s, noise) {}
 
 //only looks for B_STATE
 void SimpleMajorityRule::apply_rule(std::string& vert_label){

@@ -192,5 +192,4 @@ int main(int argc, char** argv){
     gen.grid_to_dot("degen_stoma_" +to_string(degen));
     return 0;
 }
-
 */

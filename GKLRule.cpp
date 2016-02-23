@@ -8,8 +8,8 @@ Implementation of GKL Rule.
 
 using namespace std;
 
-GKLRule::GKLRule(Graph<std::string,Cell>* graph, Stencil* stencil, int init_percent, float seed) 
-  : MajorityRule(graph, stencil, init_percent, seed) {}
+GKLRule::GKLRule(Graph<std::string,Cell>* graph, Stencil* stencil, int init_percent, float seed, int noise) 
+  : MajorityRule(graph, stencil, init_percent, seed, noise) {}
 
 void GKLRule::apply_rule(string &label) {
     Property p = graph->get_data(label)->get_property(GridGenerator::B_STATE);

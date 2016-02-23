@@ -15,7 +15,7 @@ neighbors.
 
 class SimpleMajorityRule : public MajorityRule {
 	public: 
-		SimpleMajorityRule(Graph<std::string,Cell>* graph, Stencil* s,int init_percent, float seed);
+		SimpleMajorityRule(Graph<std::string,Cell>* graph, Stencil* s,int init_percent, float seed, int noise = 0);
 
 	protected:
 		/**

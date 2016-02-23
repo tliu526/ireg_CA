@@ -16,7 +16,7 @@ This rule assumes a von Neumman neighborhood stencil (N=5).
 
 class GKLRule : public MajorityRule {
     public:
-        GKLRule(Graph<std::string,Cell>* graph, Stencil* s, int init_percent, float seed);
+        GKLRule(Graph<std::string,Cell>* graph, Stencil* s, int init_percent, float seed, int noise = 0);
     protected:
         void apply_rule(std::string& label);
 };

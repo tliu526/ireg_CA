@@ -37,7 +37,8 @@ typedef enum ArgFlag {
     PERCENT = 32,
     SEED = 64,
     SINGLE = 128,
-    NBR_METRICS = 256
+    NBR_METRICS = 256,
+    NOISE = 512
 } ArgFlag;
 
 /** Experiment types **/
@@ -54,6 +55,9 @@ int max_time;
 int num_configs;
 int subregion_rad = 0; //optional
 int flags = 0;
+
+/** Majority parameters **/
+int noise = 0;
 
 /** Single Run Experiment parameters **/
 int init_percent;
@@ -87,7 +91,7 @@ void help() {
     cout << "USAGE" << endl;
     cout << "\t-i infile -o outname -e experiment [-SN] [-t time]" << endl; 
     cout << "\t[-c configs] [-p ON percentage] [-r subregion \%]" << endl;
-    cout << "\t[-s seed] [-g graph_type]" << endl;
+    cout << "\t[-s seed] [-g graph_type] [-n noise]" << endl;
     cout << endl;
     cout << "DETAILS" << endl;
 	cout << "\t-i\tThe input graph file" << endl;
@@ -101,6 +105,7 @@ void help() {
     cout << "\t-r\tSize of subregion for initial configuration" << endl;
     cout << "\t-s\tA particular seed for the RNG (single runs)" << endl;
     cout << "\t-g\tSpecifies a graph type to generate TODO" << endl;
+    cout << "\t-n\tSpecifies amount of temporal noise for majority exprs" << endl;
 	cout << endl;
     print_experiment_opt();
 	exit(1);
@@ -130,7 +135,7 @@ void parse_args(int argc, char **argv) {
 
     if(argc < 2) help();
 
-    while((c = getopt(argc, argv, "SNhi:o:e:t:c:p:s:r:")) != -1) {
+    while((c = getopt(argc, argv, "SNhi:o:e:t:c:p:s:r:n:")) != -1) {
   	    switch (c) {
             case 'i':
                 infile = string(optarg);
@@ -171,6 +176,9 @@ void parse_args(int argc, char **argv) {
             case 'N':
                 flags |= NBR_METRICS;
                 break;
+            case 'n':
+                flags |= NOISE;
+                noise = atoi(optarg);
             case '?':
                 if(optopt == 'i') cout << "An input file is required" << endl;
                 else if(optopt == 'o') cout << "An output name is required" << endl;
@@ -217,7 +225,7 @@ void run() {
             } 
             else if ((flags & FULL_EXPMT) == FULL_EXPMT) {
                 cout << "Running LocalMajority" << endl;
-                LocalMajority expmt(infile, outname, num_configs, max_time);
+                LocalMajority expmt(infile, outname, num_configs, max_time, noise);
                 expmt.run();
             }
             else {

@@ -10,8 +10,11 @@ using namespace std;
 
 const string MajorityRule::CORRECT_CLASS = "CorrectClass";
 
-MajorityRule::MajorityRule(Graph<string, Cell>* graph, Stencil* stencil, int percent_on, float s) 
-    : BinaryRuleTable(graph, stencil, percent_on, s) {}
+MajorityRule::MajorityRule(Graph<string, Cell>* graph, Stencil* stencil, int percent_on, float s, int n) 
+    : BinaryRuleTable(graph, stencil, percent_on, s) {
+        noise = n;
+        gen.seed(s);
+    }
 
 void MajorityRule::initialize() {
     BinaryRuleTable::initialize();
@@ -44,8 +47,31 @@ void MajorityRule::compute_metrics() {
     //cout << "Percent On: " << metrics[PERCENT_ON].to_string() << endl;
 }
 
+void MajorityRule::apply_noise() {
+    if(noise > 0){
+        uniform_int_distribution<int> rand_int(0,100);
+
+        vector<string> labels = graph->get_vert_labels();
+        for(size_t i = 0; i < labels.size(); i++){
+            if(rand_int(gen) < noise){
+                Property p = graph->get_data(labels[i])->get_property(GridGenerator::B_STATE);
+                p.set_bool(!p.b);
+                state_map[labels[i]] = p;
+            }
+        }    
+
+        update_graph();     
+    }
+}
+
 void MajorityRule::transition(){
     BinaryRuleTable::transition();
+
+    int tot_on = get_on_count();
+    int tot_cells = graph->get_vert_labels().size();
+    if((tot_on > 0) && (tot_on < tot_cells)){
+        apply_noise();
+    }
 }
 
 //only looks for B_STATE

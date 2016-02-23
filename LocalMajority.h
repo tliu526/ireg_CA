@@ -12,8 +12,8 @@ An experiment template for running simple local majority experiments.
 
 class LocalMajority : public Experiment {
     public:
-        LocalMajority(string in, string out, int configs, int steps) 
-        : grid_file(in), output(out), num_configs(configs), num_steps(steps) {};
+        LocalMajority(string in, string out, int configs, int steps, int n = 0) 
+        : grid_file(in), output(out), num_configs(configs), num_steps(steps), noise(n) {};
 
         void run() {
             bool header = true;
@@ -23,7 +23,7 @@ class LocalMajority : public Experiment {
             //iterate through starting ratios
             for(int init_percent = 1; init_percent < 100; init_percent++){
                 for(int seed = 1; seed <= num_configs; seed++){
-                    SimpleMajorityRule rule(gen.get_graph(), &stencil, init_percent, seed);
+                    SimpleMajorityRule rule(gen.get_graph(), &stencil, init_percent, seed, noise);
                     Simulator s(&gen, &rule, num_steps, output);
 
                     if(header){
@@ -47,6 +47,8 @@ class LocalMajority : public Experiment {
 
         //the maximum number of timesteps to run for
         int num_steps;
+
+        int noise;
 };
 
 #endif
