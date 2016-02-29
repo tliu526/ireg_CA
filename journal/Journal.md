@@ -1,6 +1,26 @@
 #Implementation Journal
 __More recent entries are at the top.__
 
+##2-21-2016
+
+###Lambda Analysis for Degenerate Grids
+
+We've conducted lambda experiments on degenerate voronoi quad grids; generation of such grids involving randomly removing generator points before running the VQuad algorithm. Examples of these degenerate grids are shown below:
+
+![](degen_stoma_7.jpg)
+
+7% of generator points randomly removed.
+
+![](degen_stoma_20.jpg)
+
+20% of generator points randomly removed.
+
+A sequence of lambda-entropy graphs are shown below, with degeneracy percentages from 3 to 20 (Note that t=500, K=8, N=5, corresponding with previous experiments):
+
+![](degen_scatter_animated.gif)
+
+Notice the rough translation of entropy values towards greater lambda values as the grid becomes more degenerate. Also note the gradual loss of the sharp transition point from low levels of entropy to higher levels of entropy; what was a sharp boundary at entropy levels of about 0.8 becomes blurred the higher the degeneracy level. The tight convergence at high levels of lambda also weakens as the graph becomes more degenerate.
+
 ##2-16-2016
 
 ###Lambda Analysis for Voronoi Quads, Subregioned Grids
@@ -22,6 +42,10 @@ The overall shape of the lambda graph with the voronoi quad grids is remarkably 
 ![](scatter_voronoi_entropy_500.jpg)
 
 In comparison to the baseline lambda graph, there is more uniform distribution across higher entropy values in the lower lambda range (0, 0.4) despite having the same number of runs.
+
+To-Do List:
+-Variation of border conditions ("swiss cheese")
+-Adaptation to Messinger experiments
 
 ##2-14-2016
 
