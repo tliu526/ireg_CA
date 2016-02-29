@@ -136,6 +136,7 @@ int RegularGridGenerator::degenerate_grid(){
             }
         }
 
+        gen_pts.erase(remove(gen_pts.begin(), gen_pts.end(), pt_map[rm_key]), gen_pts.end());
         gen_pt_face_map.erase(rm_key);
         rev_gen_pt_map.erase(pt_map[rm_key]);
     }
