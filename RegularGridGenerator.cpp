@@ -12,16 +12,24 @@ using namespace std;
 
 const float RegularGridGenerator::OFFSET = 0.5; 
 
-RegularGridGenerator::RegularGridGenerator(int mi_x, int ma_x, int mi_y, int ma_y, bool b) {
+RegularGridGenerator::RegularGridGenerator(int mi_x, int ma_x, int mi_y, int ma_y, bool b, int degen) {
     min_x = mi_x;
     max_x = ma_x;
     max_y = ma_y;
     min_y = mi_y;
     is_toroidal = b;
+    degeneracy = degen;
 
     init_grid();
     init_maps();
     generate_graph();
+
+    if(degeneracy>0){
+        map_faces();
+        degenerate_grid();
+        generate_graph();
+    }
+
     grid_type = "Regular"; 
 }
 
@@ -75,6 +83,8 @@ Poly RegularGridGenerator::construct_square(Point &gen_pt){
     
 //pre: init_maps has been called
 void RegularGridGenerator::generate_graph() {
+    graph = Graph<string,Cell>();
+
     typename map<Point, string>::iterator map_it;
     for(map_it = rev_gen_pt_map.begin(); map_it != rev_gen_pt_map.end(); map_it++) {
         graph.add_vertex(map_it->second, Cell(map_it->first, map_it->second));
@@ -87,16 +97,65 @@ void RegularGridGenerator::generate_graph() {
        graph.add_edge(p1,p2);
     }
 
-   //graph.print_adj_list();
+   graph.print_adj_list();
 }
 
-/*
-int main(){
-    RegularGridGenerator gen(0,15,0,15, true);
-    gen.grid_to_file("majority_baseline");
-    gen.grid_to_dot("majority_baseline");
+
+int RegularGridGenerator::degenerate_grid(){
+    if(degeneracy == 0) return 0;
+
+    vector<string> keys;
+
+    for(map<string, string>::iterator map_it = gen_pt_face_map.begin(); map_it != gen_pt_face_map.end(); map_it++){
+        keys.push_back(map_it->first);
+    }
+
+    default_random_engine gen;
+    gen.seed(degeneracy);
+
+    shuffle(keys.begin(), keys.end(), gen);
+    int num_faces_to_remove = int((float(degeneracy)/float(100))*keys.size());
+    cout << "Number of faces to remove: " << num_faces_to_remove << endl;
+
+    for(int i = 0; i < num_faces_to_remove; i++){
+        string rm_key = keys[i];
+
+        vector<Edge>::iterator iter = gen_edges.begin();
+        Poly face = face_map[gen_pt_face_map[rm_key]];
+
+        cout << pt_map[rm_key] << endl;
+
+        while(iter != gen_edges.end()){
+
+            if(iter->contains(pt_map[rm_key])){
+                cout << "Erasing" << endl;
+                gen_edges.erase(iter);                
+            }
+            else{
+                iter++;
+            }
+        }
+
+        gen_pt_face_map.erase(rm_key);
+        rev_gen_pt_map.erase(pt_map[rm_key]);
+    }
+
+    return num_faces_to_remove;
+}
+
+int main(int argc, char**argv){
+    if (argc < 2){
+        cout << "Provide degen amt" << endl;
+        return -1;
+    }
+    int degen = atoi(argv[1]);
+
+    RegularGridGenerator gen(0,64,0,64, true, degen);
+
+    gen.grid_to_file("degen_reg_test");
+    gen.grid_to_dot("degen_reg_test");
 
     return 0;
 }
-*/
+
 

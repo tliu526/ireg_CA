@@ -491,6 +491,11 @@ int GridGenerator::degenerate_grid(int percent, int seed){
     	remove_gen_pt(keys[i]);
     }
 
+    rev_gen_pt_map.clear();
+    rev_vert_map.clear();
+    rev_edge_map.clear();
+    face_map.clear();
+
 	//need to rebuild maps, graph
 	init_maps();
 	generate_graph();
@@ -500,12 +505,11 @@ int GridGenerator::degenerate_grid(int percent, int seed){
 
 //TODOOOO
 void GridGenerator::remove_gen_pt(string& gp_label){
-
 	gen_pts.erase(remove(gen_pts.begin(), gen_pts.end(), pt_map[gp_label]), gen_pts.end());
 
 	Poly face = face_map[gen_pt_face_map[gp_label]];
 	faces.erase(remove(faces.begin(), faces.end(), face), faces.end());
-/*
+
 	//remove edges
 	for(size_t i = 0; i < face.edges.size(); i++){
 		edges.erase(remove(edges.begin(), edges.end(), face.edges[i]), edges.end());
@@ -514,14 +518,19 @@ void GridGenerator::remove_gen_pt(string& gp_label){
 	for(size_t i = 0; i < face.verts.size(); i++){
 		verts.erase(remove(verts.begin(), verts.end(), face.verts[i]), verts.end());
 	}
-*/
-
 
 	gen_pt_face_map.erase(gp_label);
 }
 
 //assigns a gen_pt to the face that it is contained in
 void GridGenerator::map_faces() {
+	bool init_pt_map = false;
+
+	if(pt_map.size() == 0){
+		cout << "Initialiizing pt_map" << endl;
+		init_pt_map = true;
+	}
+
 
 	for (size_t gp_i = 0; gp_i < gen_pts.size(); gp_i++){
 		Point cur_gp = gen_pts[gp_i];
@@ -532,6 +541,11 @@ void GridGenerator::map_faces() {
 				gen_pt_face_map[rev_gen_pt_map[cur_gp]] = face_it->first;
 				break;
 			}
+		}
+
+		//initialize pt_map 
+		if(init_pt_map){
+			pt_map[rev_gen_pt_map[cur_gp]] = cur_gp;
 		}
 	}
 	

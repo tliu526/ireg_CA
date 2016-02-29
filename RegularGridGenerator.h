@@ -17,18 +17,25 @@ TODO:
 
 class RegularGridGenerator : public GridGenerator {
 public:
-    RegularGridGenerator(int min_x, int max_x, int min_y, int max_y, bool toroidal = false);
+    //TODO add seed
+    RegularGridGenerator(int min_x, int max_x, int min_y, int max_y, bool toroidal = false, int degen = 0);
 
     void generate_graph();
 
 protected:
-    bool is_toroidal; //whether or not the boundaries wrap around
+    bool is_toroidal; // whether or not the boundaries wrap around
+    int degeneracy; // the amount of degeneracy applied to the grid
 
     static const float OFFSET;
     /**
     Initializes all Points, Edges, Faces
     */
     void init_grid();
+
+    /**
+    Degenerates the grid 
+    */
+    int degenerate_grid();
 
     /**
     Returns the corresponding poly for a generator point.
