@@ -39,7 +39,6 @@ LambdaRule::LambdaRule(Graph<std::string,Cell>* graph, Stencil* stencil, int n_n
     lambda = 0; //start out with everything mapped to the quiescent state
     nonq_count = 0;
 
-
     init_transition_table();
 
     //sets up transition keys to modify

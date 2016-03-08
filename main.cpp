@@ -40,7 +40,8 @@ typedef enum ArgFlag {
     SINGLE = 128,
     NBR_METRICS = 256,
     NOISE = 512,
-    FIFTY = 1024
+    FIFTY = 1024,
+    STATES = 2048
 } ArgFlag;
 
 /** Experiment types **/
@@ -64,6 +65,9 @@ int noise = 0;
 /** Single Run Experiment parameters **/
 int init_percent;
 int seed;
+
+/** Lambda parameters **/
+int num_states;
 
 /** Experiment check flags **/
 int FULL_EXPMT = (IN | OUT | EXPMT | TIME | CONFIGS);
@@ -93,7 +97,7 @@ void help() {
     cout << "USAGE" << endl;
     cout << "\t-i infile -o outname -e experiment [-SNF] [-t time]" << endl; 
     cout << "\t[-c configs] [-p ON percentage] [-r subregion \%]" << endl;
-    cout << "\t[-s seed] [-g graph_type] [-n noise]" << endl;
+    cout << "\t[-s seed] [-g graph_type] [-n noise] [-k states]" << endl;
     cout << endl;
     cout << "DETAILS" << endl;
 	cout << "\t-i\tThe input graph file" << endl;
@@ -109,6 +113,7 @@ void help() {
     cout << "\t-g\tSpecifies a graph type to generate TODO" << endl;
     cout << "\t-n\tSpecifies amount of temporal noise for majority exprs" << endl;
     cout << "\t-F\tSpecifies a fifty-fifty experiment for majority exprs" << endl;
+    cout << "\t-k\tSpecifies number of states for a lambda experiment" << endl;
 	cout << endl;
     print_experiment_opt();
 	exit(1);
@@ -138,7 +143,7 @@ void parse_args(int argc, char **argv) {
 
     if(argc < 2) help();
 
-    while((c = getopt(argc, argv, "SNFhi:o:e:t:c:p:s:r:n:")) != -1) {
+    while((c = getopt(argc, argv, "SNFhi:o:e:t:c:p:s:r:n:k:")) != -1) {
   	    switch (c) {
             case 'i':
                 infile = string(optarg);
@@ -185,6 +190,10 @@ void parse_args(int argc, char **argv) {
                 break;
             case 'F':
                 flags |= FIFTY;
+                break;
+            case 'k':
+                flags |= STATES;
+                num_states = atoi(optarg);
                 break;
             case '?':
                 if(optopt == 'i') cout << "An input file is required" << endl;
@@ -250,10 +259,17 @@ void run() {
 
         case LAMBDA:
             if((flags & LAMBDA_EXPMT) == LAMBDA_EXPMT) {
-                cout << "Running Lambda Expr" << endl;
-                LambdaExpr expmt(infile, outname, num_configs, max_time, seed, subregion_rad);
-                expmt.run();
-            }
+                if((flags & STATES) == STATES){
+                    cout << "Running Lambda Expr" << endl;
+                    cout << "Number of States: " << num_states << endl;
+                    LambdaExpr expmt(infile, outname, num_configs, max_time, seed, subregion_rad, num_states);
+                    expmt.run();                    
+                }
+                else {
+                    cout << "Running Lambda Expr" << endl;
+                    LambdaExpr expmt(infile, outname, num_configs, max_time, seed, subregion_rad);
+                    expmt.run();
+                }}
             else {
                 print_experiment_opt();
                 exit(1);

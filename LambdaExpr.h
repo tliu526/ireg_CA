@@ -22,11 +22,10 @@ using namespace std;
 
 class LambdaExpr : public Experiment {
     public:
-        LambdaExpr(string in, string out, int configs, int steps, int sd, float r = 0, bool step = true)
-        : grid_file(in), output(out), num_configs(configs), num_steps(steps), start_seed(sd), init_radius(r), step_through(step) {};
+        LambdaExpr(string in, string out, int configs, int steps, int sd, float r = 0, int n_states = 8, bool step = true)
+        : grid_file(in), output(out), num_configs(configs), num_steps(steps), start_seed(sd), init_radius(r), step_through(step), num_states(n_states) {};
 
         void run(){
-            int NUM_STATES = 8;
             int NUM_NEIGHBORS = 4;
 
             for(int seed = start_seed; seed < (start_seed + num_configs); seed++){
@@ -34,7 +33,7 @@ class LambdaExpr : public Experiment {
                 GridGenerator gen(grid_file);
 
                 Stencil stencil(gen.get_graph());
-                LambdaRule rule(gen.get_graph(), &stencil, NUM_NEIGHBORS, NUM_STATES, seed, init_radius);
+                LambdaRule rule(gen.get_graph(), &stencil, NUM_NEIGHBORS, num_states, seed, init_radius);
 
                 //ugly way to initialize headers
                 Simulator s(&gen, &rule, num_steps, name);
@@ -64,12 +63,14 @@ class LambdaExpr : public Experiment {
         //the maximum number of timesteps to run for
         int num_steps;
 
+        //the number of states
+        int num_states;
+
         //the subregion radius for initialization
         float init_radius;
 
         //determines whether lambda is changed via step-through or by random table
         bool step_through;
-
 };
 
 #endif
