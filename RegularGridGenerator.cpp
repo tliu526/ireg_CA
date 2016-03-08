@@ -115,7 +115,7 @@ int RegularGridGenerator::degenerate_grid(){
 
     shuffle(keys.begin(), keys.end(), gen);
     int num_faces_to_remove = int((float(degeneracy)/float(100))*keys.size());
-    cout << "Number of faces to remove: " << num_faces_to_remove << endl;
+    //cout << "Number of faces to remove: " << num_faces_to_remove << endl;
 
     for(int i = 0; i < num_faces_to_remove; i++){
         string rm_key = keys[i];
@@ -128,7 +128,7 @@ int RegularGridGenerator::degenerate_grid(){
         while(iter != gen_edges.end()){
 
             if(iter->contains(pt_map[rm_key])){
-                cout << "Erasing" << endl;
+                //cout << "Erasing" << endl;
                 gen_edges.erase(iter);                
             }
             else{
@@ -143,7 +143,7 @@ int RegularGridGenerator::degenerate_grid(){
 
     return num_faces_to_remove;
 }
-
+/**
 int main(int argc, char**argv){
     if (argc < 2){
         cout << "Provide degen amt" << endl;
@@ -153,10 +153,11 @@ int main(int argc, char**argv){
 
     RegularGridGenerator gen(0,64,0,64, true, degen);
 
-    gen.grid_to_file("degen_reg_test");
-    gen.grid_to_dot("degen_reg_test");
+    gen.grid_to_file("degen_reg_"+to_string(degen));
+    gen.grid_to_dot("degen_reg_"+to_string(degen));
 
     return 0;
 }
 
 
+*/

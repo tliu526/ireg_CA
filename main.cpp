@@ -15,6 +15,7 @@ Things TODO
 #include "ConnectivityExpr.h"
 #include "LocalMajority.h"
 #include "GKLMajority.h"
+#include "FFLocalMajority.h"
 
 #include <unistd.h>
 #include <string>
@@ -38,7 +39,8 @@ typedef enum ArgFlag {
     SEED = 64,
     SINGLE = 128,
     NBR_METRICS = 256,
-    NOISE = 512
+    NOISE = 512,
+    FIFTY = 1024
 } ArgFlag;
 
 /** Experiment types **/
@@ -89,7 +91,7 @@ Prints the help listing for this program.
 */
 void help() {
     cout << "USAGE" << endl;
-    cout << "\t-i infile -o outname -e experiment [-SN] [-t time]" << endl; 
+    cout << "\t-i infile -o outname -e experiment [-SNF] [-t time]" << endl; 
     cout << "\t[-c configs] [-p ON percentage] [-r subregion \%]" << endl;
     cout << "\t[-s seed] [-g graph_type] [-n noise]" << endl;
     cout << endl;
@@ -106,6 +108,7 @@ void help() {
     cout << "\t-s\tA particular seed for the RNG (single runs)" << endl;
     cout << "\t-g\tSpecifies a graph type to generate TODO" << endl;
     cout << "\t-n\tSpecifies amount of temporal noise for majority exprs" << endl;
+    cout << "\t-F\tSpecifies a fifty-fifty experiment for majority exprs" << endl;
 	cout << endl;
     print_experiment_opt();
 	exit(1);
@@ -135,7 +138,7 @@ void parse_args(int argc, char **argv) {
 
     if(argc < 2) help();
 
-    while((c = getopt(argc, argv, "SNhi:o:e:t:c:p:s:r:n:")) != -1) {
+    while((c = getopt(argc, argv, "SNFhi:o:e:t:c:p:s:r:n:")) != -1) {
   	    switch (c) {
             case 'i':
                 infile = string(optarg);
@@ -179,6 +182,10 @@ void parse_args(int argc, char **argv) {
             case 'n':
                 flags |= NOISE;
                 noise = atoi(optarg);
+                break;
+            case 'F':
+                flags |= FIFTY;
+                break;
             case '?':
                 if(optopt == 'i') cout << "An input file is required" << endl;
                 else if(optopt == 'o') cout << "An output name is required" << endl;
@@ -224,9 +231,16 @@ void run() {
                 //expmt.run();
             } 
             else if ((flags & FULL_EXPMT) == FULL_EXPMT) {
-                cout << "Running LocalMajority" << endl;
-                LocalMajority expmt(infile, outname, num_configs, max_time, noise);
-                expmt.run();
+                if(flags & FIFTY){
+                    cout << "Running FFLocalMajority" << endl;
+                    FFLocalMajority expmt(infile, outname, num_configs, max_time, noise);
+                    expmt.run();
+                }
+                else{
+                    cout << "Running LocalMajority" << endl;
+                    LocalMajority expmt(infile, outname, num_configs, max_time, noise);
+                    expmt.run();
+                }
             }
             else {
                 print_experiment_opt();

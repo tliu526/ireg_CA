@@ -23,6 +23,27 @@ void MajorityRule::initialize() {
     Property correct_class(CORRECT_CLASS, false);
     metrics[CORRECT_CLASS] = correct_class;
 
+    int on_count = get_on_count();
+    //Turn one more cell on
+    if ((num_cells - on_count) == on_count) {
+        
+        vector<string> vert_labels = graph->get_vert_labels();
+
+        Property p;
+        for(size_t i = 0; i < vert_labels.size(); i++) {
+            string label = vert_labels[i];
+
+            p = graph->get_data(label)->get_property(GridGenerator::B_STATE);
+            if (!p.b) {
+                p.set_bool(true);
+                break;
+            }            
+
+            Cell *c = graph->get_data(label);
+            c->add_property(p);
+        }
+    }
+
     target_class = (float(get_on_count()) / float(num_cells)) > 0.5;
 }
 

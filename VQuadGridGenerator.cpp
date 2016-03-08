@@ -15,7 +15,7 @@ VQuadGridGenerator::VQuadGridGenerator(string file, int degen_pct, int s){
     init_maps();
     map_faces(); //initializes gen_pt_face_map
 
-    degenerate_grid();
+    
 
     //initialize edge_gen_pt_map
     typename map<string, string>::iterator map_it;
@@ -38,6 +38,7 @@ VQuadGridGenerator::VQuadGridGenerator(string file, int degen_pct, int s){
 
     init_vgrid();
 
+    degenerate_grid();
     generate_graph();
 }
 
@@ -122,7 +123,11 @@ int VQuadGridGenerator::degenerate_grid(){
     int num_faces_to_remove = int((float(degen_percent)/float(100))*keys.size());
 
     for(int i = 0; i < num_faces_to_remove; i++){
-        gen_pt_face_map.erase(keys[i]);
+        string rm_key = keys[i];
+
+        gen_pt_face_map.erase(rm_key);
+        gen_pts.erase(remove(gen_pts.begin(), gen_pts.end(), pt_map[rm_key]), gen_pts.end());
+        rev_gen_pt_map.erase(pt_map[rm_key]);
     }
 
     return num_faces_to_remove;
@@ -188,8 +193,8 @@ int main(int argc, char** argv){
     int degen = atoi(argv[2]);
 
     VQuadGridGenerator gen(in,degen,degen);
-    gen.grid_to_file("degen_stoma_"+to_string(degen));
-    gen.grid_to_dot("degen_stoma_" +to_string(degen));
+    gen.grid_to_file("test_degen_stoma_"+to_string(degen));
+    gen.grid_to_dot("test_degen_stoma_" +to_string(degen));
     return 0;
 }
 */
