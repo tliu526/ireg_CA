@@ -49,7 +49,7 @@ bool on_segment(Point p1, Point p2, Point p3) {
     return false;
 }
 
-bool edge_intersect(Edge e1, Edge e2) {
+bool edge_intersect(Edge &e1, Edge &e2) {
     int o1 = pt_orientation(e1.p, e1.q, e2.p);
     int o2 = pt_orientation(e1.p, e1.q, e2.q);
     int o3 = pt_orientation(e2.p, e2.q, e1.p);

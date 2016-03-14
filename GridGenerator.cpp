@@ -377,6 +377,11 @@ void GridGenerator::grid_to_dot(string name, string label/* = "" */){
 		file << rev_vert_map[edges[i].p] << " -- " << rev_vert_map[edges[i].q] << ";" << endl;
 	}
 
+	for (size_t i = 0; i < ch_edges.size(); i++){
+		file << rev_vert_map[ch_edges[i].p] << " -- " << rev_vert_map[ch_edges[i].q];
+		file << " [color = \"red\"]" << ";" << endl;
+	}
+
 	file << "}" << endl;
 
 	file.close();
@@ -470,6 +475,80 @@ Property GridGenerator::build_property(std::string& name, std::string& value) {
 	}
 
 	return Property();
+}
+
+//initialize edge_gen_pt_map
+void GridGenerator::map_edges(){
+    typename map<string, string>::iterator map_it;
+    for(map_it = gen_pt_face_map.begin(); map_it != gen_pt_face_map.end(); map_it++){
+        string gp_label = map_it->first;
+        string f_label = map_it->second;
+
+        vector<Edge> *edges = &(face_map[f_label].edges);
+
+        for(size_t e_i = 0; e_i < edges->size(); e_i++ ){
+            string e_label = rev_edge_map[(*edges)[e_i]];
+
+            if(edge_gen_pt_map.count(e_label) == 0) {
+                edge_gen_pt_map[e_label];
+            }
+
+            edge_gen_pt_map[e_label].push_back(gp_label);
+        }
+    }
+}
+
+int GridGenerator::crosshatch_degeneration(int p, int seed, float width){
+	if(p == 0) return 0;
+
+    default_random_engine gen;
+    gen.seed(seed);
+    uniform_int_distribution<int> unif_dist(0,100);
+
+	//vertical cross hatchings
+	for (float vert = min_x + width; vert < max_x; vert += width){
+		Edge cross_edge(Point(vert, max_y), Point(vert, min_y));
+		//ch_edges.push_back(cross_edge);
+		for(vector<Edge>::iterator edge_it = edges.begin(); edge_it != edges.end(); edge_it++){
+			if ((count(ch_edges.begin(), ch_edges.end(), *edge_it) == 0) &&
+				edge_intersect(*edge_it, cross_edge) && (unif_dist(gen) < p)){
+				ch_edges.push_back(*edge_it);
+			}
+		}
+	}
+
+	//horizontal
+	for (float hori = min_y + width; hori < max_y; hori += width){
+		Edge cross_edge(Point(max_x, hori), Point(min_x, hori));
+		//ch_edges.push_back(cross_edge);
+		for(vector<Edge>::iterator edge_it = edges.begin(); edge_it != edges.end(); edge_it++){
+			if ((count(ch_edges.begin(), ch_edges.end(), *edge_it) == 0) &&
+				edge_intersect(*edge_it, cross_edge) && (unif_dist(gen) < p)){
+				ch_edges.push_back(*edge_it);
+			}
+		}
+	}
+
+	//remove edges from vector and from graph
+	gen_pt_face_map.clear();
+	edge_gen_pt_map.clear();
+	map_faces();
+	map_edges();
+
+	for(vector<Edge>::iterator edge_it = ch_edges.begin(); edge_it != ch_edges.end(); edge_it++){
+		Edge e = *edge_it;
+		if(count(edges.begin(), edges.end(), e) > 0){
+			vector<string> edge_gpts = edge_gen_pt_map[rev_edge_map[e]];
+			if(edge_gpts.size() == 2){
+				graph.remove_edge(edge_gpts[0], edge_gpts[1]);
+			}
+			edges.erase(remove(edges.begin(), edges.end(), e), edges.end());
+		}
+	}
+
+	graph.print_adj_list();
+
+	return ch_edges.size();
 }
 
 int GridGenerator::degenerate_grid(int percent, int seed){

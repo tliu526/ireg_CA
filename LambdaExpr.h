@@ -8,6 +8,7 @@ Valid experiment flags:
 
 TODO:
 -add option to set number of neighbors or number of states
+-ho
 
 (c) 2016 Tony Liu.
 */
@@ -17,23 +18,23 @@ TODO:
 
 #include "Experiment.h"
 #include "LambdaRule.h"
+#include "VertStencil.h"
 
 using namespace std;
 
 class LambdaExpr : public Experiment {
     public:
-        LambdaExpr(string in, string out, int configs, int steps, int sd, float r = 0, int n_states = 8, bool step = true)
-        : grid_file(in), output(out), num_configs(configs), num_steps(steps), start_seed(sd), init_radius(r), step_through(step), num_states(n_states) {};
+        LambdaExpr(string in, string out, int configs, int steps, int sd, float r = 0, int n_states = 8, int n_neighbors = 4, bool step = true)
+        : grid_file(in), output(out), num_configs(configs), num_steps(steps), start_seed(sd), init_radius(r), step_through(step), num_states(n_states), num_neighbors(n_neighbors) {};
 
         void run(){
-            int NUM_NEIGHBORS = 4;
 
             for(int seed = start_seed; seed < (start_seed + num_configs); seed++){
                 string name = output + "_" + to_string(seed);
                 GridGenerator gen(grid_file);
 
                 Stencil stencil(gen.get_graph());
-                LambdaRule rule(gen.get_graph(), &stencil, NUM_NEIGHBORS, num_states, seed, init_radius);
+                LambdaRule rule(gen.get_graph(), &stencil, num_neighbors, num_states, seed, init_radius);
 
                 //ugly way to initialize headers
                 Simulator s(&gen, &rule, num_steps, name);
@@ -65,6 +66,9 @@ class LambdaExpr : public Experiment {
 
         //the number of states
         int num_states;
+
+        //the number of neighbors
+        int num_neighbors;
 
         //the subregion radius for initialization
         float init_radius;

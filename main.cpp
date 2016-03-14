@@ -4,7 +4,7 @@ Where all experiments are called and ran.
 Things TODO
 - Stencil options from command line
 - GridGenerator options from command line -g flag (currently only reads in graph files) 
-
+- num_neighbors options
 (c) 2016 Tony Liu.
 */
 
@@ -68,6 +68,7 @@ int seed;
 
 /** Lambda parameters **/
 int num_states;
+int num_neighbors;
 
 /** Experiment check flags **/
 int FULL_EXPMT = (IN | OUT | EXPMT | TIME | CONFIGS);
@@ -112,6 +113,7 @@ void help() {
     cout << "\t-s\tA particular seed for the RNG (single runs)" << endl;
     cout << "\t-g\tSpecifies a graph type to generate TODO" << endl;
     cout << "\t-n\tSpecifies amount of temporal noise for majority exprs" << endl;
+    cout <<   "\t\tSpecifies the neighborhood size for a lambda experiment" << endl;
     cout << "\t-F\tSpecifies a fifty-fifty experiment for majority exprs" << endl;
     cout << "\t-k\tSpecifies number of states for a lambda experiment" << endl;
 	cout << endl;
@@ -187,6 +189,7 @@ void parse_args(int argc, char **argv) {
             case 'n':
                 flags |= NOISE;
                 noise = atoi(optarg);
+                num_neighbors = noise;
                 break;
             case 'F':
                 flags |= FIFTY;

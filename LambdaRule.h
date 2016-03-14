@@ -45,7 +45,7 @@ class LambdaRule : public RuleTable {
         /**
         Initializes the transition table with the lexographically minimal strings
         */
-        void init_transition_table();
+        virtual void init_transition_table();
 
         /**
         Returns the lexicographically minimal string rotation for in

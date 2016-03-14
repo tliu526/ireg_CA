@@ -84,7 +84,7 @@ bool on_segment(Point p1, Point p2, Point p3);
 /*
 Checks whether the two edges intersect. Utilizes on_segment and pt_orientation.
 */
-bool edge_intersect(Edge e1, Edge e2);
+bool edge_intersect(Edge &e1, Edge &e2);
 
 /*
 Checks whether p is enclosed within the boundary of t. Uses the barycentric method.

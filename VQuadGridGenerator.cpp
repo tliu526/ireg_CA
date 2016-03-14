@@ -14,27 +14,7 @@ VQuadGridGenerator::VQuadGridGenerator(string file, int degen_pct, int s){
     init_from_file(file);
     init_maps();
     map_faces(); //initializes gen_pt_face_map
-
-    
-
-    //initialize edge_gen_pt_map
-    typename map<string, string>::iterator map_it;
-    for(map_it = gen_pt_face_map.begin(); map_it != gen_pt_face_map.end(); map_it++){
-        string gp_label = map_it->first;
-        string f_label = map_it->second;
-
-        vector<Edge> *edges = &(face_map[f_label].edges);
-
-        for(size_t e_i = 0; e_i < edges->size(); e_i++ ){
-            string e_label = rev_edge_map[(*edges)[e_i]];
-
-            if(edge_gen_pt_map.count(e_label) == 0) {
-                edge_gen_pt_map[e_label];
-            }
-
-            edge_gen_pt_map[e_label].push_back(gp_label);
-        }
-    }
+    map_edges();
 
     init_vgrid();
 
@@ -183,18 +163,19 @@ void VQuadGridGenerator::generate_graph(){
     graph.print_adj_list();
 
 }
-/*
+
 int main(int argc, char** argv){
-    if (argc < 3){
-        cout << "Provide in file, degen amt" << endl;
+    if (argc < 4){
+        cout << "Provide in file, degen amt, width" << endl;
         return -1;
     }
     string in = argv[1];
     int degen = atoi(argv[2]);
+    int width = atoi(argv[3]);
 
-    VQuadGridGenerator gen(in,degen,degen);
-    gen.grid_to_file("test_degen_stoma_"+to_string(degen));
-    gen.grid_to_dot("test_degen_stoma_" +to_string(degen));
+    VQuadGridGenerator gen(in);
+    gen.crosshatch_degeneration(degen, degen, width);
+    gen.grid_to_file("cross_hatch_p"+to_string(degen)+"_w"+to_string(width));
+    gen.grid_to_dot("cross_hatch_p" +to_string(degen)+"_w"+to_string(width));
     return 0;
 }
-*/

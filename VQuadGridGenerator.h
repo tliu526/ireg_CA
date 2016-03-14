@@ -28,8 +28,6 @@ class VQuadGridGenerator : public GridGenerator {
         void init_vgrid();
 
         Poly build_quad(string& e_label, string& gp_1, string& gp_2);
-        //for keeping track of which edges are associated with which gen_pts
-        std::map<std::string, std::vector<std::string>> edge_gen_pt_map;
 
         /**
         Removes generator points from gen_pt_face_map according to degen_percent.

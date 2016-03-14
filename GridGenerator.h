@@ -32,7 +32,10 @@ public:
 	GridGenerator() {};
 
 	virtual void generate_graph(); 
+
 	virtual void map_faces(); //populates the gen_pt_face_map
+
+	virtual void map_edges(); //populates the edge_gen_pt map
 
 	void grid_to_file(std::string f);
 
@@ -54,6 +57,13 @@ public:
 
 	//Builds property according to the labels
 	Property build_property(std::string& label, std::string& value); 
+
+	/**
+	Degenerates the grid based on a crosshatching pattern. p is the probability that an 
+	intersecting edge will be removed. width is the distance between the cross-hatchings.
+	Returns the number of edges removed
+	*/
+	int crosshatch_degeneration(int p, int seed, float width);
 
 	/**
 	Removes a percentage of gen_pts and subsequently faces from the grid.
@@ -78,7 +88,7 @@ protected:
 	pre: verts, edges, faces are initialized
 	*/
 	void init_maps(); 
-	
+
 	/**
 	initializes the grid generator from file
 	*/
@@ -91,7 +101,14 @@ protected:
 	std::vector<Point> verts;
 	std::vector<Edge>  edges;
 	std::vector<Poly>  faces;
-	
+
+	/**** OPTIONAL DATA STRUCTURES ****/
+	std::vector<Edge> ch_edges; //edges removed during cross hatching degeneration
+
+    //for keeping track of which edges are associated with which gen_pts, populated by 
+    //map_edges()
+	std::map<std::string, std::vector<std::string>> edge_gen_pt_map;
+
 	Graph<std::string, Cell> graph;
 };
 
