@@ -163,7 +163,7 @@ void VQuadGridGenerator::generate_graph(){
     graph.print_adj_list();
 
 }
-
+/*
 int main(int argc, char** argv){
     if (argc < 4){
         cout << "Provide in file, degen amt, width" << endl;
@@ -179,3 +179,4 @@ int main(int argc, char** argv){
     gen.grid_to_dot("cross_hatch_p" +to_string(degen)+"_w"+to_string(width));
     return 0;
 }
+*/

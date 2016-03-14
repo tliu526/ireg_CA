@@ -79,24 +79,32 @@ void GridGenerator::init_from_file(string file){
 
 		float x = atof(coord.substr(0, coord.find(",")).c_str());
 		float y = atof(coord.substr(coord.find(",")+1, coord.size()).c_str());
-
+/*
 		Point p(x,y);
 		gen_pts.push_back(p);
 		pt_map[name] = p;
 		rev_gen_pt_map[p] = name;
-
-//		graph.add_vertex(name, Cell(p, name, properties));
-
+*/
 		int neighbor_count = 0;
 	    //Collect neighbors of each gen_pt
 		while(!iss.eof()){
-			iss >> neighbor;
-			neighbor_map[name].push_back(neighbor);
-			neighbor_count++;
+            if(iss >> neighbor){
+                neighbor_map[name];
+                neighbor_map[name].push_back(neighbor);
+			    neighbor_count++;
+            }
 		}
         
-        if(neighbor_count){
+        if(neighbor_count > 0){
+        	Point p(x,y);
+        	gen_pts.push_back(p);
+        	pt_map[name] = p;
+        	rev_gen_pt_map[p] = name;
+
         	graph.add_vertex(name, Cell(p, name, properties));
+        }
+        else{
+          neighbor_map[name].clear();
         }
 	}
 
@@ -105,10 +113,16 @@ void GridGenerator::init_from_file(string file){
 	/**** GRAPH ****/
 	typename map<string, vector<string>>::iterator map_it;
 	for(map_it = neighbor_map.begin(); map_it != neighbor_map.end(); map_it++){
+		vector<string> v = map_it->second;
+		for(size_t i = 0; i < v.size(); i++){
+			graph.add_edge(map_it->first, v[i]);
+		}
+      /**
 		vector<string>* v = &map_it->second;
 		for(size_t i = 0; i < v->size(); i++){
 			graph.add_edge(map_it->first, (*v)[i]);
 		}
+      */
 	}
 
 	/**** VERTS ****/
@@ -155,6 +169,7 @@ void GridGenerator::init_from_file(string file){
 		edge_map[name] = e;
 		rev_edge_map[e] = name;
 
+        //TODO remove?
 		graph.add_edge(rev_gen_pt_map[pt_map[p]], rev_gen_pt_map[pt_map[q]]);
 	}
 
